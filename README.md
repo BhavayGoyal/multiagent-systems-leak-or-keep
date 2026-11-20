@@ -102,7 +102,7 @@ Or step by step:
 | Step | Command | Writes | Time |
 |---|---|---|---|
 | Unit tests (27) | `python -m pytest -q` | console | 10 s |
-| Verification checks | `python experiments/run_checks.py` | `results/checks/checks.json` | 10 s |
+| Verification checks | `python experiments/run_checks.py` | `results/checks/checks.json` | 10 s (7 min on a first run, which builds three payoff tables) |
 | X1: who tells | `python experiments/run_x1.py` | `results/x1/*.json` | 40 min |
 | X2: motives | `python experiments/run_x2.py` | `results/x2/x2.json` | 10 min |
 | X3: learning | `python experiments/run_x3.py` | `results/x3/x3_<learner>.npz` | 8 min |
@@ -114,7 +114,9 @@ Or step by step:
 
 Notes:
 
-- All seeds are fixed, so re-running reproduces the committed result files.
+- All seeds are fixed, so re-running reproduces the committed result files. Checked on a second machine
+  (Windows 11, Python 3.13, NumPy 2.4): `run_checks.py` and `run_x4.py` rebuilt from an empty table cache match
+  the committed `checks.json` and `x4.json` in every value except run times and one last-digit float rounding.
 - Payoff tables are cached in `results/tables/` (263 MB, not committed). They are rebuilt automatically on first
   use, 15 to 40 seconds each.
 - `run_x1.py` skips (network, leak model) cells whose output file already exists; delete `results/x1/` to force a
