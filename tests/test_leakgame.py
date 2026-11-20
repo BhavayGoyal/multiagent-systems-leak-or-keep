@@ -1,4 +1,4 @@
-"""Fast unit tests (about 20 s).  Run with:  .venv/bin/python -m pytest -q"""
+"""Fast unit tests (about 10 s).  Run with:  python -m pytest -q"""
 import numpy as np
 import pytest
 

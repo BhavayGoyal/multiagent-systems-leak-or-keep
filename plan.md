@@ -487,7 +487,7 @@ For each finished item above, in this order:
 
 1. Macros in `make_figures.py` (never typed numbers).
 2. Text in the right section (see each item's "Report impact").
-3. Update the deviations list and the Limits paragraph in §5.5. Remove limits we have closed; add new ones honestly.
+3. Update the deviations list and the Limits paragraph in §5.6 (§5.5 is now the X5 robustness subsection). Remove limits we have closed; add new ones honestly.
 4. Update Table 4 if any verdict changes (H1 after 1.3; H2 after 2.1 / 4.1).
 5. Update the README's Results and Known limits sections to match.
 

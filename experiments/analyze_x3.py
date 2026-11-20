@@ -98,7 +98,10 @@ def main():
                 sigs = np.stack([g.profile_from_cells(row) for row in mp])
                 ex = g.exploitability(sigs)
                 rec["expl_mostplayed"] = {"mean": float(ex.mean()), "ci95": bootstrap_ci(ex), "max": float(ex.max()),
-                                          "frac_exact_eq": float((ex <= 1e-12).mean())}
+                                          "frac_exact_eq": float((ex <= 1e-12).mean()),
+                                          # within one message cost of an equilibrium: the only thing left to
+                                          # gain is saving a redundant tell (the E0 coordination problem)
+                                          "frac_within_c": float((ex <= cfg.c + 1e-9).mean())}
                 summary["cells"][f"{name}|{env}|{rule}"] = rec
     # ---- H2-type paired test: BAR vs SEATS final agreement (per learner x env), Holm over 15
     tests = []
@@ -174,7 +177,7 @@ def main():
                 print(f"{name:12s} {env:3s} {rule:5s} | {a['mean']:.3f} [{a['ci95'][0]:.3f},{a['ci95'][1]:.3f}]  "
                       f"{r['agree_at_60k']['mean']:.3f}     {r['agree_mp_at_60k']['mean']:.3f}  | {r['regret']['mean']:8.2f}  "
                       f"{r['cce_gap']['mean']:.5f}   ({t90['frac_reached']:.2f}, {t90['median']})  "
-                      f"expl={r['expl_mostplayed']['mean']:.5f} exact_eq={r['expl_mostplayed']['frac_exact_eq']:.2f} "
+                      f"expl={r['expl_mostplayed']['mean']:.5f} exact_eq={r['expl_mostplayed']['frac_exact_eq']:.2f} within_c={r['expl_mostplayed']['frac_within_c']:.2f} "
                       f"type_ok={[round(v, 2) for v in r['per_type_correct']]}")
     print("BAR vs SEATS agreement (Holm):")
     for t in summary["tests"]["bar_vs_seats_agreement"]:

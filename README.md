@@ -3,7 +3,7 @@
 Final project, Multi-Agent Systems, IIT Gandhinagar.
 Jash Bharat Pasad (24110146), Bhavay Goyal (24110070), Chaitanya Bhoite (24110086), Vishnu Sinha (24110389).
 
-**Report:** [`report/main.pdf`](report/main.pdf) (8 pages; LaTeX source in [`report/main.tex`](report/main.tex)).
+**Report:** [`report/main.pdf`](report/main.pdf) (9 pages; LaTeX source in [`report/main.tex`](report/main.tex)).
 
 After an interview, a candidate can tell friends who interview later which questions were asked. That helps the
 friends, but they may be competing for the same offers. We model this as a Bayesian game on a sharing matrix,
@@ -92,6 +92,17 @@ the cut-off would lose 2.5 to 4.4 times more, and fixed seats would need 20 ques
 
 ![Company loss versus bank size](results/figures/fig5_company_loss.png)
 
+### 4. The mechanism is robust; the order of the types depends on the number of seats
+
+The headline game was re-solved exactly with one parameter moved at a time: bonus per known question
+Δ ∈ {0.5, 1, 2}, marking noise σ ∈ {0.5, 1, 2} and seats K ∈ {1, 2, 3} (294 games). In all 7 settings a tell
+costs nothing under a cut-off, the cut-off shares at least as much as fixed seats (140 of 140 comparisons), and
+under fixed seats the friendliness a type needs before telling ranks the types exactly as their own loss from a
+tell does. Weak < average < strong holds in 6 settings; with K = 3 of 6 the last seat sits at the median, so
+*average* candidates lose most and tell last.
+
+![Sensitivity](results/figures/fig6_sensitivity.png)
+
 ### Console output
 
 These images are the text of the log files in `results/logs/`, rendered by
@@ -116,8 +127,8 @@ Unit tests:
 ## Reproducing the results
 
 Requirements: Python 3.10 or newer and NumPy 2.0 or newer (the code uses `np.bitwise_count`). No GPU is needed.
-Everything ran on a laptop with 16 GB of RAM; a two-friend-group CCE program needs about 4 GB, so do not run
-several of them at once (see the worker settings below).
+Everything ran on laptops with 16 GB of RAM; a two-friend-group CCE program needs 4 to 6 GB (the HiGHS peak), so do not
+run several of them at once (see the worker settings below).
 
 ```bash
 uv sync --frozen --extra dev          # exact versions from uv.lock; creates .venv
@@ -125,25 +136,31 @@ uv sync --frozen --extra dev          # exact versions from uv.lock; creates .ve
 
 The committed results were produced with Python 3.10.19, NumPy 2.2.6, SciPy 1.15.3 and matplotlib 3.10.9
 (`uv.lock` pins these for Python 3.10). Other versions agree to about 1e-14 in the stored numbers. Without `uv`:
-`python -m venv .venv && .venv/bin/pip install -e ".[dev]"`.
+
+```bash
+python -m venv .venv
+.venv/bin/pip install -e ".[dev]"            # Linux / macOS
+.venv/Scripts/pip install -e ".[dev]"        # Windows
+```
 
 Line endings are fixed by `.gitattributes` (shell scripts are always LF), so `run_all.sh` also works from a Windows
 checkout in Git Bash.
 
-(`python -m venv .venv && .venv/bin/pip install -e ".[dev]"` works too.)
-
-To regenerate everything in one go (about 75 minutes on a 10-core laptop):
+To regenerate everything in one go (about 3 hours on a 16 GB laptop with `X1_WORKERS=2 X3_WORKERS=2 CCE_WORKERS=1`, most of
+it X1 and the CCE programs; on Windows run it from Git Bash):
 
 ```bash
 ./run_all.sh
 ```
+
+`run_all.sh` uses `$PY` if set, otherwise the `.venv` Python (either layout), otherwise `python` on the PATH.
 
 Or step by step:
 
 | Step | Command | Writes | Time |
 |---|---|---|---|
 | Unit tests (42) | `python -m pytest -q` | console | 15 s |
-| Verification checks | `python experiments/run_checks.py` | `results/checks/checks.json` | 10 s |
+| Verification checks | `python experiments/run_checks.py` | `results/checks/checks.json` | 10 s (7 min on a first run, which builds three payoff tables) |
 | X1: who tells | `python experiments/run_x1.py` | `results/x1/*.json` | 40 min |
 | X1: CCE programs for E0 and E2 | `python experiments/run_cce.py [n_workers] [network:env ...]` | `results/x1/x1_cce_<network>_<env>.json` | 2 h with one worker |
 | X1: mixed equilibria (dominance, support enumeration) | `python experiments/run_support.py` | `results/x1/x1_support.json` | 5 min |
@@ -155,6 +172,8 @@ Or step by step:
 | Tests of the explanations in the report | `python experiments/run_explanations.py` | `results/explanations/explanations.json` | 1 min |
 | Bias of the counterfactual credit in E2 | `python experiments/run_e2_bias.py` | `results/e2_bias/e2_bias.json` | 30 s |
 | X4: company loss | `python experiments/run_x4.py` | `results/x4/x4.json` | 11 min |
+| X5: sensitivity | `python experiments/run_sensitivity.py` | `results/x5/*.json` | 26 min |
+| CCE programs, independent second implementation (optional cross-check) | `python experiments/run_cce_e0e2.py` (needs X1) | `results/x1/independent/x1_cce_*.json` | 2 h (one worker, up to 6 GB) |
 | Figures, tables, numbers | `python experiments/make_figures.py` | `results/figures/`, `report/figures/`, `report/generated/`, `results/numbers.json` | 5 s |
 | Console screenshots | `python experiments/make_console_shots.py` | `results/figures/console_*.png` | 2 s |
 | Report PDF | `cd report && tectonic main.tex` | `report/main.pdf` | 10 s |
@@ -168,7 +187,9 @@ Notes:
 - Worker counts: `run_x1.py` uses 9 processes unless `X1_WORKERS=<n>` is set, `run_x3.py` one process per learner
   unless `X3_WORKERS=<n>` is set, and `run_cce.py` takes the number of workers as its first argument
   (`CCE_WORKERS` in `run_all.sh`). With 16 GB of RAM use about `X1_WORKERS=3 X3_WORKERS=2 CCE_WORKERS=1`.
-- All seeds are fixed, so re-running reproduces the committed result files.
+- All seeds are fixed, so re-running reproduces the committed result files. A second machine (Windows 11, Python 3.13,
+  NumPy 2.4; Bhavay, on the original files) rebuilt `run_checks.py` and `run_x4.py` from an empty table cache and matched
+  the committed `checks.json` and `x4.json` in every value except run times and one last-digit float rounding.
 - Payoff tables are cached in `results/tables/` (not committed). They are rebuilt automatically on first use, 15 to
   40 seconds each. The full set took 263 MB before the tables also stored block means of the pairwise hiring
   probabilities (needed to bootstrap fairness utilities); the nine X1 tables now take about 100 MB.
@@ -193,6 +214,8 @@ No number in the report is typed by hand. `experiments/make_figures.py` reads th
 | Table 2, Figure 2c, Section 5.2 | `experiments/run_x2.py` | `results/x2/x2.json` |
 | Table 3, Figure 4, Section 5.3 | `experiments/run_x3.py`, `experiments/analyze_x3.py` | `results/x3/x3_summary.json` |
 | Figure 5, Section 5.4 | `experiments/run_x4.py` | `results/x4/x4.json` |
+| Figure 6, Section 5.5 | `experiments/run_sensitivity.py` | `results/x5/x5_<param>_<value>.json`, `x5_summary.json` |
+| Section 5.1, CCE paragraph (E0, E2) | `experiments/run_cce.py` (cross-checked by `experiments/run_cce_e0e2.py`) | `results/x1/x1_cce_<network>_<env>.json`; the independent copies are in `results/x1/independent/` |
 | Table 4 (hypotheses) | `experiments/make_figures.py` | all of the above |
 
 ## Repository layout
@@ -253,9 +276,13 @@ run_all.sh           runs everything in order
   claimed about mixed equilibria beyond the CCE bound.
 - The linear programs over coarse correlated equilibria cover E0, E1 and E2 (coarser alpha grid, step 0.05, for two
   friend groups). In E1 and E2 the maximum and minimum sharing coincide in all 212 games, so no mixed or correlated
-  equilibrium shares more or less than the pure one. In E0 they coincide in only 55 of 106 games: for two friend
-  groups at alpha = 0.2 under a cut-off, the four pure equilibria share 67% of the possible tells while correlated
-  play can share anywhere from 66% to 99%. So the pure-equilibrium results describe E0 less completely.
+  equilibrium shares more or less than the pure one. In E0 they coincide in only 55 of 106 games; in 48 the CCE
+  interval is wider than the range of the pure equilibria, reaching up to 33 percentage points above the largest pure
+  sharing and up to 8 below the smallest (the interval itself is up to 42 points wide). The pairs network is the
+  exception: its CCE interval equals the pure range in all 42 games. For two friend groups at alpha = 0.2 under a
+  cut-off, the four pure equilibria share 67% of the possible tells while correlated play can share anywhere from 66%
+  to 99%. So the pure-equilibrium results describe E0 less completely. Two independent implementations
+  (`run_cce.py` and Bhavay's `run_cce_e0e2.py`, whose files are in `results/x1/independent/`) agree on all 212 rows.
 - The complete network at six candidates is handled by deviation tests, not full enumeration; eight candidates
   were not attempted.
 - One exception to "a cut-off shares at least as much as fixed seats" exists in 189 comparisons: two friend

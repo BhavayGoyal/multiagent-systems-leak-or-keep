@@ -1,3 +1,5 @@
+# line endings: text files are normalised to LF in the repository; shell scripts stay LF in a Windows checkout
+# (so run_all.sh runs from Git Bash) and binaries are never touched
 * text=auto
 *.sh text eol=lf
 *.pdf binary

@@ -1,0 +1,29 @@
+done delta=1 in 699s
+done delta=0.5 in 830s
+done sigma=0.5 in 831s
+done delta=2 in 832s
+done sigma=2 in 724s
+done K=1 in 741s
+done K=3 in 743s
+setting         tau | SEATS alpha* weak/avg/strong | order | BAR ell=0 all-tell | H2    | unique
+delta=0.5     0.497 | 0.122 / 0.345 / 0.388      | yes   | yes       NO      | 20/20 | yes
+baseline      0.497 | 0.102 / 0.322 / 0.376      | yes   | yes       yes     | 20/20 | yes
+delta=2       0.497 | 0.086 / 0.306 / 0.374      | yes   | yes       yes     | 20/20 | yes
+sigma=0.5     0.448 | 0.061 / 0.335 / 0.392      | yes   | yes       yes     | 20/20 | no
+sigma=2       0.658 | 0.168 / 0.301 / 0.347      | yes   | yes       NO      | 20/20 | no
+K=1           1.117 | 0.051 / 0.221 / 0.567      | yes   | yes       yes     | 20/20 | no
+K=3           0.000 | 0.201 / 0.365 / 0.221      | NO    | yes       yes     | 20/20 | no
+X5 done in 1575s
+
+real	26m16.364s
+user	0m0.000s
+sys	0m0.000s
+setting       tau | SEATS alpha* weak/avg/strong | w<a<s follows-loss | BAR ell=0 together jump@  | H2    | several BNE at
+delta=0.5   0.497 | 0.122 / 0.345 / 0.388        | yes   yes          | yes   yes      0.05  | 20/20 | -
+baseline    0.497 | 0.102 / 0.322 / 0.376        | yes   yes          | yes   yes      0.025 | 20/20 | -
+delta=2     0.497 | 0.086 / 0.306 / 0.374        | yes   yes          | yes   yes      0.025 | 20/20 | -
+sigma=0.5   0.448 | 0.061 / 0.335 / 0.392        | yes   yes          | yes   yes      0.025 | 20/20 | [('SEATS', 0.075, 2)]
+sigma=2     0.658 | 0.168 / 0.301 / 0.347        | yes   yes          | yes   NO       0.025 | 20/20 | [('BAR', 0.025, 4)]
+K=1         1.117 | 0.051 / 0.221 / 0.567        | yes   yes          | yes   yes      0.025 | 20/20 | [('SEATS', 0.2, 2)]
+K=3         0.000 | 0.201 / 0.365 / 0.221        | NO    yes          | yes   yes      0.025 | 20/20 | [('SEATS', 0.375, 2)]
+X5 done in 1s
