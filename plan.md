@@ -48,6 +48,27 @@ compared byte for byte; they are drawn from the identical data and tables. Memor
 
 **Still open from Phases 0–1:** the page limit (D1); whether to merge `phase-1`; 1.5(e) is in Phase 3.1.
 
+### Update: Bhavay Goyal's work was merged in (branch `merge-bhavay`)
+
+Bhavay made five commits on the original submission, in parallel with ours (his repository is now `origin`). They
+overlap with the plan, so the plan changes as follows:
+
+| Plan item | What his commits already deliver | What is left |
+|---|---|---|
+| 2.1 Sensitivity sweep | **X5** (`run_sensitivity.py`, `results/x5/`, Figure 6, report §5.5): Δ ∈ {0.5, 1, 2}, σ ∈ {0.5, 1, 2}, K ∈ {1, 2, 3}, one at a time, 294 games. Finding: the mechanism survives everywhere; at K = 3 the order of the types changes (average types lose most) | the message cost **c** ∈ {0.0001, 0.01}, the **hub position** of the star network, and (2.4) joint changes. The K = 3 claim can be cross-checked with `pivotality_by_type` at K = 3 (a one-second run) |
+| 3.1 / 1.5(e) E0 mechanism | the E0 CCE finding was found independently (same 55 / 106 and 48 / 106 counts, same intervals on all 212 rows) and described in more detail: up to 33 points above the largest pure sharing and up to 8 below; the pairs network is untouched | the *test* of the redundancy explanation (vary c; inspect the max-sharing CCE) is still open |
+| 3.2 Learners in E0 | the metric `frac_within_c`: in the E0 cut-off runs the settled profile is an exact equilibrium in 0 % of runs but within one message cost of one in 100 %, for all six learners, and the two counts coincide in every other setting (report §5.3, "A caution about agreement") | where the learners sit relative to the CCE interval |
+| 0.3 / 0.4 | `numpy>=2.0`, a `python`-on-PATH fallback in `run_all.sh`, a from-scratch check of `run_checks.py` and `run_x4.py` on a second machine (Windows 11, Python 3.13, NumPy 2.4) | — |
+
+Regression checks after the merge: his 30 X3 cells (five learners) are reproduced exactly by the regenerated summary, and
+**re-running his X5 script with the merged code (2 workers, 45 min) reproduces all 8 of his result files exactly** (largest
+relative float difference 0.0), so the new table format and helpers did not change his results.
+
+Decisions made in the merge (see the merge commit message): the two CCE implementations agree exactly, so `run_cce.py`
+stays canonical and his script is an optional independent cross-check writing to `results/x1/independent/`;
+`make_figures.py` asserts that both give the same macros. The report's section numbers moved: X5 is §5.5, the verdict,
+deviations and limits are §5.6, and the report is 12 pages.
+
 ## Contents
 
 1. [How to read this plan](#how-to-read-this-plan)
