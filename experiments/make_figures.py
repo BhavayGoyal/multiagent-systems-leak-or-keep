@@ -474,6 +474,14 @@ def table_x3(x3):
     e0 = [x3["cells"][f"{n}|E0|BAR"] for n in x3["learners"]]
     num("AgreeEzeroBarMin", pct(min(c["agree"]["mean"] for c in e0))); num("AgreeEzeroBarMax", pct(max(c["agree"]["mean"] for c in e0)))
     num("ExplEzeroBarMin", f"{100 * min(c['expl_mostplayed']['mean'] for c in e0):.2f}"); num("ExplEzeroBarMax", f"{100 * max(c['expl_mostplayed']['mean'] for c in e0):.2f}")
+    if all("frac_within_c" in c["expl_mostplayed"] for c in x3["cells"].values()):
+        # runs whose settled profile is within one message cost c of an equilibrium (but not exactly one)
+        num("WithinCEzeroBarMin", pct(min(c["expl_mostplayed"]["frac_within_c"] for c in e0)))
+        num("ExactEzeroBarMax", pct(max(c["expl_mostplayed"]["frac_exact_eq"] for c in e0)))
+        other = [c for k, c in x3["cells"].items() if not k.endswith("|E0|BAR")]
+        num("WithinCOtherSame", sum(abs(c["expl_mostplayed"]["frac_within_c"] - c["expl_mostplayed"]["frac_exact_eq"]) < 1e-12
+                                    for c in other))
+        num("WithinCOtherTot", len(other))
     t = x3["tests"]["cce_gap_falls"]
     num("GapFallTests", len(t)); num("GapFallSig", sum(x["p_holm"] < 0.05 and x["mean_diff"] > 0 for x in t))
     if "model_based_vs_ucb1" in x3["tests"]:
@@ -550,6 +558,76 @@ def fig_company(x4):
     num("XfourBoot", x4["n_boot"])
 
 
+# =============================================================================== X5 (sensitivity)
+X5_ORDER = ["delta=0.5", "baseline", "delta=2", "sigma=0.5", "sigma=2", "K=1", "K=3"]
+X5_LABEL = {"delta=0.5": r"$\Delta=0.5$", "baseline": "baseline", "delta=2": r"$\Delta=2$",
+            "sigma=0.5": r"$\sigma=0.5$", "sigma=2": r"$\sigma=2$", "K=1": r"$K=1$", "K=3": r"$K=3$"}
+TYPE_MARK = {"weak": ("o", "#9ecae1"), "avg": ("s", "#4292c6"), "strong": ("D", "#08306b")}
+
+
+def fig_sensitivity(x5):
+    """(a) break-even friendliness by type under fixed seats (and the single switch point under a cut-off) for every
+    setting; (b) equilibrium sharing curves under fixed seats for every setting."""
+    if x5 is None:
+        return
+    keys = [k for k in X5_ORDER if k in x5["settings"]]
+    fig, axes = plt.subplots(1, 2, figsize=(6.9, 2.2), gridspec_kw={"width_ratios": [1.25, 1]})
+    ax = axes[0]
+    for k_i, key in enumerate(keys):
+        s = x5["settings"][key]
+        for t_i, th in enumerate(("weak", "avg", "strong")):
+            mk, col = TYPE_MARK[th]
+            ax.plot(k_i + (t_i - 1) * 0.18, s["by_type"]["SEATS"][th]["alpha_star_local"], mk, color=col, ms=4,
+                    label=f"{TYPES[t_i]} (fixed seats)" if k_i == 0 else None)
+        b = np.mean([s["by_type"]["BAR"][th]["alpha_star_local"] for th in ("weak", "avg", "strong")])
+        ax.plot(k_i, b, "_", color=COL["BAR"], ms=11, mew=2, label="every type (cut-off)" if k_i == 0 else None)
+    ax.set_xticks(range(len(keys))); ax.set_xticklabels([X5_LABEL[k] for k in keys], rotation=0, fontsize=6.8)
+    ax.set_xlim(-0.5, len(keys) - 0.5); ax.set_ylim(0, None)
+    ax.set_ylabel(r"break-even friendliness $\alpha^\star$"); ax.set_title("(a) Who needs how much friendliness")
+    ax.legend(frameon=False, fontsize=6.3, loc="upper left", ncol=2, handletextpad=0.3, columnspacing=0.8)
+    ax.set_ylim(0, ax.get_ylim()[1] * 1.3)
+    ax = axes[1]
+    a = x5["alphas"]
+    cmap = plt.get_cmap("Blues")
+    for k_i, key in enumerate(keys):
+        s = x5["settings"][key]
+        y = np.array([np.nan if v is None else v for v in s["share_seats"]], dtype=float)
+        base = key == "baseline"
+        ax.step(a, y, where="post", color=COL["SEATS"] if base else cmap(0.35 + 0.08 * k_i), lw=1.9 if base else 0.9,
+                zorder=3 if base else 2, label=RULE["SEATS"] + " (baseline bold)" if base else None)
+        yb = np.array([np.nan if v is None else v for v in s["share_bar"]], dtype=float)
+        ax.step(a, yb, where="post", color=COL["BAR"], lw=1.9 if base else 0.9, alpha=1 if base else 0.45,
+                label=RULE["BAR"] if base else None)
+    ax.set_xlabel(r"friendliness $\alpha$"); ax.set_ylabel("share of possible\ntells made")
+    ax.set_xlim(0, 0.5); ax.set_ylim(-0.04, 1.04); ax.set_title("(b) Sharing in all seven settings")
+    ax.legend(frameon=False, fontsize=6.3, loc="center right")
+    fig.tight_layout(w_pad=1.4)
+    save(fig, "fig6_sensitivity")
+
+
+def numbers_x5(x5):
+    if x5 is None:
+        return
+    S = x5["settings"]
+    num("XfiveSettings", len(S))
+    num("XfiveOrderOk", sum(s["verdicts"]["seats_order_weak_lt_avg_le_strong"] for s in S.values()))
+    num("XfiveBarZeroLoss", sum(s["verdicts"]["bar_loss_zero"] for s in S.values()))
+    num("XfiveBarTogether", sum(s["verdicts"]["bar_all_types_switch_together"] and s["verdicts"]["bar_one_jump_none_to_all"]
+                                for s in S.values()))
+    num("XfiveHtwoOk", sum(s["verdicts"]["h2_holds"] for s in S.values()))
+    h2 = [tuple(map(int, s["verdicts"]["h2_bar_ge_seats"].split("/"))) for s in S.values()]
+    num("XfiveHtwoCellsOk", sum(a for a, _ in h2)); num("XfiveHtwoCells", sum(b for _, b in h2))
+    for th, tt in (("weak", "Weak"), ("avg", "Avg"), ("strong", "Strong")):
+        v = [s["by_type"]["SEATS"][th]["alpha_star_local"] for s in S.values()]
+        num(f"XfiveAstar{tt}Lo", f"{min(v):.2f}"); num(f"XfiveAstar{tt}Hi", f"{max(v):.2f}")
+    sw = [s["verdicts"]["bar_switch_alpha"] for s in S.values() if s["verdicts"]["bar_switch_alpha"] is not None]
+    num("XfiveBarSwitchLo", f"{min(sw):g}"); num("XfiveBarSwitchHi", f"{max(sw):g}")
+    multi = [(k, m) for k, s in S.items() for m in s["verdicts"]["alphas_with_several_bne"]]
+    num("XfiveMulti", len(multi))
+    num("XfiveGames", 2 * len(S) * len(x5["alphas"]))
+    print("  X5 games with several BNE:", multi)
+
+
 # =============================================================================== checks
 def table_checks(ch):
     if ch is None:
@@ -604,6 +682,8 @@ def main():
     table_x2(x2)
     fig_learning(x3); table_x3(x3)
     fig_company(x4)
+    x5 = load("x5/x5_summary.json")
+    fig_sensitivity(x5); numbers_x5(x5)
     table_checks(ch)
     with open(os.path.join(GEN, "numbers.tex"), "w") as f:
         f.write("% AUTO-GENERATED by experiments/make_figures.py from results/*.json -- do not edit by hand.\n")

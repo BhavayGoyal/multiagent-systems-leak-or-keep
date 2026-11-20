@@ -369,7 +369,9 @@ seats, where the best arm for most types is silence --- and silence teaches noth
 Holm-corrected $p<0.001$ in \GapFallSig{} of \GapFallTests{} tests) and ends at \GapFinalMin--\GapFinalMax{} percentage points. It is not yet zero: exploration is still being paid for.
 
 \finding{A caution about ``agreement''.} In E0 with a cut-off, agreement looks poor (\AgreeEzeroBarMin--\AgreeEzeroBarMax\%). The game there has \NumEqEzeroBar{} equilibria that differ only in which of two friends tells the last candidate; the learners end up
-both telling. The residual gain from deviating is \ExplEzeroBarMin{} percentage points for every learner --- exactly the message cost $c$. They have learned everything that matters and failed only to coordinate on who saves a message.
+both telling. The residual gain from deviating is \ExplEzeroBarMin{} percentage points for every learner --- exactly the message cost $c$. They have learned everything that matters and failed only to coordinate on who saves a message:
+the settled profile is an exact equilibrium in at most \ExactEzeroBarMax\% of these runs, but within one message cost of one in \WithinCEzeroBarMin\% of them, for every learner.
+Everywhere else the two counts coincide (\WithinCOtherSame{} of \WithinCOtherTot{} learner--setting pairs), so $c$ measures this coordination slack and nothing more.
 
 \subsection{What it costs the company (RQ4)}
 \begin{figure}[t]\centering
