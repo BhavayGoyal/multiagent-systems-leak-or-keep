@@ -99,7 +99,10 @@ The headline game was re-solved exactly with one parameter moved at a time: bonu
 costs nothing under a cut-off, the cut-off shares at least as much as fixed seats (140 of 140 comparisons), and
 under fixed seats the friendliness a type needs before telling ranks the types exactly as their own loss from a
 tell does. Weak < average < strong holds in 6 settings; with K = 3 of 6 the last seat sits at the median, so
-*average* candidates lose most and tell last.
+*average* candidates lose most and tell last. This does not rest on the loss itself: on fresh days with nobody
+sharing, at K = 3 an average candidate holds the last seat on 23.6% of days, a strong one on 17.4% and a weak one on
+9.0% (`experiments/run_h1.py`), so for every K the type most often at the margin is the one that needs the most
+friendliness.
 
 ![Sensitivity](results/figures/fig6_sensitivity.png)
 
@@ -159,7 +162,7 @@ Or step by step:
 
 | Step | Command | Writes | Time |
 |---|---|---|---|
-| Unit tests (42) | `python -m pytest -q` | console | 15 s |
+| Unit tests (43) | `python -m pytest -q` | console | 15 s |
 | Verification checks | `python experiments/run_checks.py` | `results/checks/checks.json` | 10 s (7 min on a first run, which builds three payoff tables) |
 | X1: who tells | `python experiments/run_x1.py` | `results/x1/*.json` | 40 min |
 | X1: CCE programs for E0 and E2 | `python experiments/run_cce.py [n_workers] [network:env ...]` | `results/x1/x1_cce_<network>_<env>.json` | 2 h with one worker |
@@ -236,7 +239,7 @@ leakgame/            the library
   checks.py          verification of the worked example, Lemma 1 and Propositions 1-3
   pipeline.py        builds tables, games and equilibrium targets for the learning runs
 experiments/         one script per experiment, plus figures and console screenshots
-tests/               42 unit tests
+tests/               43 unit tests
 results/             result files, logs and figures (PNG)
 report/              LaTeX source, generated tables and numbers, figures (PDF), main.pdf
 run_all.sh           runs everything in order

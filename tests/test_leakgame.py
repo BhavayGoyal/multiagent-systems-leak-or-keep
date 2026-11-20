@@ -243,6 +243,14 @@ def test_baseline_values_match_the_tables(small_table):
     assert pv["welfare"] == pytest.approx(g.expected_utilities(sig).sum()) and pv["share"] == pytest.approx(g.sharing_rate(sig)[0])
 
 
+def test_pivotal_type_depends_on_the_number_of_seats():
+    # with half the candidates hired the last seat sits at the median: average types hold it most often (plan.md, issue I2)
+    r = pivotality_by_type(GameConfig(K=3), n_days=120_000, seed=2)
+    weak, avg, strong = r["P_rank_K"]
+    assert weak < strong < avg
+    assert np.mean(r["P_rank_K"]) == pytest.approx(1 / 6, abs=0.005)
+
+
 # ------------------------------------------------------------------ the learning loop
 def test_run_learning_all_learners_and_leak_aware_equals_ucb1_under_E0():
     cfg = GameConfig(n=4, K=2, network="pairs")

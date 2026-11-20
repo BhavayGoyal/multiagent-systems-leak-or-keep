@@ -15,7 +15,7 @@ fi
 export MPLCONFIGDIR="$PWD/.mplconfig"
 mkdir -p results/logs "$MPLCONFIGDIR"
 
-$PY -m pytest -q                                   | tee results/logs/tests.log     # 42 unit tests, ~15 s
+$PY -m pytest -q                                   | tee results/logs/tests.log     # 43 unit tests, ~15 s
 $PY experiments/run_checks.py                      | tee results/logs/checks.log    # Table 1 (7 min on a first run: builds payoff tables)
 $PY experiments/run_x1.py                          | tee results/logs/x1.log        # Figures 1-3   (skips finished cells)
 $PY experiments/run_cce.py ${CCE_WORKERS:-1}        | tee results/logs/x1_cce.log    # CCE programs for E0 and E2 (E1 is in run_x1)

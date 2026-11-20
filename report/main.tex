@@ -280,7 +280,7 @@ Runs that share a seed share every random draw of the environment across rules, 
 two-sided sign-flip permutation tests on the paired differences, and Holm-corrected $p$-values within each family of tests~\cite{holm}.
 
 \textbf{Checks before any experiment} (Table~\ref{tab:checks}). The simulator must reproduce the worked example and every structural result of Section~3; all pass.
-A further 42 unit tests cover every module: the simulator and tables, the game and the solvers (including replicator dynamics, the CCE program and the bootstrap), support enumeration (against matching pennies,
+A further 43 unit tests cover every module: the simulator and tables, the game and the solvers (including replicator dynamics, the CCE program and the bootstrap), support enumeration (against matching pennies,
 a coordination game and a dominance-solvable game), the learners, the learning loop (including that the leak-aware learner is identical to UCB1 under E0), the statistics, the parameter sweep, the pivotality and baseline calculations.
 
 \begin{table}[t]\centering\small
@@ -291,7 +291,7 @@ a coordination game and a dominance-solvable game), the learners, the learning l
 % =====================================================================================================
 \section{Results}\label{sec:results}
 
-\subsection{Who tells? The hiring rule decides (RQ1)}
+\subsection{Who tells? The hiring rule decides (RQ1)}\label{sec:who}
 \begin{figure}[t]\centering
 \includegraphics[width=0.66\textwidth]{figures/fig1_who_tells.pdf}
 \caption{The equilibrium for two friend groups $\{1,3,5\}$, $\{2,4,6\}$ at friendliness $\alpha=0.2$ (leak model E1). Under either rule it is the only pure equilibrium among 262{,}144 profiles.}\label{fig:who}
@@ -464,8 +464,11 @@ X1--X4 hold $\Delta=\sigma=1$ and $K=2$ of $6$ fixed, and the bootstrap measures
 \finding{The mechanism survives everywhere; the exact order of the types does not.} In all \XfiveSettings{} settings a tell costs nothing under a cut-off (\XfiveBarZeroLoss{} of \XfiveSettings),
 the cut-off shares at least as much as fixed seats (\XfiveHtwoCellsOk{} of \XfiveHtwoCells{} comparisons), and under fixed seats the break-even friendliness ranks the types exactly as their own loss $\ell$
 does (\XfiveLossOrderOk{} of \XfiveSettings). The familiar order weak $<$ average $<$ strong holds in \XfiveOrderOk{} of them. The exception is $K=3$: with half the candidates hired, the marginal seat sits at the
-median, a tell costs an \emph{average} candidate most (\XfiveKthreeEllWeak, \XfiveKthreeEllAvg, \XfiveKthreeEllStrong{} points for weak, average, strong) and the thresholds follow
-(\XfiveKthreeWeak, \XfiveKthreeAvg, \XfiveKthreeStrong). With $K=1$ a strong candidate needs $\alpha^\star=\XfiveKoneStrong$ and never tells on our grid. Under a cut-off every type switches at the
+median, a tell costs an \emph{average} candidate most (\XfiveKthreeEllWeak, \XfiveKthreeEllAvg, \XfiveKthreeEllStrong{} percentage points of her own hiring chance per friend told, for weak, average, strong;
+\EllSeatsWeak, \EllSeatsAvg, \EllSeatsStrong{} at the baseline, Section~\ref{sec:who}) and the thresholds follow
+(\XfiveKthreeWeak, \XfiveKthreeAvg, \XfiveKthreeStrong). The reversal does not rest on the loss itself: on fresh days with nobody sharing, at $K=3$ an average candidate holds
+the last seat on \PivKthreeAvg\% of days, a strong one on \PivKthreeStrong\% and a weak one on \PivKthreeWeak\% (at $K=1$: \PivKoneWeak, \PivKoneAvg{} and \PivKoneStrong\%), so for every $K$
+the type most often at the margin is the one that needs the most friendliness. With $K=1$ a strong candidate needs $\alpha^\star=\XfiveKoneStrong$ and never tells on our grid. Under a cut-off every type switches at the
 same point in \XfiveBarTogether{} of \XfiveSettings{} settings (at $\alpha=\XfiveBarSwitchLo$--$\XfiveBarSwitchHi$, the message cost over the friend's gain); in the remaining one (\XfiveBarSplitWhere) the switch point
 falls just below the first grid value and \XfiveBarSplitN{} near-indifferent equilibria share \XfiveBarSplitLo--\XfiveBarSplitHi\% there. \XfiveMulti{} of the \XfiveGames{} games have more than one pure equilibrium, each on a step of the staircase.
 
@@ -476,7 +479,7 @@ falls just below the first grid value and \XfiveBarSplitN{} near-indifferent equ
 \toprule
  & Hypothesis & Refuted if (review) & Evidence & Verdict\\\midrule
 H1 & Under fixed seats, $\alpha^\star$ is highest for the types most likely to be pivotal & $\alpha^\star$ flat, or lowest for pivotal types &
-$\alpha^\star=\AstarLocalSeatsWeak<\AstarLocalSeatsAvg<\AstarLocalSeatsStrong$, in the order of how often a type holds the last seat when nobody shares (\PivWeak, \PivAvg, \PivStrong\% of days, fresh simulation without sharing) and of the own loss ($\ell=\EllSeatsWeak,\EllSeatsAvg,\EllSeatsStrong$ points); in the X5 settings $\alpha^\star$ follows $\ell$ in all \XfiveSettings{}, though at $K=3$ average types are the pivotal ones & Supported\\
+$\alpha^\star=\AstarLocalSeatsWeak<\AstarLocalSeatsAvg<\AstarLocalSeatsStrong$, in the order of how often a type holds the last seat when nobody shares (\PivWeak, \PivAvg, \PivStrong\% of days, fresh simulation without sharing) and of the own loss ($\ell=\EllSeatsWeak,\EllSeatsAvg,\EllSeatsStrong$ points); in the X5 settings $\alpha^\star$ follows $\ell$ in all \XfiveSettings{}, though at $K=3$ average types are the pivotal ones (they hold the last seat most often, \PivKthreeAvg\% against \PivKthreeStrong\% for strong); the pivotality order matches the order of $\alpha^\star$ at $K=1,2,3$ & Supported\\
 H2 & Cut-off shares more than fixed seats for every $\alpha\in[0,0.5]$ & Fixed seats share more at some $\alpha$ &
 Holds in all \HtwoCellsNoEzero{} E1/E2 comparisons. In E0 fails once (\HtwoViolWhere): fixed seats have equilibria sharing up to \HtwoViolSeatsHi\%, the cut-off \HtwoViolBar\% &
 Refuted once (E0); holds in E1/E2\\

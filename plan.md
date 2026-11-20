@@ -5,7 +5,7 @@ four of us. You should be able to pick up any single item and work on it without
 
 - **Where we are (after the merge):** branch `merge-bhavay` (pushed to `origin`, Bhavay's repository) contains all work so
   far: the original submission, the review items 1–8, Phases 0 and 1, and Bhavay's five parallel commits (X5 sensitivity,
-  an independent CCE implementation, an E0 coordination measure, setup fixes). 42 unit tests pass; the report is 12 pages.
+  an independent CCE implementation, an E0 coordination measure, setup fixes). 43 unit tests pass; the report is 12 pages.
   `report_merge.md` has the full audit; `fix.md`, `report_p0.md` and `report_p1.md` record the earlier steps.
 - **What is open:** a few fixes found in the merge audit (Phase M), the rest of the robustness checks, the E0 mechanism,
   CCEs for X2, the stretch target `n = 8`, and the final write-up.
@@ -34,7 +34,8 @@ the reports named in the last column.
 | 1.5 Explanations | done (a–d) | C | (c) refuted; (e) is 3.1 | `report_p1.md` |
 | 1.6 E2 bias | done | C | ≤ 0.08 pp | `report_p1.md` |
 | Merge | done | C | `merge-bhavay`; audit found P1–P5 | `report_merge.md` |
-| **M.1–M.4** | **open** | — | fixes from the merge audit (units in §5.5, pivotality at K, `\RepoURL`, `main`) | this file, Phase M |
+| M.1, M.2 | done | C | units in §5.5 fixed; pivotality at K = 1–3 in the report | this file, issues I1, I2 |
+| **M.3, M.4** | **open** | — | final repository / `\RepoURL`; `main` on `origin` (team decisions) | issues I3, I4 |
 | 2.1 Sensitivity | **partly** | B | X5 covers Δ, σ, K one at a time; **left: c and the hub position** | report §5.5 |
 | 2.2 X4 at other α | open | — | | |
 | 2.3 Company-value definition | open | — | | |
@@ -52,12 +53,28 @@ only after decisions D3–D5; Phase 6 last.
 
 ---
 
+## Issues to fix now
+
+The current issues, found in the merge audit (`report_merge.md`) and while preparing this list. They come before any new
+experiment. "Who decides" marks issues that need a team decision rather than work.
+
+| ID | Issue | Why it matters | Fix | Plan item | Status |
+|---|---|---|---|---|---|
+| **I1** | The own loss from a tell is given **per friend told** in §5.1 (0.38 / 1.49 / 1.60) but **for telling all later friends** in §5.5 (K = 3: 1.24 / 2.64 / 1.48), both as "points" | a reader concludes the weak type's loss tripled at K = 3; in one unit it rose from 0.38 to 0.83 | compute the X5 losses per friend in `make_figures.py` from the per-candidate losses already stored in `results/x5/*.json` (no re-run, Bhavay's script and data untouched); say "per friend told" in §5.5 and give the baseline. Checked first: the type orderings are identical in both units in all 7 settings, so no X5 conclusion changes | M.1 | **fixed**: §5.5 now says 0.83 / 1.76 / 0.98 points per friend told at K = 3 (baseline 0.38 / 1.49 / 1.60, = §5.1); `make_figures.py` asserts the orderings are unit-independent and the baseline equals §5.1 |
+| **I2** | The report's H1 evidence uses pivotality only at K = 2, although X5 shows the pivotal type changes with K | the K = 3 reversal is explained only by the loss itself, which is circular (the same problem 1.3 fixed at K = 2) | `run_h1.py` for K = 1, 2, 3; macros; one clause in §5.5 and in the H1 row of Table 4; a unit test | M.2 | **fixed**: at K = 1 / 2 / 3 the last seat is held by weak / average / strong on 0.9 / 8.5 / 40.7, 3.6 / 17.9 / 28.5 and 9.0 / 23.6 / 17.4 % of days; the order matches α\* at every K (2 M days each); in §5.5, Table 4, README; test added (43) |
+| **I3** | `\RepoURL` in the report points at `Vish-Overflows/...`, which contains none of this work | the report promises that the linked repository regenerates every number | decide the final repository, put the work there, update `\RepoURL` | M.3 | **team decides** (D8) |
+| **I4** | `main` is behind `merge-bhavay` locally and on `origin` | anyone cloning `main` gets an old state | local: fast-forward `main`; `origin/main` (Bhavay's): fast-forward only with his agreement | M.4 | local: open; origin: **team decides** (D9) |
+| **I5** | Stale local branches `fix/items-5-7` and `phase-1` | confusion about which branch is current | delete after I4 (both are fully contained in `merge-bhavay`) | M.4 | open |
+| **I6** | The page limit is unknown; the report is 12 pages | the trim plan (0.1, 6.2) cannot be applied without it | find out | D1 | **team decides** |
+| **I7** | The full clean-clone reproduction (0.4) predates Phase 1, X5 and the merge | the README's "every number regenerates" is only partly re-verified for the merged code | re-run the clean-clone procedure on the merged branch and compare (`compare_with_committed.py`) | 6.4 (pulled forward) | open |
+| I8 | The Phase 1 commit message says P(last seat \| strong) = 28.6 %; the value is 28.5 % | cosmetic; all files are correct | not fixed (would need a history rewrite of pushed commits) | — | won't fix |
+
 ## Phase M — Fixes from the merge audit
 
 Found while checking the merged repository (`report_merge.md`, section 5). All are small; do them before new experiments
 so that new results land on a consistent report.
 
-### M.1 One unit for the own loss across §5.1 and §5.5 — **Must**
+### M.1 One unit for the own loss across §5.1 and §5.5 — **Must** — ✅ fixed (issue I1)
 
 - **Problem.** §5.1 gives the own loss per friend told (0.38 / 1.49 / 1.60 points); §5.5 (X5) gives it for telling all
   later friends (K = 3: 1.24 / 2.64 / 1.48; at the baseline 0.57 / 2.23 / 2.41), with the same word "points". A reader
@@ -68,7 +85,7 @@ so that new results land on a consistent report.
   numbers are in `results/x5/*.json`). (a) is less invasive; (b) is more consistent. Bhavay's script, so agree with him.
 - **Done when.** Both sections use one stated unit; PDF rebuilt. **Owner.** Bhavay or Chaitanya. **Cost.** 1 hour.
 
-### M.2 Pivotality across K in the report — **Should**
+### M.2 Pivotality across K in the report — **Should** — ✅ fixed (issue I2)
 
 - **What.** `pivotality_by_type` at K = 1, 2, 3 (1 million days each, a few seconds) gives P(holds the last seat):
   0.9 / 8.5 / 40.7 %, 3.6 / 17.9 / 28.5 %, 9.0 / 23.6 / 17.4 % (weak / average / strong). In every K the ordering
@@ -642,7 +659,7 @@ Measured on our 24-thread, 16 GB laptop unless noted.
 
 | Job | Time | Notes |
 |---|---|---|
-| Unit tests (42) | 10–15 s | |
+| Unit tests (43) | 10–15 s | |
 | Payoff table, two groups, n = 6 | 15–40 s | pairs ~8 s; tables cached in `results/tables/` |
 | X1 (`run_x1.py`) | ~40 min | original machine; nine cells in parallel |
 | CCE programs E0 + E2 (`run_cce.py`) | ~1.8 h with one worker | two-groups LP pair ≈ 60–110 s and ~4 GB |

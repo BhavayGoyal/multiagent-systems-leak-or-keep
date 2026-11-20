@@ -736,11 +736,32 @@ def numbers_x5(x5):
     num("XfiveSettings", len(S))
     num("XfiveOrderOk", sum(s["verdicts"]["seats_order_weak_lt_avg_le_strong"] for s in S.values()))
     num("XfiveLossOrderOk", sum(s["verdicts"]["seats_alpha_order_follows_loss"] for s in S.values()))
+    # Own loss PER FRIEND TOLD, the unit of section 5.1 (EllSeats*): run_sensitivity.py stores, per candidate, the loss from
+    # telling ALL later friends; divide by each candidate's number of later friends, as numbers_x1 does.  The type
+    # orderings must not depend on the unit (checked here for every setting).
+    from leakgame.config import GameConfig
+    n_later = {f"c{i + 1}": len(GameConfig(network="two_groups").later_friends(i)) for i in range(6)}
+
+    def loss_per_friend(key):
+        full = load(f"x5/x5_{key.replace('=', '_')}.json") if key != "baseline" else load("x5/x5_delta_1.json")
+        lg = full["rules"]["SEATS"]["loss_gain"]
+        out = {}
+        for th in ("weak", "avg", "strong"):
+            cells = [c for c in lg if c.endswith("/" + th)]
+            out[th] = float(np.mean([lg[c]["ell"] / n_later[c.split("/")[0]] for c in cells]))
+        return out
+
+    for key, s in S.items():
+        per, tot = loss_per_friend(key), s["verdicts"]["seats_loss"]
+        assert sorted(per, key=per.get) == sorted(tot, key=tot.get), f"X5 type order depends on the loss unit in {key}"
+    base = loss_per_friend("baseline")
+    assert abs(100 * base["weak"] - float(NUM.get("EllSeatsWeak", 100 * base["weak"]))) < 0.006, "X5 baseline != section 5.1"
     k3 = S.get("K=3")
     if k3 is not None:
+        per3 = loss_per_friend("K=3")
         for th, tt in (("weak", "Weak"), ("avg", "Avg"), ("strong", "Strong")):
             num(f"XfiveKthree{tt}", f"{k3['by_type']['SEATS'][th]['alpha_star_local']:.2f}")
-            num(f"XfiveKthreeEll{tt}", f"{100 * k3['verdicts']['seats_loss'][th]:.2f}")
+            num(f"XfiveKthreeEll{tt}", f"{100 * per3[th]:.2f}")
     k1 = S.get("K=1")
     if k1 is not None:
         num("XfiveKoneStrong", f"{k1['by_type']['SEATS']['strong']['alpha_star_local']:.2f}")
@@ -945,6 +966,12 @@ def numbers_h1(piv):
         num("PivNext" + tn, f"{100 * piv['P_rank_K1'][th]:.1f}")
     num("PivDays", f"{piv['n_days'] // 1_000_000}\,million")
     num("PivOrderOk", "yes" if piv["order_matches_alpha_star"] else "no")
+    if "by_K" in piv:                                  # pivotality at K = 1, 2, 3 against X5's alpha* order (issue I2)
+        for K, tk in (("1", "Kone"), ("3", "Kthree")):
+            for th, tn in enumerate(("Weak", "Avg", "Strong")):
+                num(f"Piv{tk}{tn}", f"{100 * piv['by_K'][K]['P_rank_K'][th]:.1f}")
+        num("PivOrderAllK", "yes" if piv.get("orders_match_at_every_K") else "no")
+        assert piv.get("orders_match_at_every_K"), "pivotality order differs from the X5 alpha* order at some K"
 
 
 def main():
