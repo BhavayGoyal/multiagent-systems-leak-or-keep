@@ -120,6 +120,7 @@ Or step by step:
 | X3: statistics | `python experiments/analyze_x3.py` | `results/x3/x3_summary.json` | 30 s |
 | X4: company loss | `python experiments/run_x4.py` | `results/x4/x4.json` | 11 min |
 | X5: sensitivity | `python experiments/run_sensitivity.py` | `results/x5/*.json` | 26 min |
+| CCE programs, E0 and E2 | `python experiments/run_cce_e0e2.py` (needs X1) | `results/x1/x1_cce_*.json` | 2 h (one worker, ~6 GB) |
 | Figures, tables, numbers | `python experiments/make_figures.py` | `results/figures/`, `report/figures/`, `report/generated/`, `results/numbers.json` | 5 s |
 | Console screenshots | `python experiments/make_console_shots.py` | `results/figures/console_*.png` | 2 s |
 | Report PDF | `cd report && tectonic main.tex` | `report/main.pdf` | 10 s |
@@ -153,6 +154,7 @@ No number in the report is typed by hand. `experiments/make_figures.py` reads th
 | Table 3, Figure 4, Section 5.3 | `experiments/run_x3.py`, `experiments/analyze_x3.py` | `results/x3/x3_summary.json` |
 | Figure 5, Section 5.4 | `experiments/run_x4.py` | `results/x4/x4.json` |
 | Figure 6, Section 5.5 | `experiments/run_sensitivity.py` | `results/x5/x5_<param>_<value>.json`, `x5_summary.json` |
+| Section 5.1, CCE paragraph (E0, E2) | `experiments/run_cce_e0e2.py` | `results/x1/x1_cce_<network>_<env>.json`, `x1_cce_E0E2_summary.json` |
 | Table 4 (hypotheses) | `experiments/make_figures.py` | all of the above |
 
 ## Repository layout
@@ -198,8 +200,10 @@ run_all.sh           runs everything in order
 - The "model-based" learner of the proposal is implemented as the simpler leak-aware UCB, which needs the friend
   to report how many told questions came up. `results/logs/x3_model_based_rerun.log` is from its final run,
   after a fix that refunds the message cost when crediting the "did not tell" arm.
-- Mixed equilibria are sought by replicator dynamics only; there is no support enumeration.
-- The linear programs over coarse correlated equilibria were run for leak model E1 only.
+- Mixed equilibria are sought by replicator dynamics only; there is no support enumeration (with nine or more
+  agents the indifference conditions are polynomial). The linear programs over coarse correlated equilibria bound
+  them: in E1 and E2 (212 games) the CCE sharing interval equals the pure-equilibrium range everywhere; in E0 it is
+  wider in 48 of 106 games, by up to 33 percentage points (the pairs network is the exception).
 - The complete network at six candidates is handled by deviation tests, not full enumeration; eight candidates
   were not attempted.
 - One exception to "a cut-off shares at least as much as fixed seats" exists in 189 comparisons: two friend

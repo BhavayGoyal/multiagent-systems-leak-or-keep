@@ -312,8 +312,11 @@ It is also where the one exception sits (\HtwoViolWhere): fixed seats have \Htwo
 \finding{How solid are these equilibria?} The reported profile stays an exact equilibrium in at least 95\% of bootstrap replicates in \XoneBootOk{} of \XoneBootTot{} games (\XoneBootOkPct\%). The exceptions sit
 on a step of the staircase, where a type is nearly indifferent; even there the 95th-percentile $\varepsilon$ is at most \XoneWorstEpsPP{} percentage points of utility. So the \emph{pattern} is certain and each \emph{threshold} is known to
 within one grid step. Best-response dynamics converged in \XoneBrdOk{} of \XoneBrdTot{} runs, and replicator dynamics ended at an enumerated pure equilibrium in \XoneRepMatch{} of \XoneRepTot{} runs (the other \XoneRepRest{}, all in
-the most fragile game, had not settled after 3{,}000 steps). The CCE linear programs agree from the other side: maximum and minimum sharing over \emph{all} CCEs coincide in \CceSingle{} of \CceTot{} games,
-so no mixed or correlated equilibrium shares more or less than the pure one.
+the most fragile game, had not settled after 3{,}000 steps). The CCE linear programs agree from the other side: maximum and minimum sharing over \emph{all} CCEs coincide in \CceSingle{} of \CceTot{} E1 games
+and in all \CceEtwoTot{} E2 games, so there no mixed or correlated equilibrium shares more or less than the pure one. \emph{E0 is the exception.} In \CceEzeroWide{} of its \CceEzeroTot{} games the CCEs reach
+beyond the range of the pure equilibria (\CceEzeroWideMulti{} of these have several pure equilibria): up to \CceEzeroAboveMax{} percentage points more sharing --- under a cut-off \CceEzeroBarTwoTop\% of possible tells in two groups
+(pure: \CceEzeroBarTwoPure\%) and \CceEzeroBarStarTop\% in the star (pure: \CceEzeroBarStarPure\%) --- and up to \CceEzeroBelowMax{} points less. Only the pairs network, where each candidate has one possible teller,
+is untouched (\CceEzeroPairsEqual{} of \CceEzeroPairsTot). So in E0 the staircase describes pure equilibria; play coordinated on \emph{who} tells, or the no-regret play of Section~\ref{sec:learn}, can sit above it.
 
 \begin{figure}[t]\centering
 \includegraphics[width=0.93\textwidth]{figures/fig3_sharing_vs_friendliness.pdf}
@@ -338,7 +341,7 @@ telling stops. This is the case Proposition~\ref{prop:bar} excludes, and the onl
 \finding{Motives barely spill over.} In the \MixedGames{} mixed-population games, only \MixedDiffCells{} of \MixedCells{} (candidate, type) choices differs from what that candidate does in a population made entirely of her own kind
 (a nearly indifferent strong clannish candidate tells one friend more when the other group is merely friendly). With one friendly and one selfish group, exactly the friendly group shares: weak types under fixed seats, everyone under a cut-off.
 
-\subsection{Can candidates learn it? (RQ3)}
+\subsection{Can candidates learn it? (RQ3)}\label{sec:learn}
 \begin{figure}[t]\centering
 \includegraphics[width=0.93\textwidth]{figures/fig4_learning.pdf}
 \caption{Learning in E1, mean over \XthreeSeeds{} seeds with 95\% bootstrap bands. (a,b) Share of the 12 (candidate, type) learners whose best arm is the equilibrium row.
@@ -423,8 +426,8 @@ H5 & $\Lambda_{\textsc{bar}}>\Lambda_{\textsc{seats}}$, and fixed seats need a s
 All five hypotheses are supported (Table~\ref{tab:hyp}), H2 with one exception and H4 with a simpler learner than promised. \textbf{Deviations from the review plan:}
 (i)~tables use 2{,}000 days per cell, not the pilot's 8{,}000; precision is instead reported per equilibrium by the bootstrap;
 (ii)~the ``model-based'' learner is the leak-aware learner above and needs the friend to report how many told questions came up;
-(iii)~mixed equilibria were sought by replicator dynamics only (no support enumeration), with the CCE programs bounding what they could do;
-(iv)~the CCE programs were run for E1 only; (v)~the complete network at $n=6$ was handled by deviation tests, and $n=8$ was not attempted.
+(iii)~mixed equilibria were sought by replicator dynamics only (no support enumeration: with nine or more agents the indifference conditions are polynomial, not linear), with the CCE programs bounding
+what they could do --- tightly in E1 and E2, loosely in E0; (iv)~the complete network at $n=6$ was handled by deviation tests, and $n=8$ was not attempted.
 \textbf{Limits.} Types are coarse and rounds are independent: there is no reputation, and placed candidates do not leave the pool (a stochastic game~\cite{shapley}). Networks are fixed and small.
 There is no real leak data, so every claim is comparative (seats vs.\ cut-off, weak vs.\ strong), not a prediction of how much real candidates share.
 Sensitivity to $\Delta$, $\sigma$ and $K$ was tested one parameter at a time (X5), for one network and leak model; joint changes, other $n$ and the learning and company experiments were not re-run.
