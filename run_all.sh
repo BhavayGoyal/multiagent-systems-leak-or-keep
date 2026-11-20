@@ -3,7 +3,12 @@
 # About 75 minutes on a 10-core laptop (X1 dominates: its nine cells run in parallel, the slowest takes ~40 min).
 set -euo pipefail
 cd "$(dirname "$0")"
-PY=${PY:-.venv/bin/python}
+# Python: $PY if set, else the project venv (Linux/macOS or Windows layout), else python on PATH.
+if [ -z "${PY:-}" ]; then
+  if [ -x .venv/bin/python ]; then PY=.venv/bin/python
+  elif [ -x .venv/Scripts/python.exe ]; then PY=.venv/Scripts/python.exe
+  else PY=python; fi
+fi
 export MPLCONFIGDIR="$PWD/.mplconfig"
 mkdir -p results/logs "$MPLCONFIGDIR"
 

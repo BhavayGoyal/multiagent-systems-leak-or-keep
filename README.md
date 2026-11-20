@@ -81,24 +81,27 @@ Unit tests:
 
 ## Reproducing the results
 
-Requirements: Python 3.10 or newer. No GPU is needed. Everything ran on a 10-core laptop.
+Requirements: Python 3.10 or newer and NumPy 2.0 or newer. No GPU is needed. Everything ran on a 10-core laptop.
 
 ```bash
 python -m venv .venv
-.venv/bin/pip install -e ".[dev]"
+.venv/bin/pip install -e ".[dev]"            # Linux / macOS
+.venv/Scripts/pip install -e ".[dev]"        # Windows
 ```
 
-To regenerate everything in one go (about 75 minutes on a 10-core laptop):
+To regenerate everything in one go (about 75 minutes on a 10-core laptop; on Windows run it from Git Bash):
 
 ```bash
 ./run_all.sh
 ```
 
+`run_all.sh` uses `$PY` if set, otherwise the `.venv` Python (either layout), otherwise `python` on the PATH.
+
 Or step by step:
 
 | Step | Command | Writes | Time |
 |---|---|---|---|
-| Unit tests (27) | `python -m pytest -q` | console | 5 s |
+| Unit tests (27) | `python -m pytest -q` | console | 10 s |
 | Verification checks | `python experiments/run_checks.py` | `results/checks/checks.json` | 10 s |
 | X1: who tells | `python experiments/run_x1.py` | `results/x1/*.json` | 40 min |
 | X2: motives | `python experiments/run_x2.py` | `results/x2/x2.json` | 10 min |
