@@ -3,74 +3,98 @@
 This plan says what to do next, in what order, and how we will know each step is done. It is written for the
 four of us. You should be able to pick up any single item and work on it without reading the rest.
 
-- **Where we are:** Phases 0 and 1 are done (see [Status](#status-after-phases-0-and-1)); `main` has the review items
-  1–8 and Phase 0, branch `phase-1` has Phase 1, 42 unit tests pass. `fix.md` records the review items.
-- **What is open:** the stretch target `n = 8`, robustness of every headline number, E0 (where correlated play
-  differs a lot from the pure equilibria), several explanations the report labels "plausible, not tested", and
-  the final write-up.
+- **Where we are (after the merge):** branch `merge-bhavay` (pushed to `origin`, Bhavay's repository) contains all work so
+  far: the original submission, the review items 1–8, Phases 0 and 1, and Bhavay's five parallel commits (X5 sensitivity,
+  an independent CCE implementation, an E0 coordination measure, setup fixes). 42 unit tests pass; the report is 12 pages.
+  `report_merge.md` has the full audit; `fix.md`, `report_p0.md` and `report_p1.md` record the earlier steps.
+- **What is open:** a few fixes found in the merge audit (Phase M), the rest of the robustness checks, the E0 mechanism,
+  CCEs for X2, the stretch target `n = 8`, and the final write-up.
 - **What this plan is not:** a schedule with dates. We never fixed a deadline in this repository, so effort is
   given in rough working days and compute time in measured minutes. Put the dates in once we know the deadline
   (see [Decisions we need to make](#decisions-we-need-to-make)).
 
 ---
 
-## Status after Phases 0 and 1
+## Status after the merge
 
-Everything below is in the repository; commits are `Phase 0` (merged into `main`) and `Phase 1` (branch `phase-1`, not
-merged). Predictions were written before each run; where one failed it says so.
+Who: C = Chaitanya, B = Bhavay, V = Vishnu (original submission). Details per item are in the phase sections below and in
+the reports named in the last column.
 
-| Item | Result | Where the plan turned out wrong or incomplete |
-|---|---|---|
-| 0.1 PDF | rebuilt with `report/tectonic.exe`; **11 pages** (10 of body and references, the appendix on page 11); no undefined references, no overfull boxes | The page limit is still unknown (decision D1). A run-in heading in §5.1 was fixed. My first appendix was placed inside the two-column bibliography group, where floats are silently dropped; it now follows the references |
-| 0.2 Merge | `fix/items-5-7` merged into `main` (local only, nothing pushed); `proposal.pdf` moved to `docs/`; stale root `main.pdf` removed (byte-identical to the old committed report) | — |
-| 0.3 Environment | `uv.lock`, README versions, `.gitattributes`, `X1_WORKERS` / `X3_WORKERS` | The plan said `run_all.sh` has CRLF endings in git. It has LF in git; only a Windows checkout turned it into CRLF. `.gitattributes` fixes that |
-| 0.4 Clean clone | **done**: `run_all.sh` ran start to finish in a fresh clone, exit code 0, 2 h 43 min. 38 files identical, 5 differ (all logs, all explained), 2 not produced by `run_all.sh`, 14 figure binaries not compared. Every JSON, NPZ and generated LaTeX file matches the committed one | The committed results are part of a clone, and `run_x1.py` / `run_cce.py` skip cells whose result file exists, so a plain `run_all.sh` in a clone would *skip* X1 and the CCE programs. The clone's results had to be deleted first |
-| 1.1 CCE-gap test | per learner × leak model × rule, 30 seeds as the unit: **36 of 36 significant** (24 of 24 in E1/E2), as predicted | — |
-| 1.2 Rounds to 90% | all three leak models, appendix Table 5 | — |
-| 1.3 H1 pivotality | P(last seat) = **3.6 / 17.9 / 28.6 %** for weak / average / strong, the order of α\* — prediction holds, H1 no longer rests on the loss | Plan guessed "average ≈ strong"; strong is clearly highest |
-| 1.4 Baselines | no learner is below random sharing in **welfare** (0 of 24). In **company value under a cut-off every learner is below random sharing — and so is the equilibrium** (0.771 vs 0.833): the cut-off company is hurt by everybody telling | The written prediction ("never below random sharing in company value") was ill posed: the company is not a player. Under fixed seats welfare is flat by construction (exactly K hires), so only company value is informative there. Random sharing was added to X4 (old fields unchanged): at Q = 15 it costs 3.6 % (seats) and 6.5 % (cut-off) against 1.7 % and 13.1 % at the equilibrium |
-| 1.5 Explanations | (a) average types learn slowest because the noise-to-gap ratio is largest: **supported** (ρ = 0.80 UCB1, 0.70 Thompson). (b) UCB1 explores because of its bonus: **supported** (56 % of pulls on wrong rows vs 37–41 %). (c) ε-greedy's mistakes are on cheap decisions: **refuted** (ratio 1.01); its low regret is because it pulls wrong rows less often. (d) pooling across rows: **supported but modest** (4 of 4 settings; 34 vs 25 % in E1 seats). (e) E0 redundancy: still open, Phase 3.1 | The leak-aware learner's stored `final_counts` include *credited* observations, so they are not pull counts; it is excluded from (b)/(c). Its settled profile is unaffected (identical to the greedy-means profile in 100 % of runs). The plan's item 1.5(c) assumed counts are pulls for every learner |
-| 1.6 E2 bias | at most **0.08 pp** (about two standard errors) against a smallest payoff gap of 0.36 pp; a control with no second teller scatters as much. Not shown to be zero, but small next to the signal | — |
+| Item | Status | By | What it delivered / what is left | Record |
+|---|---|---|---|---|
+| Review items 1–8 | done | C | NumPy ≥ 2.0, X4 caveat, regret, refutation criteria, near-ties, CCE E0/E2, dominance + support enumeration, fairness bootstrap, Model-based UCB | `fix.md` |
+| 0.1 PDF | done | C | builds cleanly; **12 pages** now (page limit unknown, D1) | `report_p0.md` |
+| 0.2 Merge | done | C | `fix/items-5-7` into `main`; `docs/proposal.pdf` | `report_p0.md` |
+| 0.3 Environment | done | C (+B) | `uv.lock`, `.gitattributes`; B: `python`-on-PATH fallback in `run_all.sh` | `report_p0.md` |
+| 0.4 Clean clone | done (before the merge) | C (+B) | full `run_all.sh` reproduces every JSON/NPZ/LaTeX; B: second machine reproduces checks and X4. **Repeat in 6.4** | `report_p0.md` |
+| 1.1 CCE-gap tests | done | C | 36 / 36 significant per setting | `report_p1.md` |
+| 1.2 Rounds to 90 % | done | C | appendix Table 5 | `report_p1.md` |
+| 1.3 H1 pivotality | done | C | 3.6 / 17.9 / 28.5 %; merge audit: confirmed at K = 1, 2, 3 | `report_p1.md`, `report_merge.md` |
+| 1.4 Baselines | done | C | random sharing etc.; Table 6 | `report_p1.md` |
+| 1.5 Explanations | done (a–d) | C | (c) refuted; (e) is 3.1 | `report_p1.md` |
+| 1.6 E2 bias | done | C | ≤ 0.08 pp | `report_p1.md` |
+| Merge | done | C | `merge-bhavay`; audit found P1–P5 | `report_merge.md` |
+| **M.1–M.4** | **open** | — | fixes from the merge audit (units in §5.5, pivotality at K, `\RepoURL`, `main`) | this file, Phase M |
+| 2.1 Sensitivity | **partly** | B | X5 covers Δ, σ, K one at a time; **left: c and the hub position** | report §5.5 |
+| 2.2 X4 at other α | open | — | | |
+| 2.3 Company-value definition | open | — | | |
+| 2.4 Joint sweep | open (Could) | — | | |
+| 2.5 CCEs for the X2 utilities | open (new) | — | last core gap from the proposal | |
+| 3.1 E0 mechanism | **partly** | C, B | wide E0 CCE interval found twice and confirmed; **left: test the redundancy explanation** | report §5.1 |
+| 3.2 Learners in E0 | **partly** | B | `frac_within_c`: exact 0 %, within one message cost 100 %; **left: where learners sit in the CCE interval** | report §5.3 |
+| 3.3 Complete network, cut-off | open | — | | |
+| 4.1–4.3 | open | — | n = 8; support enumeration beyond 2 actions; learning elsewhere | |
+| 5.x | open (Could) | — | | |
+| 6.1–6.4 | open | — | write-up, figures, presentation, final rerun | |
 
-**0.4 clean-clone run.** Command: `X1_WORKERS=2 X3_WORKERS=2 CCE_WORKERS=1 bash run_all.sh` in a fresh clone of `main`
-at `..\FAI_clean` after deleting its committed `results/`, `report/generated/` and `report/figures/`; compare with
-the committed files with `python experiments/compare_with_committed.py ..\FAI_clean` (numeric tolerances, timings ignored).
+**Next, in order:** Phase M (an afternoon), then 2.2, 2.3 and 2.1's remainder, then 3.1 and 3.2, then 2.5 and 3.3; Phase 4
+only after decisions D3–D5; Phase 6 last.
 
-*Outcome.* Run time with 2 / 2 / 1 workers for X1 / X3 / CCE: tests and checks 4 min, X1 47 min, CCE programs 69 min,
-support enumeration 1 min, X2 14 min, X3 15 min, X4 12 min (17:26 to 20:09). Differences, all in logs:
-`checks.log` (last digit of printed floats, and a timing line from the original author's machine), `x1.log` and
-`x1_cce.log` (the committed ones come from a *resumed* run and contain "skip … already done" lines, as the README
-says), `x3.log` (progress lines of parallel workers interleaved differently; the NPZ data is identical) and
-`figures.log` (the committed one was stale, 524 macros; refreshed in Phase 1). Not produced by `run_all.sh`:
-`x3_model_based_rerun.log` and `x3_model_ucb.log`, which document separate reruns. Figures are PNG/PDF and are not
-compared byte for byte; they are drawn from the identical data and tables. Memory was the limit, not time: with
-16 GB and other programs open the CCE program of two friend groups (about 4 GB) must run alone.
+---
 
-**Still open from Phases 0–1:** the page limit (D1); whether to merge `phase-1`; 1.5(e) is in Phase 3.1.
+## Phase M — Fixes from the merge audit
 
-### Update: Bhavay Goyal's work was merged in (branch `merge-bhavay`)
+Found while checking the merged repository (`report_merge.md`, section 5). All are small; do them before new experiments
+so that new results land on a consistent report.
 
-Bhavay made five commits on the original submission, in parallel with ours (his repository is now `origin`). They
-overlap with the plan, so the plan changes as follows:
+### M.1 One unit for the own loss across §5.1 and §5.5 — **Must**
 
-| Plan item | What his commits already deliver | What is left |
-|---|---|---|
-| 2.1 Sensitivity sweep | **X5** (`run_sensitivity.py`, `results/x5/`, Figure 6, report §5.5): Δ ∈ {0.5, 1, 2}, σ ∈ {0.5, 1, 2}, K ∈ {1, 2, 3}, one at a time, 294 games. Finding: the mechanism survives everywhere; at K = 3 the order of the types changes (average types lose most) | the message cost **c** ∈ {0.0001, 0.01}, the **hub position** of the star network, and (2.4) joint changes. The K = 3 claim can be cross-checked with `pivotality_by_type` at K = 3 (a one-second run) |
-| 3.1 / 1.5(e) E0 mechanism | the E0 CCE finding was found independently (same 55 / 106 and 48 / 106 counts, same intervals on all 212 rows) and described in more detail: up to 33 points above the largest pure sharing and up to 8 below; the pairs network is untouched | the *test* of the redundancy explanation (vary c; inspect the max-sharing CCE) is still open |
-| 3.2 Learners in E0 | the metric `frac_within_c`: in the E0 cut-off runs the settled profile is an exact equilibrium in 0 % of runs but within one message cost of one in 100 %, for all six learners, and the two counts coincide in every other setting (report §5.3, "A caution about agreement") | where the learners sit relative to the CCE interval |
-| 0.3 / 0.4 | `numpy>=2.0`, a `python`-on-PATH fallback in `run_all.sh`, a from-scratch check of `run_checks.py` and `run_x4.py` on a second machine (Windows 11, Python 3.13, NumPy 2.4) | — |
+- **Problem.** §5.1 gives the own loss per friend told (0.38 / 1.49 / 1.60 points); §5.5 (X5) gives it for telling all
+  later friends (K = 3: 1.24 / 2.64 / 1.48; at the baseline 0.57 / 2.23 / 2.41), with the same word "points". A reader
+  would think the weak type's loss tripled at K = 3.
+- **Fix (choose one).** (a) In §5.5 say "own loss from telling all later friends" and add the baseline value in the same
+  unit (new macros from `x5_summary.json`, baseline setting); or (b) divide by the number of later friends in
+  `run_sensitivity.py`'s `type_summary` as `make_figures.py` does for §5.1, and regenerate (no re-simulation: the
+  numbers are in `results/x5/*.json`). (a) is less invasive; (b) is more consistent. Bhavay's script, so agree with him.
+- **Done when.** Both sections use one stated unit; PDF rebuilt. **Owner.** Bhavay or Chaitanya. **Cost.** 1 hour.
 
-Regression checks after the merge: his 30 X3 cells (five learners) are reproduced exactly by the regenerated summary, and
-**re-running his X5 script with the merged code (2 workers, 45 min) reproduces all 8 of his result files exactly** (largest
-relative float difference 0.0), so the new table format and helpers did not change his results.
+### M.2 Pivotality across K in the report — **Should**
 
-Decisions made in the merge (see the merge commit message): the two CCE implementations agree exactly, so `run_cce.py`
-stays canonical and his script is an optional independent cross-check writing to `results/x1/independent/`;
-`make_figures.py` asserts that both give the same macros. The report's section numbers moved: X5 is §5.5, the verdict,
-deviations and limits are §5.6, and the report is 12 pages.
+- **What.** `pivotality_by_type` at K = 1, 2, 3 (1 million days each, a few seconds) gives P(holds the last seat):
+  0.9 / 8.5 / 40.7 %, 3.6 / 17.9 / 28.5 %, 9.0 / 23.6 / 17.4 % (weak / average / strong). In every K the ordering
+  matches X5's own loss and α\*, which makes H1's "most likely to be pivotal" independent of the loss at every K, and
+  explains the K = 3 reversal directly.
+- **How.** Add K to `experiments/run_h1.py` (loop over K, one JSON), macros in `make_figures.py`, one clause in §5.5 and in
+  the H1 row of Table 4; a unit test that the K = 3 order is weak < strong < average.
+- **Owner.** Chaitanya. **Cost.** 2 hours.
+
+### M.3 Which repository is final — **Must**
+
+- The report cites `Vish-Overflows/multiagent-systems-leak-or-keep` (`\RepoURL`), which has none of this work. Decide the
+  final repository, push `merge-bhavay` there (as `main` or via a pull request), and update `\RepoURL` if it changes.
+- **Owner.** the team. **Cost.** minutes, once decided.
+
+### M.4 Make `merge-bhavay` the main line — **Should**
+
+- `git checkout main && git merge --ff-only merge-bhavay` locally; on `origin`, `merge-bhavay` contains Bhavay's latest
+  commit, so `git push origin merge-bhavay:main` is a fast-forward. Only with Bhavay's agreement. Then delete the
+  stale local branches `fix/items-5-7` and `phase-1`.
+
+---
 
 ## Contents
 
+0. [Status after the merge](#status-after-the-merge) and [Phase M — Fixes from the merge audit](#phase-m--fixes-from-the-merge-audit)
 1. [How to read this plan](#how-to-read-this-plan)
 2. [Ground rules for every item](#ground-rules-for-every-item)
 3. [Phase map at a glance](#phase-map-at-a-glance)
@@ -135,22 +159,24 @@ These are the habits that made the current repository trustworthy. Keep them.
 
 | Phase | Goal | Priority | Your time | Compute | Depends on |
 |---|---|---|---|---|---|
-| 0 | Merge, rebuild the PDF, pin the environment, prove a clean clone reproduces everything | Must | 1–2 days | ~4 h (full rerun) | — |
-| 1 | Close small gaps using data already in `results/` (tests, baselines, "plausible reasons") | Must / Should | 2–3 days | < 30 min | 0 |
-| 2 | Show the headline results survive other parameter values | Must / Should | 3–4 days | 2–4 h | 0 |
-| 3 | Explain why E0 behaves differently, and settle the complete network under a cut-off | Should | 2–3 days | < 1 h | 0 |
+| 0 | Merge, rebuild the PDF, pin the environment, prove a clean clone reproduces everything | Must | ✅ done | | |
+| 1 | Close small gaps using data already in `results/` (tests, baselines, "plausible reasons") | Must / Should | ✅ done | | |
+| M | Fixes from the merge audit (units in §5.5, pivotality at K, final repository, `main`) | Must / Should | ½ day | seconds | — |
+| 2 | Show the headline results survive other parameter values (X5 did Δ, σ, K; left: c, hub, 2.2, 2.3, CCEs for X2) | Must / Should | 2–3 days | 2–3 h | M |
+| 3 | Explain why E0 behaves differently (finding confirmed twice; mechanism untested), complete network under a cut-off | Should | 2 days | < 1 h | M |
 | 4 | `n = 8`, mixed equilibria for bigger agents, learning in more settings | Should / Could | 4–7 days | 2–8 h | 0, ideally 2 |
 | 5 | Optional: season game, a learner that best-responds, real-world grounding | Could | open | open | 1–4 |
 | 6 | Final report, figures, presentation, release | Must | 2–3 days | ~4 h (final rerun) | everything chosen |
 
-Phases 1, 2 and 3 are independent of each other and can run in parallel across people. Phase 4 should start
-after Phase 2's sensitivity sweep, because that tells us whether `n = 8` is likely to change anything.
+Phases 2 and 3 are independent of each other and can run in parallel across people, after Phase M. Phase 4 should start
+after the rest of Phase 2. X5 already shows that the number of seats changes which type is pivotal, which matters for the
+choice of K at n = 8 (D4).
 
 ---
 
 ## Phase 0 — Close out the current work
 
-### 0.1 Rebuild the PDF and fit the page limit — **Must**
+### 0.1 Rebuild the PDF and fit the page limit — **Must** — ✅ done (`report_p0.md`)
 
 - **Why.** `report/main.pdf` predates items 1–8. The source has grown (new findings, sixth learner, extra table
   column), and the old PDF was already 8 pages.
@@ -166,7 +192,7 @@ after Phase 2's sensitivity sweep, because that tells us whether `n = 8` is like
   [ ] `report/main.pdf` committed.
 - **Owner.** Jash. **Cost.** half a day.
 
-### 0.2 Merge the branch — **Must**
+### 0.2 Merge the branch — **Must** — ✅ done (`report_p0.md`)
 
 - **What.** Review the 6 commits on `fix/items-5-7` (one per review item, plus one for the report and README),
   then merge into `main`.
@@ -175,7 +201,7 @@ after Phase 2's sensitivity sweep, because that tells us whether `n = 8` is like
 - **Done when.** [ ] reviewed by at least one person who did not write it [ ] merged [ ] root clean.
 - **Owner.** anyone. **Cost.** 1–2 hours.
 
-### 0.3 Pin the environment — **Should**
+### 0.3 Pin the environment — **Should** — ✅ done (`report_p0.md`)
 
 - **Why.** Results already differ at the 1e-14 level between machines (seen when re-running the X3 analysis).
   That is harmless today but a reviewer re-running everything should get the same files.
@@ -185,7 +211,7 @@ after Phase 2's sensitivity sweep, because that tells us whether `n = 8` is like
 - **Done when.** [ ] `uv.lock` committed [ ] `run_all.sh` runs on Git Bash *and* on a Linux shell.
 - **Owner.** Bhavay. **Cost.** 1–2 hours.
 
-### 0.4 Prove a clean clone reproduces everything — **Must**
+### 0.4 Prove a clean clone reproduces everything — **Must** — ✅ done before the merge (`report_p0.md`); repeat in 6.4
 
 - **Why.** The README promises that `run_all.sh` regenerates every number. Nobody has run it end to end since
   the new scripts were added (`run_cce.py`, `run_support.py`, the sixth learner).
@@ -205,7 +231,7 @@ after Phase 2's sensitivity sweep, because that tells us whether `n = 8` is like
 Everything here uses files already in `results/` or seconds of extra simulation. Do these first: each removes a
 caveat from the report cheaply.
 
-### 1.1 Fix the CCE-gap significance test — **Must**
+### 1.1 Fix the CCE-gap significance test — **Must** — ✅ done (`report_p1.md`)
 
 - **Why.** `analyze_x3.py` tests "the CCE gap falls" by pooling 180 runs per learner across six different games.
   Runs that share a seed share random draws, so they are not independent, and the six games are not one
@@ -220,14 +246,14 @@ caveat from the report cheaply.
 - **Done when.** [ ] per-setting tests in `x3_summary.json` [ ] report sentence uses the new counts.
 - **Owner.** Vishnu.
 
-### 1.2 Report "rounds to 90 %" for all leak models — **Should**
+### 1.2 Report "rounds to 90 %" for all leak models — **Should** — ✅ done (`report_p1.md`)
 
 - **Why.** Table 3 shows rounds-to-90 % only for E1; E0 and E2 are already computed (`rounds_to_90` in
   `x3_summary.json`).
 - **What.** Either widen Table 3 or add a short appendix table. Suggest an appendix table to save space.
 - **Owner.** Vishnu. **Cost.** 1 hour.
 
-### 1.3 Make H1 non-circular — **Must**
+### 1.3 Make H1 non-circular — **Must** — ✅ done (`report_p1.md`; extended to K = 1–3 in M.2)
 
 - **Why.** H1 says "α\* is highest for the types most likely to be *pivotal*", but the report measures
   pivotality with ℓ, the own-loss from telling, and α\* = (ℓ + c)/G. With G roughly constant, the ordering of
@@ -243,7 +269,7 @@ caveat from the report cheaply.
 - **Cost.** half a day; compute seconds.
 - **Owner.** Chaitanya.
 
-### 1.4 Baselines the proposal promised — **Must**
+### 1.4 Baselines the proposal promised — **Must** — ✅ done (`report_p1.md`)
 
 - **Why.** The proposal listed five baselines: nobody shares, everybody shares, **random sharing**, the Level-1
   equilibrium, and a leak-free company. Random sharing never appears, and the learners are never compared with
@@ -261,7 +287,7 @@ caveat from the report cheaply.
 - **Cost.** 1 day; compute minutes.
 - **Owner.** Jash (company side), Vishnu (learner side).
 
-### 1.5 Test the explanations the report calls "plausible, not tested" — **Should**
+### 1.5 Test the explanations the report calls "plausible, not tested" — **Should** — ✅ done for (a)–(d) (`report_p1.md`); (e) is 3.1
 
 The report currently has five such sentences. Each can be tested cheaply. If a test fails, rewrite the sentence.
 
@@ -276,7 +302,7 @@ The report currently has five such sentences. Each can be tested cheaply. If a t
 - **Done when.** [ ] each of a–d has a number in the report or the sentence is removed/rewritten.
 - **Owner.** Vishnu (b–d), Bhavay (a). **Cost.** 1 day in total.
 
-### 1.6 Measure the leak-aware learner's bias in E2 — **Could**
+### 1.6 Measure the leak-aware learner's bias in E2 — **Could** — ✅ done (`report_p1.md`)
 
 - **Why.** The report says the counterfactual credit is "very slightly biased" in E2 and that we did not measure
   it.
@@ -294,7 +320,19 @@ which we held fixed." Every headline number (the 0.10 / 0.32 / 0.38 thresholds, 
 "8–12× more loss") comes from one parameter setting. This phase checks which conclusions are qualitative (survive
 everywhere) and which are numbers specific to our setting.
 
-### 2.1 One-at-a-time sensitivity sweep — **Must**
+### 2.1 One-at-a-time sensitivity sweep — **Must** — ◐ partly done by Bhavay (X5)
+
+> **Status.** Bhavay's X5 (`experiments/run_sensitivity.py`, `results/x5/`, Figure 6, report §5.5) did Δ ∈ {0.5, 1, 2},
+> σ ∈ {0.5, 1, 2} and K ∈ {1, 2, 3}, 294 games. Outcome against the predictions below: prediction 2 (H2) holds in all
+> 140 comparisons, and the cut-off half of prediction 1 (everyone tells once α > c/G) holds in 6 of 7 settings; at σ = 2,
+> α = 0.025, just above the switch point, four near-indifferent equilibria share only 83–89 %. Under fixed seats the written refutation
+> condition of prediction 1 ("a strong type tells before a weak one") is never met, but its description ("weak → average
+> → strong in every setting") is wrong at **K = 3**: the order is weak < strong < average there, because average types
+> most often hold the last seat (confirmed independently, M.2). Prediction 3 (direction of the thresholds) can be read off
+> Figure 6a and is not yet stated in the report. **Left to do:** the message cost c ∈ {0.0001, 0.01} and the hub position
+> of the star network ∈ {1, 6}. Extend his script (new `SETTINGS` entries, the same file layout). c only enters the
+> utilities, but the table cache key (`tables._cache_key`) contains the whole configuration, so each c value rebuilds a
+> payoff table: about 40 s, harmless. The original item text follows.
 
 - **What.** Re-solve the two-groups game in E1 (both rules, the full α grid) changing one parameter at a time
   from the baseline (n = 6, K = 2, m = 3, Q = 15, Δ = σ = 1, c = 0.001):
@@ -317,9 +355,8 @@ everywhere) and which are numbers specific to our setting.
      E1 setting.
   3. The thresholds move: larger Δ lowers all α\*, larger σ lowers them too (more luck, less to lose).
      Refuted if the direction is the opposite.
-- **Cost.** 1 day of work; compute about 40 s per table plus ~5 s per game: 9 settings × 42 games ≈ 35–45 min.
-- **Output.** `results/sensitivity/sens_<param>_<value>.json`; one figure with the three thresholds against each
-  parameter.
+- **Cost.** (remaining part) half a day; compute about 10–12 min per setting with 2 workers (X5 took 45 min for 7).
+- **Output.** `results/x5/x5_<param>_<value>.json` (Bhavay's layout); Figure 6 gains the new settings.
 - **Report impact.** A short paragraph in §5.1 plus a figure (appendix if space is tight). Remove the limitation
   sentence or narrow it to what was not swept.
 - **Owner.** Chaitanya.
@@ -350,6 +387,21 @@ everywhere) and which are numbers specific to our setting.
 ### 2.4 Full factorial sweep — **Could**
 
 - Only if 2.1 shows an interaction worth studying: Δ × σ × K at 3 levels each, 27 settings, ≈ 2–3 h compute.
+  X5's K = 3 reversal is such a candidate: does it survive other Δ and σ? A K × Δ grid (9 settings) would answer it.
+
+### 2.5 CCEs for the X2 utilities — **Should** (new after the merge)
+
+- **Why.** The proposal's core deliverables include "X1–X2 equilibria and CCEs". X1 now has CCE programs for all
+  three leak models (two implementations agree); X2 (selfish, friendly, clannish, fairness-minded and mixed
+  populations) has none.
+- **What.** For each X2 game (two friend groups, E1, both rules), solve max / min sharing over all CCEs with
+  `solvers.cce_lp` and compare with the pure equilibrium. The fairness utilities are the interesting case: they are the
+  only ones whose behaviour under a cut-off depends on type.
+- **Prediction / refuted if.** The CCE interval is a single point equal to the pure equilibrium in every X2 game except
+  possibly the near-indifferent ones marked † in Table 2; refuted if any unmarked game has a wider interval.
+- **Cost.** half a day; compute about 2 min per game (a two-group LP pair ≈ 100 s and ~4 GB), 20–30 games ≈ 1 h,
+  one worker. Resumable script in the style of `run_cce.py`.
+- **Report impact.** one sentence in §5.2 and a column in Table 2. **Owner.** Jash (X2) or Chaitanya (solvers).
 
 ---
 
@@ -359,7 +411,12 @@ In E0 (a told question always comes up), the CCE interval is wider than the pure
 In one example, all four pure equilibria share 67% of tells while correlated play can share 66% to 99%. The report
 offers a reason it has not tested. This phase tests it and makes E0's story complete.
 
-### 3.1 Test the redundancy explanation — **Should**
+### 3.1 Test the redundancy explanation — **Should** — ◐ finding confirmed, explanation still untested
+
+> **Status.** The wide E0 CCE interval was found by Chaitanya (`run_cce.py`) and independently by Bhavay
+> (`run_cce_e0e2.py`); they agree on all 212 rows. Bhavay added that the interval reaches up to 33 points above the
+> largest pure sharing and up to 8 below, and that the pairs network (one possible teller per friend) is untouched,
+> which already fits the redundancy explanation. The test below is still to do.
 
 - **Claim to test.** In E0 a second tell to the same friend changes nothing and costs only c, so candidates are
   almost indifferent about who tells, and a CCE can add redundant tells almost for free.
@@ -376,7 +433,12 @@ offers a reason it has not tested. This phase tests it and makes E0's story comp
   with the result.
 - **Owner.** Chaitanya.
 
-### 3.2 Where do the learners end up in E0? — **Should**
+### 3.2 Where do the learners end up in E0? — **Should** — ◐ partly done by Bhavay
+
+> **Status.** Bhavay's `frac_within_c`: in E0 under a cut-off every learner's settled profile is an exact equilibrium in
+> 0 % of runs but within one message cost of one in 100 % (the two counts coincide in all 30 other settings), in report
+> §5.3. Left: where the learners' average sharing sits inside the CCE interval (below). Remember that the leak-aware
+> learner's stored `final_counts` include credited observations and are not pull counts.
 
 - **Why.** Agreement in E0 under a cut-off looks poor (51–74%). The report explains that learners tell redundantly
   instead of coordinating. Now that we know the CCE interval, we can check this directly.
@@ -517,12 +579,15 @@ For each finished item above, in this order:
 | Item | Check |
 |---|---|
 | Figure 1–3 | unchanged unless 2.1 / 4.1 adds panels |
-| Figure 4 | six learners, legend fits at print size |
+| Figure 4 | six learners, legend fits at print size (checked after the merge: yes) |
 | Figure 5 | consider adding the α sweep of 2.2 as panel (c) |
+| Figure 6 (X5) | add the c and hub settings of 2.1; units of panel (a) consistent with §5.1 after M.1 |
 | Table 1 | add the Proposition 4 check from 3.3 |
 | Table 3 | 11 columns: check it fits; rounds-to-90 for E0/E2 in the appendix (1.2) |
-| Table 4 | 5 columns with "Refuted if"; verdicts match the text |
-| Appendix | sensitivity (2.1), X4 at other α (2.2), baselines (1.4), learning in more settings (4.3) |
+| Table 2 | a CCE column after 2.5 |
+| Table 4 | 5 columns with "Refuted if"; verdicts match the text; H1 row gains the pivotality-at-K result (M.2) |
+| Appendix | Tables 5 (rounds to 90 %) and 6 (baselines) are there; candidates: X4 at other α (2.2), learning in more settings (4.3) |
+| Length | 12 pages now; trim against D1 (candidates in 0.1; X5 and the appendix are the largest blocks) |
 
 ### 6.3 Presentation — **Must if there is one** (*decision needed*)
 
@@ -543,12 +608,16 @@ For each finished item above, in this order:
 
 | # | Decision | Options | Suggestion | Blocks |
 |---|---|---|---|---|
-| D1 | Deadline and page limit of the final report | — | find out first | 0.1, all of Phase 6 |
+| D1 | Deadline and page limit of the final report (the report is **12 pages** now) | — | find out first | all of Phase 6 |
 | D2 | Is there a presentation? | yes / no | — | 6.3 |
 | D3 | Which phases are in scope | 0–3 only; 0–4; all | 0–3 plus 4.1 (pairs, star) and 4.3 | everything after Phase 1 |
 | D4 | Seats at n = 8 | K = 2 or K = 3 | run both for pairs, then choose | 4.1 |
 | D5 | Attempt two groups at n = 8 | yes (new method, several days) / no | only if 2.1 shows thresholds move a lot with n-related parameters | 4.1 step 3 |
-| D6 | Keep `proposal.pdf` in the repository | `docs/` / leave out | `docs/proposal.pdf` | 0.2 |
+| D6 | Keep `proposal.pdf` in the repository | `docs/` / leave out | done: `docs/proposal.pdf` | — |
+| D8 | Which repository is final (and what `\RepoURL` in the report points to) | Vish-Overflows / BhavayGoyal / other | decide as a team | M.3, 6.4 |
+| D9 | Make `merge-bhavay` the main line, here and on `origin` | yes / keep separate | yes, fast-forward | M.4 |
+| D10 | Contribution table: Bhavay's row now credits X5 and the CCE cross-check | keep / change | confirm with Bhavay | 6.1 |
+| D11 | Units of the own loss in §5.5 (M.1) | state "tell all" + baseline / convert to per friend | agree with Bhavay (his script) | M.1 |
 | D7 | Who owns which item | — | owners suggested per item above | — |
 
 ---
@@ -573,7 +642,7 @@ Measured on our 24-thread, 16 GB laptop unless noted.
 
 | Job | Time | Notes |
 |---|---|---|
-| Unit tests (40) | 10–15 s | |
+| Unit tests (42) | 10–15 s | |
 | Payoff table, two groups, n = 6 | 15–40 s | pairs ~8 s; tables cached in `results/tables/` |
 | X1 (`run_x1.py`) | ~40 min | original machine; nine cells in parallel |
 | CCE programs E0 + E2 (`run_cce.py`) | ~1.8 h with one worker | two-groups LP pair ≈ 60–110 s and ~4 GB |
@@ -582,10 +651,16 @@ Measured on our 24-thread, 16 GB laptop unless noted.
 | X3, one learner (180 runs × 200,000 rounds) | ~9 min | `run_x3.py <learner>` |
 | X3 analysis (`analyze_x3.py`) | ~2 min | |
 | X4 (`run_x4.py`) | ~11 min | original machine |
+| X5 sensitivity (`run_sensitivity.py`, 7 settings) | 45 min with 2 workers; 26 min with 4 (Bhavay's README) | each worker builds one payoff table at a time |
+| Independent CCE cross-check (`run_cce_e0e2.py`) | about 2 h, one worker, up to 6 GB | optional, commented out in `run_all.sh` |
+| Phase 1 scripts (`run_h1`, `run_baselines`, `run_explanations`, `run_e2_bias`) | 1 s / 1 min / 1 min / 30 s | |
 | Figures, tables, macros (`make_figures.py`) | ~5 s | |
-| Full `run_all.sh` | ~4 h | dominated by the CCE programs |
+| Full `run_all.sh` | ~3–4 h | 2 h 43 min measured before Phase 1 and X5 were added; X5 adds ~45 min |
 
 Current headline facts the plan builds on (all from `results/`):
+
+- X5: the mechanism survives Δ, σ and K; at K = 3 average types are pivotal and tell last (independently confirmed).
+- Two independent implementations of the CCE programs agree on all 212 E0/E2 rows.
 
 - Dominance solves 311 of 378 X1 games exactly; all but one of the 67 open games are in E0.
 - CCE sharing is a single point in all 212 E1/E2 games, but in only 55 of 106 E0 games.

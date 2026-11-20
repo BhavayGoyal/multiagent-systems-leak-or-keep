@@ -7,7 +7,7 @@ changed in the repository and in the report, what went wrong on the way, and how
 Four predictions held, one was **refuted** (1.5c), and one was **ill posed** (the company-value half of 1.4). In
 both cases the report now says what was measured, not what I had guessed. Unit tests went from 40 to 42.
 
-Commits on `phase-1`: `8adc1f5` (all of Phase 1), `6ceb6b6` (status section in `plan.md`), `4c70827` (the clean-clone
+Commits on `phase-1`: `b6b51cd` (all of Phase 1), `96e3f2b` (status section in `plan.md`), `41345c4` (the clean-clone
 comparison tool; see `report_p0.md`).
 
 ---
@@ -18,7 +18,7 @@ comparison tool; see `report_p0.md`).
 |---|---|---|
 | 1.1 CCE-gap test per setting | significant in all 24 E1/E2 learner×setting pairs | **holds**: 36 of 36 significant (24 of 24 in E1/E2) |
 | 1.2 Rounds to 90 % for E0 and E2 | (no prediction; a table) | done, appendix Table 5 |
-| 1.3 H1 without using the own loss | P(last seat) increases weak < average < strong, the order of α\* | **holds**: 3.6 % / 17.9 % / 28.6 % |
+| 1.3 H1 without using the own loss | P(last seat) increases weak < average < strong, the order of α\* | **holds**: 3.6 % / 17.9 % / 28.5 % |
 | 1.4 Baselines | no learner below random sharing in company value or welfare | **welfare holds; company value ill posed**: under a cut-off every learner *and the equilibrium itself* is below random sharing |
 | 1.5 Four "plausible, not tested" explanations | (a) average types hardest, (b) UCB1 explores most, (c) ε-greedy's mistakes are cheap, (d) pooling helps in 4-arm cells | (a) **holds**, (b) **holds**, (c) **REFUTED**, (d) **holds, modest** |
 | 1.6 Bias of the counterfactual credit in E2 | \|bias\| < half the smallest payoff gap | **holds**: at most 0.08 pp (22 % of the gap) |
@@ -80,7 +80,7 @@ her. How often each type holds rank K when nobody shares can be measured without
 
 | | weak | average | strong |
 |---|---|---|---|
-| P(holds the last seat) | **3.6 %** | **17.9 %** | **28.6 %** |
+| P(holds the last seat) | **3.6 %** | **17.9 %** | **28.5 %** |
 | P(first place outside) | 9.0 % | 23.6 % | 17.4 % |
 | P(hired) | 4.5 % | 26.3 % | 69.2 % |
 | α\* (from the report) | 0.10 | 0.32 | 0.38 |
@@ -242,7 +242,7 @@ committed versions rather than commit matplotlib rendering noise.
 
 ```bash
 python -m pytest -q                              # 42 pass
-python experiments/run_h1.py                      # 1 s,   prints the 3.6 / 17.9 / 28.6 % table
+python experiments/run_h1.py                      # 1 s,   prints the 3.6 / 17.9 / 28.5 % table
 python experiments/run_baselines.py               # 1 min, needs results/x3
 python experiments/run_explanations.py            # 1 min, needs results/x3
 python experiments/run_e2_bias.py                 # 30 s

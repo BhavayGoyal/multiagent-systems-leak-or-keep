@@ -45,7 +45,7 @@ the α = 0.2 games above still have exactly one. 117 of the 378 games have more 
 fixed-seats staircase (up to 64 profiles), where one type is nearly indifferent.
 
 The ordering does not rest on the loss itself. Measured on fresh days with nobody sharing, a weak candidate holds the
-last seat on 3.6% of days, an average one on 17.9% and a strong one on 28.6%, the same order as the thresholds
+last seat on 3.6% of days, an average one on 17.9% and a strong one on 28.5%, the same order as the thresholds
 (`experiments/run_h1.py`).
 
 Mixed and correlated equilibria do not change this picture in E1 and E2: the linear programs over all coarse

@@ -19,8 +19,8 @@ and generated LaTeX file came out identical to the committed one.
 | 0.3 Pin the environment | done | `uv.lock`, README environment section, `.gitattributes`, `X1_WORKERS` / `X3_WORKERS` settings |
 | 0.4 Clean-clone reproduction | done | exit code 0; 38 files identical, 5 logs differ for harmless reasons, 14 figure binaries not compared |
 
-Commits (in order): `0e39b8a` Phase 0 changes, `5186232` merge into `main`, and (on branch `phase-1`, because it
-finished after the merge) `4c70827` for 0.4 and the comparison tool.
+Commits (in order): `2c194ae` Phase 0 changes, `77e8f35` merge into `main`, and (on branch `phase-1`, because it
+finished after the merge) `41345c4` for 0.4 and the comparison tool.
 
 ---
 
@@ -56,7 +56,7 @@ know the limit.
 
 **What I did.**
 - Checked that the 6 commits on `fix/items-5-7` were each one review item (plus one for the report/README), then ran
-  `git checkout main && git merge --no-ff fix/items-5-7`. History now shows the merge commit `5186232`.
+  `git checkout main && git merge --no-ff fix/items-5-7`. History now shows the merge commit `77e8f35`.
 - `proposal.pdf` was untracked at the repository root. I moved it to `docs/proposal.pdf` and committed it (this was
   the plan's suggestion, decision D6; easy to undo).
 - The untracked `main.pdf` at the root was a stale copy. Before deleting it I compared it byte for byte with the old
@@ -153,9 +153,9 @@ need them (the clone is a few hundred MB).
 
 ---
 
-## 6. Complete list of changes (commit `0e39b8a` and `4c70827`)
+## 6. Complete list of changes (commit `2c194ae` and `41345c4`)
 
-Phase 0 commit `0e39b8a` (10 files):
+Phase 0 commit `2c194ae` (10 files):
 
 | File | Change |
 |---|---|
@@ -169,7 +169,7 @@ Phase 0 commit `0e39b8a` (10 files):
 | `report/main.tex` | one blank line (run-in heading) |
 | `uv.lock` | new |
 
-Then the merge commit `5186232`, and on `phase-1` the commit `4c70827` for 0.4: `experiments/compare_with_committed.py`
+Then the merge commit `77e8f35`, and on `phase-1` the commit `41345c4` for 0.4: `experiments/compare_with_committed.py`
 (new), `README.md` (how to reproduce), `plan.md` (outcome), `results/logs/figures.log` (refreshed).
 
 No result file was changed in Phase 0.
