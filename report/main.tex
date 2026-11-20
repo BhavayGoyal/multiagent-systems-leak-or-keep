@@ -370,7 +370,7 @@ Holm-corrected $p<0.001$ in \GapFallSig{} of \GapFallTests{} tests) and ends at 
 
 \finding{A caution about ``agreement''.} In E0 with a cut-off, agreement looks poor (\AgreeEzeroBarMin--\AgreeEzeroBarMax\%). The game there has \NumEqEzeroBar{} equilibria that differ only in which of two friends tells the last candidate; the learners end up
 both telling. The residual gain from deviating is \ExplEzeroBarMin{} percentage points for every learner --- exactly the message cost $c$. They have learned everything that matters and failed only to coordinate on who saves a message:
-the settled profile is an exact equilibrium in at most \ExactEzeroBarMax\% of these runs, but within one message cost of one in \WithinCEzeroBarMin\% of them, for every learner.
+for every learner, the settled profile is an exact equilibrium in \ExactEzeroBarMax\% of these runs but within one message cost of one in \WithinCEzeroBarMin\%.
 Everywhere else the two counts coincide (\WithinCOtherSame{} of \WithinCOtherTot{} learner--setting pairs), so $c$ measures this coordination slack and nothing more.
 
 \subsection{What it costs the company (RQ4)}
@@ -387,6 +387,22 @@ To keep the loss below 5\% the company needs $Q\ge\QFiveSeats$ under fixed seats
 candidates or none, where fixed seats must always hire two. Leaks eat this advantage only for small banks: fixed seats give more value up to $Q=\CrossQBarWorseUpTo$, the cut-off from $Q=\CrossQBarBetterFrom$
 (\VEqBarQFifteen{} against \VEqSeatsQFifteen{} at $Q=15$). For a company the message is not ``avoid cut-offs'' but ``a cut-off needs a question bank several times larger''.
 
+\subsection{How robust is the staircase? (X5)}
+\begin{figure}[t]\centering
+\includegraphics[width=0.93\textwidth]{figures/fig6_sensitivity.pdf}
+\caption{Re-solving the two-groups game (E1) with one parameter moved at a time: bonus per known question $\Delta$, marking noise $\sigma$, seats $K$ (the cut-off $\tau_K$ moves with $K$).
+(a) Break-even friendliness by type under fixed seats, and the single value shared by every type under a cut-off. (b) Equilibrium sharing in all seven settings; baseline bold.}\label{fig:sens}
+\end{figure}
+X1--X4 hold $\Delta=\sigma=1$ and $K=2$ of $6$ fixed, and the bootstrap measures only Monte Carlo error. We therefore re-solved the headline game exactly in \XfiveSettings{} settings
+($\Delta\in\{0.5,1,2\}$, $\sigma\in\{0.5,1,2\}$, $K\in\{1,2,3\}$, one at a time; \XfiveGames{} games; Figure~\ref{fig:sens}).
+\finding{The mechanism survives everywhere; the exact order of the types does not.} In all \XfiveSettings{} settings a tell costs nothing under a cut-off (\XfiveBarZeroLoss{} of \XfiveSettings),
+the cut-off shares at least as much as fixed seats (\XfiveHtwoCellsOk{} of \XfiveHtwoCells{} comparisons), and under fixed seats the break-even friendliness ranks the types exactly as their own loss $\ell$
+does (\XfiveLossOrderOk{} of \XfiveSettings). The familiar order weak $<$ average $<$ strong holds in \XfiveOrderOk{} of them. The exception is $K=3$: with half the candidates hired, the marginal seat sits at the
+median, a tell costs an \emph{average} candidate most (\XfiveKthreeEllWeak, \XfiveKthreeEllAvg, \XfiveKthreeEllStrong{} points for weak, average, strong) and the thresholds follow
+(\XfiveKthreeWeak, \XfiveKthreeAvg, \XfiveKthreeStrong). With $K=1$ a strong candidate needs $\alpha^\star=\XfiveKoneStrong$ and never tells on our grid. Under a cut-off every type switches at the
+same point in \XfiveBarTogether{} of \XfiveSettings{} settings (at $\alpha=\XfiveBarSwitchLo$--$\XfiveBarSwitchHi$, the message cost over the friend's gain); in the remaining one (\XfiveBarSplitWhere) the switch point
+falls just below the first grid value and \XfiveBarSplitN{} near-indifferent equilibria share \XfiveBarSplitLo--\XfiveBarSplitHi\% there. \XfiveMulti{} of the \XfiveGames{} games have more than one pure equilibrium, each on a step of the staircase.
+
 \subsection{Verdict on the hypotheses, deviations and limits}
 \begin{table}[t]\centering\small
 \caption{The five hypotheses fixed in the project review, and what the experiments say.}\label{tab:hyp}
@@ -394,7 +410,7 @@ candidates or none, where fixed seats must always hire two. Leaks eat this advan
 \toprule
  & Hypothesis & Evidence & Verdict\\\midrule
 H1 & Under fixed seats, $\alpha^\star$ is highest for the types most likely to be pivotal &
-$\alpha^\star=\AstarLocalSeatsWeak<\AstarLocalSeatsAvg<\AstarLocalSeatsStrong$, in the order of the chance that a tell costs one's own seat ($\ell=\EllSeatsWeak,\EllSeatsAvg,\EllSeatsStrong$ points) & Supported\\
+$\alpha^\star=\AstarLocalSeatsWeak<\AstarLocalSeatsAvg<\AstarLocalSeatsStrong$, in the order of the chance that a tell costs one's own seat ($\ell=\EllSeatsWeak,\EllSeatsAvg,\EllSeatsStrong$ points); $\alpha^\star$ follows $\ell$ in all \XfiveSettings{} X5 settings, though at $K=3$ average types are the pivotal ones & Supported\\
 H2 & Cut-off shares more than fixed seats for every $\alpha\in[0,0.5]$ & At least as much in \HtwoOk{} of \HtwoCells{} exact comparisons, strictly more in \HtwoStrict; 1 exception, in E0 with several equilibria & Supported, 1~exception\\
 H3 & Fixed seats: sharing rises with $\beta$; cut-off: no effect & \ClanShareMinSeats\%$\to$\ClanShareMaxSeats\% (never falling) vs.\ constant \ClanShareMinBar\% & Supported\\
 H4 & No-regret play nears the CCE set; model-based learners are faster & CCE gap falls for \GapFallSig{} of \GapFallTests{} learners; leak-aware UCB reaches 90\% in \TninetyMbEoneSeats/\TninetyMbEoneBar{} rounds vs.\ \TninetyUcbEoneSeats/\TninetyUcbEoneBar{} for UCB1 & Supported$^\ast$\\
@@ -411,7 +427,7 @@ All five hypotheses are supported (Table~\ref{tab:hyp}), H2 with one exception a
 (iv)~the CCE programs were run for E1 only; (v)~the complete network at $n=6$ was handled by deviation tests, and $n=8$ was not attempted.
 \textbf{Limits.} Types are coarse and rounds are independent: there is no reputation, and placed candidates do not leave the pool (a stochastic game~\cite{shapley}). Networks are fixed and small.
 There is no real leak data, so every claim is comparative (seats vs.\ cut-off, weak vs.\ strong), not a prediction of how much real candidates share.
-The bootstrap measures Monte Carlo error, not sensitivity to $\Delta$, $\sigma$ or $K/n$, which we held fixed.
+Sensitivity to $\Delta$, $\sigma$ and $K$ was tested one parameter at a time (X5), for one network and leak model; joint changes, other $n$ and the learning and company experiments were not re-run.
 
 % =====================================================================================================
 \section{Contribution}

@@ -600,7 +600,7 @@ def fig_sensitivity(x5):
                 label=RULE["BAR"] if base else None)
     ax.set_xlabel(r"friendliness $\alpha$"); ax.set_ylabel("share of possible\ntells made")
     ax.set_xlim(0, 0.5); ax.set_ylim(-0.04, 1.04); ax.set_title("(b) Sharing in all seven settings")
-    ax.legend(frameon=False, fontsize=6.3, loc="center right")
+    ax.legend(frameon=False, fontsize=6.3, loc="upper left", bbox_to_anchor=(0.1, 0.96))
     fig.tight_layout(w_pad=1.4)
     save(fig, "fig6_sensitivity")
 
@@ -611,6 +611,15 @@ def numbers_x5(x5):
     S = x5["settings"]
     num("XfiveSettings", len(S))
     num("XfiveOrderOk", sum(s["verdicts"]["seats_order_weak_lt_avg_le_strong"] for s in S.values()))
+    num("XfiveLossOrderOk", sum(s["verdicts"]["seats_alpha_order_follows_loss"] for s in S.values()))
+    k3 = S.get("K=3")
+    if k3 is not None:
+        for th, tt in (("weak", "Weak"), ("avg", "Avg"), ("strong", "Strong")):
+            num(f"XfiveKthree{tt}", f"{k3['by_type']['SEATS'][th]['alpha_star_local']:.2f}")
+            num(f"XfiveKthreeEll{tt}", f"{100 * k3['verdicts']['seats_loss'][th]:.2f}")
+    k1 = S.get("K=1")
+    if k1 is not None:
+        num("XfiveKoneStrong", f"{k1['by_type']['SEATS']['strong']['alpha_star_local']:.2f}")
     num("XfiveBarZeroLoss", sum(s["verdicts"]["bar_loss_zero"] for s in S.values()))
     num("XfiveBarTogether", sum(s["verdicts"]["bar_all_types_switch_together"] and s["verdicts"]["bar_one_jump_none_to_all"]
                                 for s in S.values()))
@@ -622,6 +631,15 @@ def numbers_x5(x5):
         num(f"XfiveAstar{tt}Lo", f"{min(v):.2f}"); num(f"XfiveAstar{tt}Hi", f"{max(v):.2f}")
     sw = [s["verdicts"]["bar_switch_alpha"] for s in S.values() if s["verdicts"]["bar_switch_alpha"] is not None]
     num("XfiveBarSwitchLo", f"{min(sw):g}"); num("XfiveBarSwitchHi", f"{max(sw):g}")
+    split = [k for k, s in S.items()
+             if not (s["verdicts"]["bar_all_types_switch_together"] and s["verdicts"]["bar_one_jump_none_to_all"])]
+    if len(split) == 1:
+        # the one cut-off setting where the switch is not clean: where, and how much the several equilibria share
+        x5_full = load(f"x5/x5_{split[0].replace('=', '_')}.json")
+        rec = next(r for r in x5_full["rules"]["BAR"]["records"] if r["n_bne"] > 1)
+        num("XfiveBarSplitWhere", X5_LABEL[split[0]] + rf", $\alpha={rec['alpha']:g}$")
+        num("XfiveBarSplitN", rec["n_bne"])
+        num("XfiveBarSplitLo", pct(rec["sharing_rate_min"])); num("XfiveBarSplitHi", pct(rec["sharing_rate_max"]))
     multi = [(k, m) for k, s in S.items() for m in s["verdicts"]["alphas_with_several_bne"]]
     num("XfiveMulti", len(multi))
     num("XfiveGames", 2 * len(S) * len(x5["alphas"]))

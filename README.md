@@ -3,7 +3,7 @@
 Final project, Multi-Agent Systems, IIT Gandhinagar.
 Jash Bharat Pasad (24110146), Bhavay Goyal (24110070), Chaitanya Bhoite (24110086), Vishnu Sinha (24110389).
 
-**Report:** [`report/main.pdf`](report/main.pdf) (8 pages; LaTeX source in [`report/main.tex`](report/main.tex)).
+**Report:** [`report/main.pdf`](report/main.pdf) (9 pages; LaTeX source in [`report/main.tex`](report/main.tex)).
 
 After an interview, a candidate can tell friends who interview later which questions were asked. That helps the
 friends, but they may be competing for the same offers. We model this as a Bayesian game on a sharing matrix,
@@ -58,6 +58,17 @@ A cut-off still gives the higher absolute value once the bank has 9 or more ques
 
 ![Company loss versus bank size](results/figures/fig5_company_loss.png)
 
+### 4. The mechanism is robust; the order of the types depends on the number of seats
+
+The headline game was re-solved exactly with one parameter moved at a time: bonus per known question
+Δ ∈ {0.5, 1, 2}, marking noise σ ∈ {0.5, 1, 2} and seats K ∈ {1, 2, 3} (294 games). In all 7 settings a tell
+costs nothing under a cut-off, the cut-off shares at least as much as fixed seats (140 of 140 comparisons), and
+under fixed seats the friendliness a type needs before telling ranks the types exactly as their own loss from a
+tell does. Weak < average < strong holds in 6 settings; with K = 3 of 6 the last seat sits at the median, so
+*average* candidates lose most and tell last.
+
+![Sensitivity](results/figures/fig6_sensitivity.png)
+
 ### Console output
 
 These images are the text of the log files in `results/logs/`, rendered by
@@ -108,6 +119,7 @@ Or step by step:
 | X3: learning | `python experiments/run_x3.py` | `results/x3/x3_<learner>.npz` | 8 min |
 | X3: statistics | `python experiments/analyze_x3.py` | `results/x3/x3_summary.json` | 30 s |
 | X4: company loss | `python experiments/run_x4.py` | `results/x4/x4.json` | 11 min |
+| X5: sensitivity | `python experiments/run_sensitivity.py` | `results/x5/*.json` | 26 min |
 | Figures, tables, numbers | `python experiments/make_figures.py` | `results/figures/`, `report/figures/`, `report/generated/`, `results/numbers.json` | 5 s |
 | Console screenshots | `python experiments/make_console_shots.py` | `results/figures/console_*.png` | 2 s |
 | Report PDF | `cd report && tectonic main.tex` | `report/main.pdf` | 10 s |
@@ -140,6 +152,7 @@ No number in the report is typed by hand. `experiments/make_figures.py` reads th
 | Table 2, Figure 2c, Section 5.2 | `experiments/run_x2.py` | `results/x2/x2.json` |
 | Table 3, Figure 4, Section 5.3 | `experiments/run_x3.py`, `experiments/analyze_x3.py` | `results/x3/x3_summary.json` |
 | Figure 5, Section 5.4 | `experiments/run_x4.py` | `results/x4/x4.json` |
+| Figure 6, Section 5.5 | `experiments/run_sensitivity.py` | `results/x5/x5_<param>_<value>.json`, `x5_summary.json` |
 | Table 4 (hypotheses) | `experiments/make_figures.py` | all of the above |
 
 ## Repository layout

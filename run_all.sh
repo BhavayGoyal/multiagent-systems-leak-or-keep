@@ -19,6 +19,7 @@ $PY experiments/run_x2.py                          | tee results/logs/x2.log    
 $PY experiments/run_x3.py                          | tee results/logs/x3.log        # 900 learning runs
 $PY experiments/analyze_x3.py                      | tee results/logs/x3_analysis.log   # Table 3, Figure 4
 $PY experiments/run_x4.py                          | tee results/logs/x4.log        # Figure 5
+$PY experiments/run_sensitivity.py                 | tee results/logs/x5.log        # Figure 6     (skips finished settings)
 $PY experiments/make_figures.py                    | tee results/logs/figures.log   # figures, tables, numbers.tex
 $PY experiments/make_console_shots.py                                               # README screenshots
 # PDF (needs tectonic, or any LaTeX: cd report && pdflatex main && pdflatex main)
