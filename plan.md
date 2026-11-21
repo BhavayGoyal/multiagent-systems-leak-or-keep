@@ -35,20 +35,20 @@ the reports named in the last column.
 | 1.6 E2 bias | done | C | ≤ 0.08 pp | `report_p1.md` |
 | Merge | done | C | `merge-bhavay`; audit found P1–P5 | `report_merge.md` |
 | M.1, M.2 | done | C | units in §5.5 fixed; pivotality at K = 1–3 in the report | this file, issues I1, I2 |
-| **M.3, M.4** | **open** | — | final repository / `\RepoURL`; `main` on `origin` (team decisions) | issues I3, I4 |
+| M.3, M.4 | M.3 done; M.4 local done, origin at submission | C | team decided (22 Nov): final repository is Bhavay's (`\RepoURL` updated); `origin/main` is fast-forwarded to `merge-bhavay` | issues I3, I4 |
 | 2.1 Sensitivity | **partly** | B | X5 covers Δ, σ, K one at a time; **left: c and the hub position** | report §5.5 |
-| 2.2 X4 at other α | open | — | | |
-| 2.3 Company-value definition | open | — | | |
+| 2.2 X4 at other α | done | C | cut-off loses more in all 55 games with α > 0; ratio 6–12× (α = 0.2–0.3), 2.5–5.9× (α ≥ 0.4); Figure 5c | `run_x4_robust.py` |
+| 2.3 Company-value definition | done | C | prediction refuted: with κ = 0 or τ/2 the cut-off is better at every Q; flip κ* = 0.61–5.72 τ | `run_x4_robust.py` |
 | 2.4 Joint sweep | open (Could) | — | | |
-| 2.5 CCEs for the X2 utilities | open (new) | — | last core gap from the proposal | |
-| 3.1 E0 mechanism | **partly** | C, B | wide E0 CCE interval found twice and confirmed; **left: test the redundancy explanation** | report §5.1 |
-| 3.2 Learners in E0 | **partly** | B | `frac_within_c`: exact 0 %, within one message cost 100 %; **left: where learners sit in the CCE interval** | report §5.3 |
+| 2.5 CCEs for the X2 utilities | done | C | all 44 X2 games: CCE interval is a single point equal to the pure equilibrium (prediction holds) | `run_cce_x2.py` |
+| 3.1 E0 mechanism | done | C, B | extra CCE sharing is 100 % redundant tells; width falls only 33 → 28 points over a 40× rise in c ("in proportion to c" refuted); fixed seats close from c = 0.005 | `run_e0_mechanism.py` |
+| 3.2 Learners in E0 | done | B, C | 4 of 6 learners settle at the top of the CCE interval (96–100 %); run averages inside but at 0.28–0.56 (prediction on run averages refuted) | `run_learners_in_cce.py` |
 | 3.3 Complete network, cut-off | open | — | | |
 | 4.1–4.3 | open | — | n = 8; support enumeration beyond 2 actions; learning elsewhere | |
 | 5.x | open (Could) | — | | |
 | 6.1–6.4 | open | — | write-up, figures, presentation, final rerun | |
 
-**Next, in order:** Phase M (an afternoon), then 2.2, 2.3 and 2.1's remainder, then 3.1 and 3.2, then 2.5 and 3.3; Phase 4
+**Next, in order (submission day, 22 Nov, deadline 10 pm):** close I7 (clean-clone comparison), fast-forward `origin/main`, tag. Not done before the deadline and named as future work in the report: 2.1's remainder (c outside E0, hub position), 2.4, 3.3, Phase 4 and 5.
 only after decisions D3–D5; Phase 6 last.
 
 ---
@@ -62,10 +62,10 @@ experiment. "Who decides" marks issues that need a team decision rather than wor
 |---|---|---|---|---|---|
 | **I1** | The own loss from a tell is given **per friend told** in §5.1 (0.38 / 1.49 / 1.60) but **for telling all later friends** in §5.5 (K = 3: 1.24 / 2.64 / 1.48), both as "points" | a reader concludes the weak type's loss tripled at K = 3; in one unit it rose from 0.38 to 0.83 | compute the X5 losses per friend in `make_figures.py` from the per-candidate losses already stored in `results/x5/*.json` (no re-run, Bhavay's script and data untouched); say "per friend told" in §5.5 and give the baseline. Checked first: the type orderings are identical in both units in all 7 settings, so no X5 conclusion changes | M.1 | **fixed**: §5.5 now says 0.83 / 1.76 / 0.98 points per friend told at K = 3 (baseline 0.38 / 1.49 / 1.60, = §5.1); `make_figures.py` asserts the orderings are unit-independent and the baseline equals §5.1 |
 | **I2** | The report's H1 evidence uses pivotality only at K = 2, although X5 shows the pivotal type changes with K | the K = 3 reversal is explained only by the loss itself, which is circular (the same problem 1.3 fixed at K = 2) | `run_h1.py` for K = 1, 2, 3; macros; one clause in §5.5 and in the H1 row of Table 4; a unit test | M.2 | **fixed**: at K = 1 / 2 / 3 the last seat is held by weak / average / strong on 0.9 / 8.5 / 40.7, 3.6 / 17.9 / 28.5 and 9.0 / 23.6 / 17.4 % of days; the order matches α\* at every K (2 M days each); in §5.5, Table 4, README; test added (43) |
-| **I3** | `\RepoURL` in the report points at `Vish-Overflows/...`, which contains none of this work | the report promises that the linked repository regenerates every number | decide the final repository, put the work there, update `\RepoURL` | M.3 | **team decides** (D8) |
+| **I3** | `\RepoURL` in the report pointed at `Vish-Overflows/...`, which contains none of this work | the report promises that the linked repository regenerates every number | team decided: Bhavay's repository | M.3 | **fixed** (`\RepoURL` = `github.com/BhavayGoyal/multiagent-systems-leak-or-keep`) |
 | **I4** | `main` is behind `merge-bhavay` locally and on `origin` | anyone cloning `main` gets an old state | local: fast-forward `main`; `origin/main` (Bhavay's): fast-forward only with his agreement | M.4 | local: **fixed** (`main` fast-forwarded to `merge-bhavay`, tracks `origin/main`, 16 commits ahead); origin: **team decides** (D9) |
 | **I5** | Stale local branches `fix/items-5-7` and `phase-1` | confusion about which branch is current | delete after I4 (both are fully contained in `merge-bhavay`) | M.4 | **fixed** (deleted with `git branch -d`, which refuses unmerged branches) |
-| **I6** | The page limit is unknown; the report is 12 pages | the trim plan (0.1, 6.2) cannot be applied without it | find out | D1 | **team decides** |
+| **I6** | The page limit was unknown; the report was 12 pages | the trim plan (0.1, 6.2) could not be applied without it | team decided: about 8 pages, ±2 | D1 | **fixed**: 10 pages (9 main text and references, 1 appendix); Table 1 moved to the appendix, §4 and §5 tightened |
 | **I7** | The full clean-clone reproduction (0.4) predates Phase 1, X5 and the merge | the README's "every number regenerates" is only partly re-verified for the merged code | re-run the clean-clone procedure on the merged branch and compare (`compare_with_committed.py`) | 6.4 (pulled forward) | **running (second attempt)**: fresh clone of `origin/merge-bhavay` at `d7f4879` in `..\FAI_clean`, results deleted. Attempt 1 (`X1_WORKERS=2`, 1.1 GB free) failed in X1 with `MemoryError: std::bad_alloc` inside HiGHS: two X1 cells ran together while one solved a two-groups CCE program (4–6 GB); a memory limit, not a code fault (log `..\clean_run_attempt1.log`). It also showed the procedure must restore `results/x1/independent/` (inputs of the optional `run_cce_e0e2.py`, which `run_all.sh` skips) or the `CceCross*` macros vanish; both are now in the procedure (`compare_with_committed.py`, `run_all.sh`). Attempt 2: `X1_WORKERS=1 X3_WORKERS=2 X5_WORKERS=2 CCE_WORKERS=1` (about 4 h); log `..\clean_run.log` |
 | I8 | The Phase 1 commit message says P(last seat \| strong) = 28.6 %; the value is 28.5 % | cosmetic; all files are correct | not fixed (would need a history rewrite of pushed commits) | — | won't fix |
 
@@ -378,7 +378,7 @@ everywhere) and which are numbers specific to our setting.
   sentence or narrow it to what was not swept.
 - **Owner.** Chaitanya.
 
-### 2.2 The company-loss result at other friendliness levels — **Must**
+### 2.2 The company-loss result at other friendliness levels — **Must** — ✅ done (22 Nov)
 
 - **Why.** The "8–12× more loss under a cut-off" holds at α = 0.2, where only weak candidates tell under fixed
   seats. The everyone-tells line already shows the rule alone gives 2.5–4.4×. Readers will ask what happens at
@@ -391,7 +391,7 @@ everywhere) and which are numbers specific to our setting.
 - **Cost.** half a day; compute ~15 min.
 - **Owner.** Jash.
 
-### 2.3 How much does the company-value definition matter? — **Should**
+### 2.3 How much does the company-value definition matter? — **Should** — ✅ done (22 Nov; prediction refuted)
 
 - **Why.** V = Σ_{j hired} (s_j − τ) rewards *not* hiring weak candidates, which only a cut-off can do. "The
   cut-off is the better rule from Q ≥ 9" depends on this choice.
@@ -406,7 +406,7 @@ everywhere) and which are numbers specific to our setting.
 - Only if 2.1 shows an interaction worth studying: Δ × σ × K at 3 levels each, 27 settings, ≈ 2–3 h compute.
   X5's K = 3 reversal is such a candidate: does it survive other Δ and σ? A K × Δ grid (9 settings) would answer it.
 
-### 2.5 CCEs for the X2 utilities — **Should** (new after the merge)
+### 2.5 CCEs for the X2 utilities — **Should** (new after the merge) — ✅ done (22 Nov)
 
 - **Why.** The proposal's core deliverables include "X1–X2 equilibria and CCEs". X1 now has CCE programs for all
   three leak models (two implementations agree); X2 (selfish, friendly, clannish, fairness-minded and mixed
@@ -428,7 +428,7 @@ In E0 (a told question always comes up), the CCE interval is wider than the pure
 In one example, all four pure equilibria share 67% of tells while correlated play can share 66% to 99%. The report
 offers a reason it has not tested. This phase tests it and makes E0's story complete.
 
-### 3.1 Test the redundancy explanation — **Should** — ◐ finding confirmed, explanation still untested
+### 3.1 Test the redundancy explanation — **Should** — ✅ done (22 Nov): the extra sharing is redundant tells, but the width barely depends on c
 
 > **Status.** The wide E0 CCE interval was found by Chaitanya (`run_cce.py`) and independently by Bhavay
 > (`run_cce_e0e2.py`); they agree on all 212 rows. Bhavay added that the interval reaches up to 33 points above the
@@ -450,7 +450,7 @@ offers a reason it has not tested. This phase tests it and makes E0's story comp
   with the result.
 - **Owner.** Chaitanya.
 
-### 3.2 Where do the learners end up in E0? — **Should** — ◐ partly done by Bhavay
+### 3.2 Where do the learners end up in E0? — **Should** — ✅ done (22 Nov)
 
 > **Status.** Bhavay's `frac_within_c`: in E0 under a cut-off every learner's settled profile is an exact equilibrium in
 > 0 % of runs but within one message cost of one in 100 % (the two counts coincide in all 30 other settings), in report
@@ -627,14 +627,14 @@ For each finished item above, in this order:
 
 | # | Decision | Options | Suggestion | Blocks |
 |---|---|---|---|---|
-| D1 | Deadline and page limit of the final report (the report is **12 pages** now) | — | find out first | all of Phase 6 |
+| D1 | Deadline and page limit of the final report | — | **decided 22 Nov:** submit by end of day (10 pm); about 8 pages, ±2 | all of Phase 6 |
 | D2 | Is there a presentation? | yes / no | — | 6.3 |
 | D3 | Which phases are in scope | 0–3 only; 0–4; all | 0–3 plus 4.1 (pairs, star) and 4.3 | everything after Phase 1 |
 | D4 | Seats at n = 8 | K = 2 or K = 3 | run both for pairs, then choose | 4.1 |
 | D5 | Attempt two groups at n = 8 | yes (new method, several days) / no | only if 2.1 shows thresholds move a lot with n-related parameters | 4.1 step 3 |
 | D6 | Keep `proposal.pdf` in the repository | `docs/` / leave out | done: `docs/proposal.pdf` | — |
-| D8 | Which repository is final (and what `\RepoURL` in the report points to) | Vish-Overflows / BhavayGoyal / other | decide as a team | M.3, 6.4 |
-| D9 | Make `merge-bhavay` the main line, here and on `origin` | yes / keep separate | yes, fast-forward | M.4 |
+| D8 | Which repository is final (and what `\RepoURL` in the report points to) | Vish-Overflows / BhavayGoyal / other | **decided:** BhavayGoyal | M.3, 6.4 |
+| D9 | Make `merge-bhavay` the main line, here and on `origin` | yes / keep separate | **decided: yes** (Bhavay agrees), fast-forward | M.4 |
 | D10 | Contribution table: Bhavay's row now credits X5 and the CCE cross-check | keep / change | confirm with Bhavay | 6.1 |
 | D11 | Units of the own loss in §5.5 (M.1) | state "tell all" + baseline / convert to per friend | agree with Bhavay (his script) | M.1 |
 | D7 | Who owns which item | — | owners suggested per item above | — |

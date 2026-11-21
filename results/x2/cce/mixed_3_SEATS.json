@@ -1,0 +1,27 @@
+{
+ "id": "mixed_3_SEATS",
+ "section": "mixed",
+ "index": 6,
+ "rule": "SEATS",
+ "population": "mixed[FRIEND(0.2),CLAN(0.2,0.3),FRIEND(0.2),CLAN(0.2,0.3),FRIEND(0.2),CLAN(0.2,0.3)]",
+ "beta": null,
+ "a": null,
+ "b": null,
+ "name": "friendly group {1,3,5}, clannish(0.2,0.3) group {2,4,6}",
+ "cce_share_max": 0.6111111111111113,
+ "cce_share_min": 0.6111111111111113,
+ "cce_width": 0.0,
+ "lp_status": [
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+ ],
+ "lp_seconds": 36.23741388320923,
+ "n_bne": 1,
+ "bne_share_min": 0.6111111111111113,
+ "bne_share_max": 0.6111111111111113,
+ "frac_exact_bne": 0.665,
+ "near_indifferent": true,
+ "matches_x2_equilibria": true,
+ "seconds": 68.31283164024353,
+ "cce_equals_pure_range": true
+}

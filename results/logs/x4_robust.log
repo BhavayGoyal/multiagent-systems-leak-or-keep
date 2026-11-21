@@ -1,0 +1,81 @@
+Q=  4 alpha=0.0: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  0.00%  ratio None
+Q=  4 alpha=0.1: SEATS 1 BNE loss  9.22% | BAR 1 BNE loss 57.63%  ratio 6.253193342619927
+Q=  4 alpha=0.2: SEATS 1 BNE loss  9.22% | BAR 1 BNE loss 57.63%  ratio 6.253193342619927
+Q=  4 alpha=0.3: SEATS 1 BNE loss 12.11% | BAR 1 BNE loss 57.63%  ratio 4.75848514608573
+Q=  4 alpha=0.4: SEATS 1 BNE loss 17.59% | BAR 1 BNE loss 57.63%  ratio 3.2760062848056855
+Q=  4 alpha=0.5: SEATS 1 BNE loss 17.59% | BAR 1 BNE loss 57.63%  ratio 3.2760062848056855
+        kappa: BAR better at 0 / tau/2 / tau: True / True / False; extra hires under BAR +1.135; flip at kappa = 0.30428418603684537
+Q=  6 alpha=0.0: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  0.00%  ratio None
+Q=  6 alpha=0.1: SEATS 1 BNE loss  5.23% | BAR 1 BNE loss 37.50%  ratio 7.167194712394857
+Q=  6 alpha=0.2: SEATS 1 BNE loss  5.23% | BAR 1 BNE loss 37.50%  ratio 7.167194712394857
+Q=  6 alpha=0.3: SEATS 1 BNE loss  6.54% | BAR 1 BNE loss 37.50%  ratio 5.73576965124051
+Q=  6 alpha=0.4: SEATS 1 BNE loss 13.68% | BAR 1 BNE loss 37.50%  ratio 2.741736932619885
+Q=  6 alpha=0.5: SEATS 1 BNE loss 13.68% | BAR 1 BNE loss 37.50%  ratio 2.741736932619885
+        kappa: BAR better at 0 / tau/2 / tau: True / True / False; extra hires under BAR +0.839; flip at kappa = 0.4200090580913301
+Q=  9 alpha=0.0: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  0.00%  ratio None
+Q=  9 alpha=0.1: SEATS 1 BNE loss  3.14% | BAR 1 BNE loss 23.71%  ratio 7.54655995869799
+Q=  9 alpha=0.2: SEATS 1 BNE loss  3.14% | BAR 1 BNE loss 23.71%  ratio 7.54655995869799
+Q=  9 alpha=0.3: SEATS 1 BNE loss  4.29% | BAR 1 BNE loss 23.71%  ratio 5.52027585432668
+Q=  9 alpha=0.4: SEATS 1 BNE loss  9.97% | BAR 1 BNE loss 23.71%  ratio 2.3772234908670495
+Q=  9 alpha=0.5: SEATS 1 BNE loss  9.97% | BAR 1 BNE loss 23.71%  ratio 2.3772234908670495
+        kappa: BAR better at 0 / tau/2 / tau: True / True / True; extra hires under BAR +0.596; flip at kappa = 0.5719702043203279
+Q= 12 alpha=0.0: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  0.00%  ratio None
+Q= 12 alpha=0.1: SEATS 1 BNE loss  1.40% | BAR 1 BNE loss 16.99%  ratio 12.17426757737335
+Q= 12 alpha=0.2: SEATS 1 BNE loss  2.26% | BAR 1 BNE loss 16.99%  ratio 7.501009673401713
+Q= 12 alpha=0.3: SEATS 1 BNE loss  2.26% | BAR 1 BNE loss 16.99%  ratio 7.501009673401713
+Q= 12 alpha=0.4: SEATS 1 BNE loss  7.75% | BAR 1 BNE loss 16.99%  ratio 2.1919950960149475
+Q= 12 alpha=0.5: SEATS 1 BNE loss  7.75% | BAR 1 BNE loss 16.99%  ratio 2.1919950960149475
+        kappa: BAR better at 0 / tau/2 / tau: True / True / True; extra hires under BAR +0.459; flip at kappa = 0.7137791608500323
+Q= 15 alpha=0.0: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  0.00%  ratio None
+Q= 15 alpha=0.1: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss 13.15%  ratio None
+Q= 15 alpha=0.2: SEATS 1 BNE loss  1.70% | BAR 1 BNE loss 13.15%  ratio 7.72696842435473
+Q= 15 alpha=0.3: SEATS 1 BNE loss  1.70% | BAR 1 BNE loss 13.15%  ratio 7.72696842435473
+Q= 15 alpha=0.4: SEATS 1 BNE loss  5.53% | BAR 1 BNE loss 13.15%  ratio 2.378534245017898
+Q= 15 alpha=0.5: SEATS 1 BNE loss  6.23% | BAR 1 BNE loss 13.15%  ratio 2.1101140223763175
+        kappa: BAR better at 0 / tau/2 / tau: True / True / True; extra hires under BAR +0.375; flip at kappa = 0.8432015842754489
+Q= 20 alpha=0.0: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  0.00%  ratio None
+Q= 20 alpha=0.1: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  9.60%  ratio None
+Q= 20 alpha=0.2: SEATS 1 BNE loss  1.27% | BAR 1 BNE loss  9.60%  ratio 7.528835620046321
+Q= 20 alpha=0.3: SEATS 1 BNE loss  1.27% | BAR 1 BNE loss  9.60%  ratio 7.528835620046321
+Q= 20 alpha=0.4: SEATS 1 BNE loss  4.15% | BAR 1 BNE loss  9.60%  ratio 2.312971270527518
+Q= 20 alpha=0.5: SEATS 1 BNE loss  4.79% | BAR 1 BNE loss  9.60%  ratio 2.0050157235013852
+        kappa: BAR better at 0 / tau/2 / tau: True / True / True; extra hires under BAR +0.285; flip at kappa = 1.0542236042994169
+Q= 25 alpha=0.0: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  0.00%  ratio None
+Q= 25 alpha=0.1: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  7.50%  ratio None
+Q= 25 alpha=0.2: SEATS 1 BNE loss  0.98% | BAR 1 BNE loss  7.50%  ratio 7.675545540186077
+Q= 25 alpha=0.3: SEATS 1 BNE loss  0.98% | BAR 1 BNE loss  7.50%  ratio 7.675545540186077
+Q= 25 alpha=0.4: SEATS 1 BNE loss  3.15% | BAR 1 BNE loss  7.50%  ratio 2.3835017766161126
+Q= 25 alpha=0.5: SEATS 1 BNE loss  3.87% | BAR 1 BNE loss  7.50%  ratio 1.93910806572988
+        kappa: BAR better at 0 / tau/2 / tau: True / True / True; extra hires under BAR +0.230; flip at kappa = 1.2607368465976325
+Q= 30 alpha=0.0: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  0.00%  ratio None
+Q= 30 alpha=0.1: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  6.13%  ratio None
+Q= 30 alpha=0.2: SEATS 1 BNE loss  0.79% | BAR 1 BNE loss  6.13%  ratio 7.76331465121137
+Q= 30 alpha=0.3: SEATS 1 BNE loss  0.79% | BAR 1 BNE loss  6.13%  ratio 7.76331465121137
+Q= 30 alpha=0.4: SEATS 1 BNE loss  1.48% | BAR 1 BNE loss  6.13%  ratio 4.149749616855018
+Q= 30 alpha=0.5: SEATS 1 BNE loss  3.19% | BAR 1 BNE loss  6.13%  ratio 1.9233484642391807
+        kappa: BAR better at 0 / tau/2 / tau: True / True / True; extra hires under BAR +0.193; flip at kappa = 1.4667717477892608
+Q= 40 alpha=0.0: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  0.00%  ratio None
+Q= 40 alpha=0.1: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  4.49%  ratio None
+Q= 40 alpha=0.2: SEATS 1 BNE loss  0.56% | BAR 1 BNE loss  4.49%  ratio 7.956536772014737
+Q= 40 alpha=0.3: SEATS 1 BNE loss  0.56% | BAR 1 BNE loss  4.49%  ratio 7.956536772014737
+Q= 40 alpha=0.4: SEATS 1 BNE loss  1.10% | BAR 1 BNE loss  4.49%  ratio 4.082647136761162
+Q= 40 alpha=0.5: SEATS 1 BNE loss  2.39% | BAR 1 BNE loss  4.49%  ratio 1.8805909614109817
+        kappa: BAR better at 0 / tau/2 / tau: True / True / True; extra hires under BAR +0.146; flip at kappa = 1.864436130295622
+Q= 50 alpha=0.0: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  0.00%  ratio None
+Q= 50 alpha=0.1: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  3.58%  ratio None
+Q= 50 alpha=0.2: SEATS 1 BNE loss  0.46% | BAR 1 BNE loss  3.58%  ratio 7.79316919998244
+Q= 50 alpha=0.3: SEATS 1 BNE loss  0.46% | BAR 1 BNE loss  3.58%  ratio 7.79316919998244
+Q= 50 alpha=0.4: SEATS 1 BNE loss  0.90% | BAR 1 BNE loss  3.58%  ratio 3.993003736684421
+Q= 50 alpha=0.5: SEATS 1 BNE loss  1.95% | BAR 1 BNE loss  3.58%  ratio 1.8351054872994774
+        kappa: BAR better at 0 / tau/2 / tau: True / True / True; extra hires under BAR +0.118; flip at kappa = 2.2546247295353403
+Q= 64 alpha=0.0: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  0.00%  ratio None
+Q= 64 alpha=0.1: SEATS 1 BNE loss  0.00% | BAR 1 BNE loss  2.76%  ratio None
+Q= 64 alpha=0.2: SEATS 1 BNE loss  0.32% | BAR 1 BNE loss  2.76%  ratio 8.542789024671762
+Q= 64 alpha=0.3: SEATS 1 BNE loss  0.32% | BAR 1 BNE loss  2.76%  ratio 8.542789024671762
+Q= 64 alpha=0.4: SEATS 1 BNE loss  0.63% | BAR 1 BNE loss  2.76%  ratio 4.373652606541169
+Q= 64 alpha=0.5: SEATS 1 BNE loss  1.49% | BAR 1 BNE loss  2.76%  ratio 1.846007587536943
+        kappa: BAR better at 0 / tau/2 / tau: True / True / True; extra hires under BAR +0.091; flip at kappa = 2.8431494680963896
+cut-off loses more at every alpha > 0 and every Q (every pair of equilibria): True
+with kappa = 0 fixed seats give more value at every Q: False
+X4 robustness done in 626s
+exit 0

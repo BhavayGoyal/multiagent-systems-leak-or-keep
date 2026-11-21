@@ -1,0 +1,27 @@
+{
+ "id": "fair_0.5_0.25_SEATS",
+ "section": "fair",
+ "index": 1,
+ "rule": "SEATS",
+ "population": "FAIR(0.5,0.25)",
+ "beta": null,
+ "a": 0.5,
+ "b": 0.25,
+ "name": null,
+ "cce_share_max": 0.0,
+ "cce_share_min": 0.0,
+ "cce_width": 0.0,
+ "lp_status": [
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+ ],
+ "lp_seconds": 41.54823708534241,
+ "n_bne": 1,
+ "bne_share_min": 0.0,
+ "bne_share_max": 0.0,
+ "frac_exact_bne": 1.0,
+ "near_indifferent": false,
+ "matches_x2_equilibria": true,
+ "seconds": 69.05822229385376,
+ "cce_equals_pure_range": true
+}

@@ -1,0 +1,579 @@
+{
+ "alpha": 0.2,
+ "cs": [
+  0.0005,
+  0.001,
+  0.002,
+  0.005,
+  0.01,
+  0.02
+ ],
+ "base_c": 0.001,
+ "rows": {
+  "SEATS/0.0005": {
+   "c": 0.0005,
+   "rule": "SEATS",
+   "cce_share_max": 0.7861295604347289,
+   "cce_share_min": 0.3333333333333333,
+   "cce_width": 0.4527962271013956,
+   "n_bne": 2,
+   "bne_share_min": 0.3333333333333333,
+   "bne_share_max": 0.6666666666666666,
+   "lp_status": [
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+   ],
+   "max_cce": {
+    "support": 6,
+    "tells": 4.716777362608374,
+    "first": 3.143689240280746,
+    "redundant": 1.5730881223276274
+   },
+   "min_cce": {
+    "support": 1,
+    "tells": 2.0,
+    "first": 1.7777777777777777,
+    "redundant": 0.2222222222222222
+   },
+   "pure": {
+    "tells": [
+     2.0,
+     4.0
+    ],
+    "first": [
+     1.7777777777777777,
+     3.111111111111111
+    ],
+    "redundant": [
+     0.2222222222222222,
+     0.8888888888888888
+    ]
+   },
+   "extra_tells": 0.716777362608374,
+   "extra_redundant_share": 0.9545491656557308,
+   "seconds": 104.08159685134888
+  },
+  "SEATS/0.001": {
+   "c": 0.001,
+   "rule": "SEATS",
+   "cce_share_max": 0.7379168140056914,
+   "cce_share_min": 0.3333333333333333,
+   "cce_width": 0.4045834806723581,
+   "n_bne": 2,
+   "bne_share_min": 0.3333333333333333,
+   "bne_share_max": 0.6666666666666666,
+   "lp_status": [
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+   ],
+   "max_cce": {
+    "support": 7,
+    "tells": 4.427500884034148,
+    "first": 3.08064770229681,
+    "redundant": 1.346853181737338
+   },
+   "min_cce": {
+    "support": 1,
+    "tells": 2.0,
+    "first": 1.7777777777777777,
+    "redundant": 0.2222222222222222
+   },
+   "pure": {
+    "tells": [
+     2.0,
+     4.0
+    ],
+    "first": [
+     1.7777777777777777,
+     3.111111111111111
+    ],
+    "redundant": [
+     0.2222222222222222,
+     0.8888888888888888
+    ]
+   },
+   "extra_tells": 0.4275008840341483,
+   "extra_redundant_share": 1.0712592884646932,
+   "seconds": 106.60737109184265
+  },
+  "SEATS/0.002": {
+   "c": 0.002,
+   "rule": "SEATS",
+   "cce_share_max": 0.6903044386266598,
+   "cce_share_min": 0.3333333333333333,
+   "cce_width": 0.3569711052933265,
+   "n_bne": 2,
+   "bne_share_min": 0.3333333333333333,
+   "bne_share_max": 0.6666666666666666,
+   "lp_status": [
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+   ],
+   "max_cce": {
+    "support": 7,
+    "tells": 4.14182663175996,
+    "first": 3.0679719050325875,
+    "redundant": 1.0738547267273717
+   },
+   "min_cce": {
+    "support": 1,
+    "tells": 2.0,
+    "first": 1.7777777777777777,
+    "redundant": 0.2222222222222222
+   },
+   "pure": {
+    "tells": [
+     2.0,
+     4.0
+    ],
+    "first": [
+     1.7777777777777777,
+     3.111111111111111
+    ],
+    "redundant": [
+     0.2222222222222222,
+     0.8888888888888888
+    ]
+   },
+   "extra_tells": 0.1418266317599599,
+   "extra_redundant_share": 1.304168586274654,
+   "seconds": 135.00040674209595
+  },
+  "SEATS/0.005": {
+   "c": 0.005,
+   "rule": "SEATS",
+   "cce_share_max": 0.33333333332223947,
+   "cce_share_min": 0.3333333333333333,
+   "cce_width": -1.1093848062415645e-11,
+   "n_bne": 1,
+   "bne_share_min": 0.3333333333333333,
+   "bne_share_max": 0.3333333333333333,
+   "lp_status": [
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+   ],
+   "max_cce": {
+    "support": 1,
+    "tells": 2.0,
+    "first": 1.7777777777777777,
+    "redundant": 0.2222222222222222
+   },
+   "min_cce": {
+    "support": 1,
+    "tells": 2.0,
+    "first": 1.7777777777777777,
+    "redundant": 0.2222222222222222
+   },
+   "pure": {
+    "tells": [
+     2.0
+    ],
+    "first": [
+     1.7777777777777777
+    ],
+    "redundant": [
+     0.2222222222222222
+    ]
+   },
+   "extra_tells": 0.0,
+   "extra_redundant_share": null,
+   "seconds": 101.2048065662384
+  },
+  "SEATS/0.01": {
+   "c": 0.01,
+   "rule": "SEATS",
+   "cce_share_max": 0.3333333333332477,
+   "cce_share_min": 0.3333333333333333,
+   "cce_width": -8.559819519859957e-14,
+   "n_bne": 1,
+   "bne_share_min": 0.3333333333333333,
+   "bne_share_max": 0.3333333333333333,
+   "lp_status": [
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+   ],
+   "max_cce": {
+    "support": 1,
+    "tells": 2.0,
+    "first": 1.7777777777777777,
+    "redundant": 0.2222222222222222
+   },
+   "min_cce": {
+    "support": 1,
+    "tells": 2.0,
+    "first": 1.7777777777777777,
+    "redundant": 0.2222222222222222
+   },
+   "pure": {
+    "tells": [
+     2.0
+    ],
+    "first": [
+     1.7777777777777777
+    ],
+    "redundant": [
+     0.2222222222222222
+    ]
+   },
+   "extra_tells": 0.0,
+   "extra_redundant_share": null,
+   "seconds": 96.26479148864746
+  },
+  "SEATS/0.02": {
+   "c": 0.02,
+   "rule": "SEATS",
+   "cce_share_max": 0.33333333333333326,
+   "cce_share_min": 0.3333333333333333,
+   "cce_width": -5.551115123125783e-17,
+   "n_bne": 1,
+   "bne_share_min": 0.3333333333333333,
+   "bne_share_max": 0.3333333333333333,
+   "lp_status": [
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+   ],
+   "max_cce": {
+    "support": 1,
+    "tells": 2.0,
+    "first": 1.7777777777777777,
+    "redundant": 0.2222222222222222
+   },
+   "min_cce": {
+    "support": 1,
+    "tells": 2.0,
+    "first": 1.7777777777777777,
+    "redundant": 0.2222222222222222
+   },
+   "pure": {
+    "tells": [
+     2.0
+    ],
+    "first": [
+     1.7777777777777777
+    ],
+    "redundant": [
+     0.2222222222222222
+    ]
+   },
+   "extra_tells": 0.0,
+   "extra_redundant_share": null,
+   "seconds": 102.85686016082764
+  },
+  "BAR/0.0005": {
+   "c": 0.0005,
+   "rule": "BAR",
+   "cce_share_max": 0.9950750669658243,
+   "cce_share_min": 0.6641719105580052,
+   "cce_width": 0.3309031564078191,
+   "n_bne": 4,
+   "bne_share_min": 0.6666666666666666,
+   "bne_share_max": 0.6666666666666669,
+   "lp_status": [
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+   ],
+   "max_cce": {
+    "support": 5,
+    "tells": 5.970450401794948,
+    "first": 4.0,
+    "redundant": 1.9704504017949482
+   },
+   "min_cce": {
+    "support": 6,
+    "tells": 3.98503146334803,
+    "first": 3.98503146334803,
+    "redundant": 0.0
+   },
+   "pure": {
+    "tells": [
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ],
+    "first": [
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ],
+    "redundant": [
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "extra_tells": 1.970450401794948,
+   "extra_redundant_share": 1.0000000000000002,
+   "seconds": 94.58969354629517
+  },
+  "BAR/0.001": {
+   "c": 0.001,
+   "rule": "BAR",
+   "cce_share_max": 0.9902223652286077,
+   "cce_share_min": 0.6616771098711142,
+   "cce_width": 0.32854525535749357,
+   "n_bne": 4,
+   "bne_share_min": 0.6666666666666666,
+   "bne_share_max": 0.6666666666666669,
+   "lp_status": [
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+   ],
+   "max_cce": {
+    "support": 5,
+    "tells": 5.941334191371649,
+    "first": 4.0,
+    "redundant": 1.9413341913716484
+   },
+   "min_cce": {
+    "support": 6,
+    "tells": 3.970062659226681,
+    "first": 3.970062659226681,
+    "redundant": 0.0
+   },
+   "pure": {
+    "tells": [
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ],
+    "first": [
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ],
+    "redundant": [
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "extra_tells": 1.9413341913716486,
+   "extra_redundant_share": 0.9999999999999999,
+   "seconds": 94.2807469367981
+  },
+  "BAR/0.002": {
+   "c": 0.002,
+   "rule": "BAR",
+   "cce_share_max": 0.9807273912597063,
+   "cce_share_min": 0.6566873706330708,
+   "cce_width": 0.3240400206266355,
+   "n_bne": 4,
+   "bne_share_min": 0.6666666666666666,
+   "bne_share_max": 0.6666666666666669,
+   "lp_status": [
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+   ],
+   "max_cce": {
+    "support": 5,
+    "tells": 5.88436434755824,
+    "first": 4.0,
+    "redundant": 1.8843643475582394
+   },
+   "min_cce": {
+    "support": 6,
+    "tells": 3.940124223798426,
+    "first": 3.940124223798426,
+    "redundant": 0.0
+   },
+   "pure": {
+    "tells": [
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ],
+    "first": [
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ],
+    "redundant": [
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "extra_tells": 1.8843643475582397,
+   "extra_redundant_share": 0.9999999999999999,
+   "seconds": 93.4580225944519
+  },
+  "BAR/0.005": {
+   "c": 0.005,
+   "rule": "BAR",
+   "cce_share_max": 0.9538209571111241,
+   "cce_share_min": 0.6417169696554804,
+   "cce_width": 0.3121039874556437,
+   "n_bne": 4,
+   "bne_share_min": 0.6666666666666666,
+   "bne_share_max": 0.6666666666666669,
+   "lp_status": [
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+   ],
+   "max_cce": {
+    "support": 5,
+    "tells": 5.722925742666747,
+    "first": 4.0,
+    "redundant": 1.7229257426667464
+   },
+   "min_cce": {
+    "support": 6,
+    "tells": 3.850301817932881,
+    "first": 3.850301817932881,
+    "redundant": 0.0
+   },
+   "pure": {
+    "tells": [
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ],
+    "first": [
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ],
+    "redundant": [
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "extra_tells": 1.7229257426667468,
+   "extra_redundant_share": 0.9999999999999998,
+   "seconds": 95.49289345741272
+  },
+  "BAR/0.01": {
+   "c": 0.01,
+   "rule": "BAR",
+   "cce_share_max": 0.9136249874650076,
+   "cce_share_min": 0.6167617318454403,
+   "cce_width": 0.2968632556195674,
+   "n_bne": 4,
+   "bne_share_min": 0.6666666666666666,
+   "bne_share_max": 0.6666666666666669,
+   "lp_status": [
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+   ],
+   "max_cce": {
+    "support": 5,
+    "tells": 5.481749924790047,
+    "first": 4.0,
+    "redundant": 1.4817499247900465
+   },
+   "min_cce": {
+    "support": 6,
+    "tells": 3.7005703910726417,
+    "first": 3.7005703910726417,
+    "redundant": 0.0
+   },
+   "pure": {
+    "tells": [
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ],
+    "first": [
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ],
+    "redundant": [
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "extra_tells": 1.481749924790047,
+   "extra_redundant_share": 0.9999999999999997,
+   "seconds": 89.41587948799133
+  },
+  "BAR/0.02": {
+   "c": 0.02,
+   "rule": "BAR",
+   "cce_share_max": 0.8469874635095495,
+   "cce_share_min": 0.5668275255579064,
+   "cce_width": 0.28015993795164307,
+   "n_bne": 4,
+   "bne_share_min": 0.6666666666666666,
+   "bne_share_max": 0.6666666666666669,
+   "lp_status": [
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+   ],
+   "max_cce": {
+    "support": 5,
+    "tells": 5.081924781057298,
+    "first": 4.0,
+    "redundant": 1.0819247810572974
+   },
+   "min_cce": {
+    "support": 6,
+    "tells": 3.4009651533474385,
+    "first": 3.4009651533474385,
+    "redundant": 0.0
+   },
+   "pure": {
+    "tells": [
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ],
+    "first": [
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ],
+    "redundant": [
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "extra_tells": 1.0819247810572978,
+   "extra_redundant_share": 0.9999999999999996,
+   "seconds": 91.89368057250977
+  }
+ },
+ "SEATS_widths": [
+  0.4527962271013956,
+  0.4045834806723581,
+  0.3569711052933265,
+  -1.1093848062415645e-11,
+  -8.559819519859957e-14,
+  -5.551115123125783e-17
+ ],
+ "SEATS_width_falls_with_c": true,
+ "SEATS_extra_redundant_share": 1.0712592884646932,
+ "BAR_widths": [
+  0.3309031564078191,
+  0.32854525535749357,
+  0.3240400206266355,
+  0.3121039874556437,
+  0.2968632556195674,
+  0.28015993795164307
+ ],
+ "BAR_width_falls_with_c": true,
+ "BAR_extra_redundant_share": 0.9999999999999999,
+ "prediction_holds": true,
+ "seconds": 423.5974407196045
+}

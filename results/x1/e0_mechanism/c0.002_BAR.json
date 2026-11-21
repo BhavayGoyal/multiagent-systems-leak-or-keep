@@ -1,0 +1,49 @@
+{
+ "c": 0.002,
+ "rule": "BAR",
+ "cce_share_max": 0.9807273912597063,
+ "cce_share_min": 0.6566873706330708,
+ "cce_width": 0.3240400206266355,
+ "n_bne": 4,
+ "bne_share_min": 0.6666666666666666,
+ "bne_share_max": 0.6666666666666669,
+ "lp_status": [
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+ ],
+ "max_cce": {
+  "support": 5,
+  "tells": 5.88436434755824,
+  "first": 4.0,
+  "redundant": 1.8843643475582394
+ },
+ "min_cce": {
+  "support": 6,
+  "tells": 3.940124223798426,
+  "first": 3.940124223798426,
+  "redundant": 0.0
+ },
+ "pure": {
+  "tells": [
+   4.0,
+   4.0,
+   4.0,
+   4.0
+  ],
+  "first": [
+   4.0,
+   4.0,
+   4.0,
+   4.0
+  ],
+  "redundant": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "extra_tells": 1.8843643475582397,
+ "extra_redundant_share": 0.9999999999999999,
+ "seconds": 93.4580225944519
+}

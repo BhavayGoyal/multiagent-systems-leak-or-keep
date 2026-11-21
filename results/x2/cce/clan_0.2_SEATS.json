@@ -1,0 +1,27 @@
+{
+ "id": "clan_0.2_SEATS",
+ "section": "clan",
+ "index": 4,
+ "rule": "SEATS",
+ "population": null,
+ "beta": 0.2,
+ "a": null,
+ "b": null,
+ "name": null,
+ "cce_share_max": 0.6666666666666666,
+ "cce_share_min": 0.6666666666666666,
+ "cce_width": 0.0,
+ "lp_status": [
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+ ],
+ "lp_seconds": 35.91073536872864,
+ "n_bne": 1,
+ "bne_share_min": 0.6666666666666666,
+ "bne_share_max": 0.6666666666666666,
+ "frac_exact_bne": 0.93,
+ "near_indifferent": true,
+ "matches_x2_equilibria": true,
+ "seconds": 69.38711166381836,
+ "cce_equals_pure_range": true
+}

@@ -616,12 +616,13 @@ def table_x3(x3):
 
 
 # =============================================================================== X4
-def fig_company(x4):
+def fig_company(x4, xr=None):
     if x4 is None:
         return
     rows = x4["rows"]
     Q = np.array([r["Q"] for r in rows])
-    fig, axes = plt.subplots(1, 2, figsize=(6.6, 2.1))
+    fig, axes = plt.subplots(1, 3 if xr is not None else 2, figsize=(6.9, 2.05) if xr is not None else (6.6, 2.1),
+                             gridspec_kw={"width_ratios": [1.15, 1, 0.85]} if xr is not None else None)
     ax = axes[0]
     for rule in ("SEATS", "BAR"):
         y = 100 * np.array([r[rule]["Lambda_eq_rel"] for r in rows])
@@ -640,7 +641,9 @@ def fig_company(x4):
     ax.set_xscale("log"); ax.set_xticks([4, 6, 9, 15, 25, 40, 64]); ax.set_xticklabels([4, 6, 9, 15, 25, 40, 64]); ax.minorticks_off()
     ax.set_xlabel("size of the question bank $Q$"); ax.set_ylabel(r"hiring value $E[V]$")
     ax.set_title("(b) Value with leaks (dotted: leak-free)"); ax.legend(frameon=False, loc="lower right")
-    fig.tight_layout(w_pad=1.2)
+    if xr is not None:
+        fig_company_alpha(axes[2], xr)
+    fig.tight_layout(w_pad=1.0)
     save(fig, "fig5_company_loss")
     # numbers
     for rule, tag in (("SEATS", "Seats"), ("BAR", "Bar")):
@@ -680,6 +683,136 @@ def fig_company(x4):
     num("XfourSeatsShareSame", "yes" if len({tuple(r["SEATS"]["cell_tells"]) for r in rows}) == 1 else "no")
     num("XfourBarShareSame", "yes" if len({tuple(r["BAR"]["cell_tells"]) for r in rows}) == 1 else "no")
     num("XfourBoot", x4["n_boot"])
+
+
+# =============================================================================== X4 robustness: other alpha, other company value
+def numbers_x4_robust(xr, x4):
+    """Plan 2.2 (alpha in 0..0.5) and 2.3 (per-hire charge kappa) from run_x4_robust.py."""
+    if xr is None:
+        return
+    rows = xr["rows"]
+    # consistency with X4 at alpha = 0.2 (same tables, same first equilibrium)
+    for r in rows:
+        ref = [x for x in x4["rows"] if x["Q"] == r["Q"]][0]
+        for rule in ("SEATS", "BAR"):
+            assert abs(r["alphas"]["0.2"][rule]["Lambda_rel"][0] - ref[rule]["Lambda_eq_rel"]) < 1e-12, (r["Q"], rule)
+    pos = [a for a in xr["alphas"] if a > 0]
+    pairs = [(r, a) for r in rows for a in pos]
+    num("XfourRobPairs", len(pairs))
+    num("XfourRobBarMore", int(sum(bool(r["alphas"][str(a)]["bar_loses_more_every_bne"]) for r, a in pairs)))
+    num("XfourRobMaxBne", max(r["alphas"][str(a)][rule]["n_bne"] for r, a in pairs for rule in ("SEATS", "BAR")))
+
+    def ratios(alphas):
+        """Ratio of the absolute losses Lambda (as LamRatioMin/Max), from the relative ones and the leak-free values."""
+        out = []
+        for r in rows:
+            for a in alphas:
+                e = r["alphas"][str(a)]
+                s = e["SEATS"]["Lambda_rel"][0] * r["noleak"]["SEATS"]["V"]
+                b = e["BAR"]["Lambda_rel"][0] * r["noleak"]["BAR"]["V"]
+                if s > 0:
+                    out.append(b / s)
+        return out
+    r02 = ratios([0.2])
+    assert f"{min(r02):.0f}" == NUM["LamRatioMin"] and f"{max(r02):.0f}" == NUM["LamRatioMax"], "alpha = 0.2 must reproduce X4"
+    lo_r, hi_r = ratios([0.2, 0.3]), ratios([0.4, 0.5])
+    num("XfourRobRatioLowMin", f"{min(lo_r):.0f}"); num("XfourRobRatioLowMax", f"{max(lo_r):.0f}")
+    num("XfourRobRatioHighMin", f"{min(hi_r):.1f}"); num("XfourRobRatioHighMax", f"{max(hi_r):.1f}")
+    zero_seats = [r["Q"] for r in rows if r["alphas"]["0.1"]["SEATS"]["Lambda_rel"][0] == 0]
+    num("XfourRobAlphaOneSeatsZero", len(zero_seats)); num("XfourRobQs", len(rows))
+    r15 = [r for r in rows if r["Q"] == 15][0]
+    for a, tag in ((0.1, "One"), (0.4, "Four"), (0.5, "Five")):
+        for rule, rt in (("SEATS", "Seats"), ("BAR", "Bar")):
+            num(f"XfourRob{rt}A{tag}QFifteen", pct(r15["alphas"][str(a)][rule]["Lambda_rel"][0], 1))
+    # 2.3: kappa
+    r4 = [r for r in rows if r["Q"] == 4][0]
+    num("XfourRobHiredBarQFour", f"{r4['alphas']['0.2']['BAR']['n_hired'][0]:.1f}")
+    tau = rows[0]["tau"]
+    num("TauK", f"{tau:.2f}")
+    for name, tag in (("0", "Zero"), ("tau/2", "Half"), ("tau", "Full")):
+        better = [r["Q"] for r in rows if r["kappa"]["values"][name]["bar_better"]]
+        worse = [r["Q"] for r in rows if not r["kappa"]["values"][name]["bar_better"]]
+        assert not better or not worse or max(worse) < min(better), f"kappa={name}: ranking is not a single crossover in Q"
+        num(f"KappaBarBetterFrom{tag}", min(better) if better else "never")
+    assert [r["Q"] for r in rows if r["kappa"]["values"]["tau"]["bar_better"]][0] == int(NUM["CrossQBarBetterFrom"])
+    fl = [r["kappa"]["kappa_flip_over_tau"] for r in rows]
+    num("KappaFlipMin", f"{min(fl):.2f}"); num("KappaFlipMax", f"{max(fl):.2f}")
+    num("KappaZeroSeatsBetterEveryQ", "yes" if xr["kappa0_seats_better_every_Q"] else "no")
+    print("  X4 robustness:", {k: NUM[k] for k in NUM if k.startswith(("XfourRob", "Kappa"))})
+
+
+def fig_company_alpha(ax, xr):
+    """Panel (c) of Figure 5: loss against friendliness at two bank sizes."""
+    al = np.array(xr["alphas"])
+    for Q, ls, mk in ((15, "-", "o"), (40, "--", "s")):
+        r = [x for x in xr["rows"] if x["Q"] == Q][0]
+        for rule in ("SEATS", "BAR"):
+            y = [100 * r["alphas"][str(a)][rule]["Lambda_rel"][0] for a in al]
+            ax.plot(al, y, ls, marker=mk, ms=2.8, color=COL[rule], lw=1.2, label=f"$Q={Q}$" if rule == "BAR" else None)
+    ax.set_xlabel(r"friendliness $\alpha$"); ax.set_ylabel("hiring value lost (%)")
+    ax.set_title("(c) Other friendliness levels"); ax.legend(frameon=False, loc="center right", fontsize=7)
+
+
+# =============================================================================== learners inside the CCE interval (plan 3.2)
+def numbers_learners_cce(d):
+    if d is None:
+        return
+    e0 = d["settings"]["E0/BAR"]
+    assert abs(e0["cce_min"] - float(NUM["CceExLo"]) / 100) < 0.006 and abs(e0["cce_max"] - float(NUM["CceExHi"]) / 100) < 0.006
+    run = {k: v for k, v in e0["learners"].items() if "position_mean" in v}
+    num("LcRunPosMin", f"{min(v['position_mean'] for v in run.values()):.2f}")
+    num("LcRunPosMax", f"{max(v['position_mean'] for v in run.values()):.2f}")
+    num("LcRunInside", sum(v["n_inside"] for v in run.values())); num("LcRunN", sum(v["n_runs"] for v in run.values()))
+    num("LcRunLearners", len(run))
+    high = {k: v for k, v in e0["learners"].items() if v["greedy_position_mean"] >= 0.85}
+    low = {k: v for k, v in e0["learners"].items() if v["greedy_position_mean"] < 0.85}
+    num("LcSettledHighN", len(high)); num("LcSettledN", len(e0["learners"]))
+    num("LcSettledHighNames", ", ".join(LEARNER_TXT[k] for k in high))
+    num("LcSettledLowNames", " and ".join(LEARNER_TXT[k] for k in low))
+    num("LcSettledHighShareMin", pct(min(v["greedy_share_mean"] for v in high.values())))
+    num("LcSettledHighShareMax", pct(max(v["greedy_share_mean"] for v in high.values())))
+    num("LcSettledLowPosMin", f"{min(v['greedy_position_mean'] for v in low.values()):.2f}")
+    num("LcSettledLowPosMax", f"{max(v['greedy_position_mean'] for v in low.values()):.2f}")
+    num("LcPredHolds", "yes" if d["prediction_holds"] else "no")
+    others = [v for k, s in d["settings"].items() if not k.startswith("E0") for v in s["learners"].values() if "n_inside" in v]
+    num("LcEonetwoRunInside", sum(v["n_inside"] for v in others))
+    print("  learners in CCE:", {k: NUM[k] for k in NUM if k.startswith("Lc")})
+
+
+# =============================================================================== E0 mechanism (plan 3.1)
+def numbers_e0_mechanism(d):
+    if d is None:
+        return
+    rb = d["rows"]
+    num("EzmCLo", d["cs"][0]); num("EzmCHi", d["cs"][-1])
+    for rule, tag in (("BAR", "Bar"), ("SEATS", "Seats")):
+        w = d[f"{rule}_widths"]
+        num(f"EzmWidth{tag}Lo", pct(max(w[0], 0.0))); num(f"EzmWidth{tag}Hi", pct(max(w[-1], 0.0)))
+        num(f"EzmWidth{tag}Base", pct(rb[f"{rule}/{d['base_c']}"]["cce_width"]))
+        num(f"EzmFalls{tag}", "yes" if d[f"{rule}_width_falls_with_c"] else "no")
+        s = d[f"{rule}_extra_redundant_share"]
+        num(f"EzmRedundant{tag}", pct(s) if s is not None else "n/a")
+    num("EzmCRatio", f"{d['cs'][-1] / d['cs'][0]:.0f}")
+    closed = [c for c, w in zip(d["cs"], d["SEATS_widths"]) if w < 1e-6]
+    assert closed and all(w < 1e-6 for c, w in zip(d["cs"], d["SEATS_widths"]) if c >= closed[0]), "fixed-seats interval must close and stay closed"
+    num("EzmSeatsClosedFrom", closed[0])
+    base = rb[f"BAR/{d['base_c']}"]
+    assert abs(base["cce_share_max"] - float(NUM["CceExHi"]) / 100) < 0.006, "e0_mechanism disagrees with run_cce.py at the baseline"
+    num("EzmPred", "yes" if d["prediction_holds"] else "no")
+    print("  E0 mechanism:", {k: NUM[k] for k in NUM if k.startswith("Ezm")})
+
+
+# =============================================================================== CCEs for the X2 games (plan 2.5)
+def numbers_x2_cce(d):
+    if d is None:
+        return
+    num("XtwoCceGames", d["n_games"]); num("XtwoCceSingle", d["n_single_point"]); num("XtwoCceEqualPure", d["n_equal_pure_range"])
+    num("XtwoCceWide", len(d["wide"])); num("XtwoCceWideNearIndiff", len(d["wide_near_indifferent"]))
+    num("XtwoCceMaxWidth", pct(d["max_width"], 1))
+    num("XtwoCcePred", "yes" if d["prediction_holds"] else "no")
+    # the report says "in all X2 games the CCE interval is a single point equal to the pure equilibrium"
+    assert d["n_single_point"] == d["n_games"] == d["n_equal_pure_range"], "update the X2 CCE sentence in the report"
+    print("  X2 CCE:", {k: NUM[k] for k in NUM if k.startswith("XtwoCce")}, "wide:", d["wide"])
 
 
 # =============================================================================== X5 (sensitivity)
@@ -997,10 +1130,14 @@ def main():
     fig_who_tells(x1); fig_sharing_vs_alpha(x1, comp); fig_why(x1, x2); numbers_x1(x1, comp, support)
     table_x2(x2)
     fig_learning(x3); table_x3(x3); table_rounds90(x3)
-    fig_company(x4)
+    xr = load("x4/x4_robust.json")
+    fig_company(x4, xr); numbers_x4_robust(xr, x4)
     x5 = load("x5/x5_summary.json")
     fig_sensitivity(x5); numbers_x5(x5)
     numbers_cce_e0e2()
+    numbers_learners_cce(load("x3/learners_in_cce.json"))
+    numbers_e0_mechanism(load("x1/e0_mechanism.json"))
+    numbers_x2_cce(load("x2/x2_cce.json"))
     table_checks(ch)
     with open(os.path.join(GEN, "numbers.tex"), "w") as f:
         f.write("% AUTO-GENERATED by experiments/make_figures.py from results/*.json -- do not edit by hand.\n")

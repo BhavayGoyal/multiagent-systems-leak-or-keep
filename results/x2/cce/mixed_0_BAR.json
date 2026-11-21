@@ -1,0 +1,27 @@
+{
+ "id": "mixed_0_BAR",
+ "section": "mixed",
+ "index": 1,
+ "rule": "BAR",
+ "population": "mixed[FRIEND(0.2),SELF,FRIEND(0.2),SELF,FRIEND(0.2),SELF]",
+ "beta": null,
+ "a": null,
+ "b": null,
+ "name": "friendly group {1,3,5}, selfish group {2,4,6}",
+ "cce_share_max": 0.5000000000000001,
+ "cce_share_min": 0.5000000000000001,
+ "cce_width": 0.0,
+ "lp_status": [
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+ ],
+ "lp_seconds": 33.38662815093994,
+ "n_bne": 1,
+ "bne_share_min": 0.5000000000000001,
+ "bne_share_max": 0.5000000000000001,
+ "frac_exact_bne": 1.0,
+ "near_indifferent": false,
+ "matches_x2_equilibria": true,
+ "seconds": 65.47984313964844,
+ "cce_equals_pure_range": true
+}

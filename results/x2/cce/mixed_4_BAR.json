@@ -1,0 +1,27 @@
+{
+ "id": "mixed_4_BAR",
+ "section": "mixed",
+ "index": 9,
+ "rule": "BAR",
+ "population": "mixed[FAIR(0.5,0.25),FRIEND(0.2),FAIR(0.5,0.25),FRIEND(0.2),FAIR(0.5,0.25),FRIEND(0.2)]",
+ "beta": null,
+ "a": null,
+ "b": null,
+ "name": "half FAIR(0.5,0.25) {1,3,5}, half FRIEND(0.2) {2,4,6}",
+ "cce_share_max": 0.6111111111111112,
+ "cce_share_min": 0.6111111111111112,
+ "cce_width": 0.0,
+ "lp_status": [
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+ ],
+ "lp_seconds": 33.87004828453064,
+ "n_bne": 1,
+ "bne_share_min": 0.6111111111111112,
+ "bne_share_max": 0.6111111111111112,
+ "frac_exact_bne": 1.0,
+ "near_indifferent": false,
+ "matches_x2_equilibria": true,
+ "seconds": 62.52698469161987,
+ "cce_equals_pure_range": true
+}

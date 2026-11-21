@@ -1,0 +1,27 @@
+{
+ "id": "fair_2.0_0.5_BAR",
+ "section": "fair",
+ "index": 7,
+ "rule": "BAR",
+ "population": "FAIR(2,0.5)",
+ "beta": null,
+ "a": 2.0,
+ "b": 0.5,
+ "name": null,
+ "cce_share_max": 0.0,
+ "cce_share_min": 0.0,
+ "cce_width": 0.0,
+ "lp_status": [
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+ ],
+ "lp_seconds": 41.30200815200806,
+ "n_bne": 1,
+ "bne_share_min": 0.0,
+ "bne_share_max": 0.0,
+ "frac_exact_bne": 1.0,
+ "near_indifferent": false,
+ "matches_x2_equilibria": true,
+ "seconds": 68.37312865257263,
+ "cce_equals_pure_range": true
+}

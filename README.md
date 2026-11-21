@@ -171,13 +171,17 @@ Or step by step:
 | X1: CCE programs for E0 and E2 | `python experiments/run_cce.py [n_workers] [network:env ...]` | `results/x1/x1_cce_<network>_<env>.json` | 2 h with one worker |
 | X1: mixed equilibria (dominance, support enumeration) | `python experiments/run_support.py` | `results/x1/x1_support.json` | 5 min |
 | X2: motives | `python experiments/run_x2.py` | `results/x2/x2.json` | 20 min |
+| X2: CCE programs for the 44 X2 games | `python experiments/run_cce_x2.py [n_workers]` (needs X2) | `results/x2/x2_cce.json`, `results/x2/cce/` | ~1 h with one worker (4-6 GB each) |
+| E0: why the CCE interval is wide (message cost, redundant tells) | `python experiments/run_e0_mechanism.py [n_workers]` | `results/x1/e0_mechanism.json` | ~25 min with one worker |
 | X3: learning | `python experiments/run_x3.py` | `results/x3/x3_<learner>.npz` | 10 min |
 | X3: statistics | `python experiments/analyze_x3.py` | `results/x3/x3_summary.json` | 2 min |
+| Where learners sit inside the CCE interval | `python experiments/run_learners_in_cce.py` (needs X1 CCEs, X3) | `results/x3/learners_in_cce.json` | 2 s |
 | H1 pivotality (independent of the own loss) | `python experiments/run_h1.py` | `results/h1/pivotality.json` | 1 s |
 | Baselines (nobody, random, everybody, equilibrium, learners) | `python experiments/run_baselines.py` | `results/baselines/baselines.json` | 1 min |
 | Tests of the explanations in the report | `python experiments/run_explanations.py` | `results/explanations/explanations.json` | 1 min |
 | Bias of the counterfactual credit in E2 | `python experiments/run_e2_bias.py` | `results/e2_bias/e2_bias.json` | 30 s |
 | X4: company loss | `python experiments/run_x4.py` | `results/x4/x4.json` | 11 min |
+| X4 robustness: other friendliness, other company value | `python experiments/run_x4_robust.py` | `results/x4/x4_robust.json` | 10 min |
 | X5: sensitivity | `python experiments/run_sensitivity.py` | `results/x5/*.json` | 26 min |
 | CCE programs, independent second implementation (optional cross-check) | `python experiments/run_cce_e0e2.py` (needs X1) | `results/x1/independent/x1_cce_*.json` | 2 h (one worker, up to 6 GB) |
 | Figures, tables, numbers | `python experiments/make_figures.py` | `results/figures/`, `report/figures/`, `report/generated/`, `results/numbers.json` | 5 s |

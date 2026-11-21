@@ -1,0 +1,43 @@
+{
+ "c": 0.0005,
+ "rule": "SEATS",
+ "cce_share_max": 0.7861295604347289,
+ "cce_share_min": 0.3333333333333333,
+ "cce_width": 0.4527962271013956,
+ "n_bne": 2,
+ "bne_share_min": 0.3333333333333333,
+ "bne_share_max": 0.6666666666666666,
+ "lp_status": [
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+ ],
+ "max_cce": {
+  "support": 6,
+  "tells": 4.716777362608374,
+  "first": 3.143689240280746,
+  "redundant": 1.5730881223276274
+ },
+ "min_cce": {
+  "support": 1,
+  "tells": 2.0,
+  "first": 1.7777777777777777,
+  "redundant": 0.2222222222222222
+ },
+ "pure": {
+  "tells": [
+   2.0,
+   4.0
+  ],
+  "first": [
+   1.7777777777777777,
+   3.111111111111111
+  ],
+  "redundant": [
+   0.2222222222222222,
+   0.8888888888888888
+  ]
+ },
+ "extra_tells": 0.716777362608374,
+ "extra_redundant_share": 0.9545491656557308,
+ "seconds": 104.08159685134888
+}

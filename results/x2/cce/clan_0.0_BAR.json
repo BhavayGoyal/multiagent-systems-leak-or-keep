@@ -1,0 +1,27 @@
+{
+ "id": "clan_0.0_BAR",
+ "section": "clan",
+ "index": 11,
+ "rule": "BAR",
+ "population": null,
+ "beta": 0.0,
+ "a": null,
+ "b": null,
+ "name": null,
+ "cce_share_max": 0.9999999999999997,
+ "cce_share_min": 0.9999999999999997,
+ "cce_width": 0.0,
+ "lp_status": [
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+ ],
+ "lp_seconds": 40.82614183425903,
+ "n_bne": 1,
+ "bne_share_min": 0.9999999999999997,
+ "bne_share_max": 0.9999999999999997,
+ "frac_exact_bne": 1.0,
+ "near_indifferent": false,
+ "matches_x2_equilibria": true,
+ "seconds": 67.38487505912781,
+ "cce_equals_pure_range": true
+}
