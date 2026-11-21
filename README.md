@@ -157,6 +157,9 @@ it X1 and the CCE programs; on Windows run it from Git Bash):
 ```
 
 `run_all.sh` uses `$PY` if set, otherwise the `.venv` Python (either layout), otherwise `python` on the PATH.
+With less than about 8 GB of free memory use `X1_WORKERS=1` (two X1 cells side by side can need more than that, and HiGHS
+then stops with `MemoryError: std::bad_alloc`). To check that a fresh clone reproduces the committed files, follow the
+procedure at the top of `experiments/compare_with_committed.py`.
 
 Or step by step:
 

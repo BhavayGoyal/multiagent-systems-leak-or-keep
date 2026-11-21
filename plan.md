@@ -66,7 +66,7 @@ experiment. "Who decides" marks issues that need a team decision rather than wor
 | **I4** | `main` is behind `merge-bhavay` locally and on `origin` | anyone cloning `main` gets an old state | local: fast-forward `main`; `origin/main` (Bhavay's): fast-forward only with his agreement | M.4 | local: **fixed** (`main` fast-forwarded to `merge-bhavay`, tracks `origin/main`, 16 commits ahead); origin: **team decides** (D9) |
 | **I5** | Stale local branches `fix/items-5-7` and `phase-1` | confusion about which branch is current | delete after I4 (both are fully contained in `merge-bhavay`) | M.4 | **fixed** (deleted with `git branch -d`, which refuses unmerged branches) |
 | **I6** | The page limit is unknown; the report is 12 pages | the trim plan (0.1, 6.2) cannot be applied without it | find out | D1 | **team decides** |
-| **I7** | The full clean-clone reproduction (0.4) predates Phase 1, X5 and the merge | the README's "every number regenerates" is only partly re-verified for the merged code | re-run the clean-clone procedure on the merged branch and compare (`compare_with_committed.py`) | 6.4 (pulled forward) | **running**: fresh clone of `origin/merge-bhavay` at `d7f4879` in `..\FAI_clean`, results deleted, `X1_WORKERS=2 X3_WORKERS=2 X5_WORKERS=2 CCE_WORKERS=1 bash run_all.sh` (about 3.5 h); log `..\clean_run.log` |
+| **I7** | The full clean-clone reproduction (0.4) predates Phase 1, X5 and the merge | the README's "every number regenerates" is only partly re-verified for the merged code | re-run the clean-clone procedure on the merged branch and compare (`compare_with_committed.py`) | 6.4 (pulled forward) | **running (second attempt)**: fresh clone of `origin/merge-bhavay` at `d7f4879` in `..\FAI_clean`, results deleted. Attempt 1 (`X1_WORKERS=2`, 1.1 GB free) failed in X1 with `MemoryError: std::bad_alloc` inside HiGHS: two X1 cells ran together while one solved a two-groups CCE program (4–6 GB); a memory limit, not a code fault (log `..\clean_run_attempt1.log`). It also showed the procedure must restore `results/x1/independent/` (inputs of the optional `run_cce_e0e2.py`, which `run_all.sh` skips) or the `CceCross*` macros vanish; both are now in the procedure (`compare_with_committed.py`, `run_all.sh`). Attempt 2: `X1_WORKERS=1 X3_WORKERS=2 X5_WORKERS=2 CCE_WORKERS=1` (about 4 h); log `..\clean_run.log` |
 | I8 | The Phase 1 commit message says P(last seat \| strong) = 28.6 %; the value is 28.5 % | cosmetic; all files are correct | not fixed (would need a history rewrite of pushed commits) | — | won't fix |
 
 ## Phase M — Fixes from the merge audit
@@ -615,7 +615,9 @@ For each finished item above, in this order:
 
 ### 6.4 Final reproducibility run and release — **Must**
 
-1. Fresh clone, `./run_all.sh`, diff against committed results (as in 0.4).
+1. Fresh clone, `./run_all.sh`, diff against committed results (as in 0.4). Follow the procedure at the top of
+   `experiments/compare_with_committed.py` exactly: delete `results/`, restore `results/x1/independent/`, and use
+   `X1_WORKERS=1` unless about 8 GB is free (see I7).
 2. Rebuild the PDF from the regenerated `report/generated/`.
 3. Tag the commit (`v2.0`) and, if the course asks for it, attach a zip of the repository to the submission.
 

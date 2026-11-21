@@ -2,8 +2,10 @@
 # Regenerate every result, figure, table and number in the report from scratch.
 # About 3 hours on a 16 GB laptop with  X1_WORKERS=2 X3_WORKERS=2 CCE_WORKERS=1  (measured: 2 h 43 min for the steps up
 # to X4, before the Phase 1 and X5 steps were added; the CCE programs and X1 dominate).  The CCE programs need 4 to 6 GB
-# each for two friend groups (set CCE_WORKERS higher only if you have the memory).
-# NOTE: run_x1.py and run_cce.py skip cells whose result file already exists, so in a clone delete results/ first.
+# each for two friend groups (set CCE_WORKERS higher only if you have the memory; with less than about 8 GB free use
+# X1_WORKERS=1, or HiGHS fails with "MemoryError: std::bad_alloc").
+# NOTE: run_x1.py and run_cce.py skip cells whose result file already exists, so in a clone delete results/ first, then
+# restore the optional cross-check inputs: git checkout -- results/x1/independent
 set -euo pipefail
 cd "$(dirname "$0")"
 # Python: $PY if set, else the project venv (Linux/macOS or Windows layout), else python on PATH.

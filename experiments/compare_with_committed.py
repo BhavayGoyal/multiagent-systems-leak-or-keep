@@ -4,8 +4,12 @@ Procedure (plan.md, item 0.4 and Phase 6):
     git clone <this repository> ../FAI_clean && cd ../FAI_clean
     uv sync --frozen --extra dev
     rm -rf results report/generated report/figures        # run_x1.py and run_cce.py skip cells whose result exists!
-    X1_WORKERS=2 X3_WORKERS=2 CCE_WORKERS=1 bash run_all.sh > ../clean_run.log 2>&1
+    git checkout -- results/x1/independent                 # inputs of the optional run_cce_e0e2.py, which run_all.sh skips
+    X1_WORKERS=1 X3_WORKERS=2 CCE_WORKERS=1 bash run_all.sh > ../clean_run.log 2>&1
     python experiments/compare_with_committed.py .          # from the clone, or pass the clone's path
+
+X1_WORKERS=2 needs about 8 GB free: a two-groups CCE program (4 to 6 GB) can run next to another cell.  With less free
+memory HiGHS fails with "MemoryError: std::bad_alloc"; use X1_WORKERS=1 (slower, same results).
 
 Compares every tracked file under results/, report/generated/ and report/figures/ with its version at HEAD of the clone:
   JSON and NPZ  numerically (relative 1e-9, absolute 1e-12), timing fields ignored
