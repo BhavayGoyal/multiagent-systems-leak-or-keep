@@ -28,13 +28,13 @@ $PY experiments/run_e0_mechanism.py ${CCE_WORKERS:-1} | tee results/logs/e0_mech
 $PY experiments/run_x3.py                          | tee results/logs/x3.log        # 1,080 learning runs
 $PY experiments/analyze_x3.py                      | tee results/logs/x3_analysis.log   # Table 3, Figure 4
 $PY experiments/run_learners_in_cce.py             | tee results/logs/learners_in_cce.log  # learners inside the E0 CCE interval (plan 3.2)
-$PY experiments/run_h1.py                          | tee results/logs/h1.log        # H1 pivotality
 $PY experiments/run_baselines.py                   | tee results/logs/baselines.log # needs X3
 $PY experiments/run_explanations.py                | tee results/logs/explanations.log  # needs X3
 $PY experiments/run_e2_bias.py                     | tee results/logs/e2_bias.log
 $PY experiments/run_x4.py                          | tee results/logs/x4.log        # Figure 5
 $PY experiments/run_x4_robust.py                   | tee results/logs/x4_robust.log # Figure 5c: other alpha, other company value (plan 2.2, 2.3)
 $PY experiments/run_sensitivity.py                 | tee results/logs/x5.log        # X5, Figure 6  (skips finished settings)
+$PY experiments/run_h1.py                          | tee results/logs/h1.log        # H1 pivotality (after X5: compares with its alpha* order)
 # Optional independent cross-check of the CCE programs (a second implementation; about 2 h, up to 6 GB per worker).
 # make_figures.py uses its files when they exist and asserts that they agree with run_cce.py.
 # $PY experiments/run_cce_e0e2.py                  | tee results/logs/x1_cce_e0e2.log

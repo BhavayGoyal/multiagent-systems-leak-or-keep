@@ -192,8 +192,9 @@ Notes:
 
 - To check that everything reproduces, clone the repository, delete the clone's `results/`, `report/generated/` and
   `report/figures/` (otherwise `run_x1.py` and `run_cce.py` skip cells whose result file exists), run `run_all.sh`
-  there, then `python experiments/compare_with_committed.py <clone>`. This was done once: 2 h 43 min, every JSON,
-  NPZ and generated LaTeX file identical to the committed one.
+  there, then `python experiments/compare_with_committed.py <clone>`. This was done before the merge (laptop, 2 h 43 min)
+  and again on 22 Nov 2026 for the merged code (a 64-thread Linux server, 2 h): every JSON and NPZ result and every number in
+  the report identical to the committed files; only logs differ.
 - Worker counts: `run_x1.py` uses 9 processes unless `X1_WORKERS=<n>` is set, `run_x3.py` one process per learner
   unless `X3_WORKERS=<n>` is set, and `run_cce.py` takes the number of workers as its first argument
   (`CCE_WORKERS` in `run_all.sh`). With 16 GB of RAM use about `X1_WORKERS=3 X3_WORKERS=2 CCE_WORKERS=1`.

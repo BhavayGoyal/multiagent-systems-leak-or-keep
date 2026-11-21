@@ -982,7 +982,7 @@ def numbers_cce_e0e2():
         n_rows += 1
     else:
         assert max_diff < 1e-9, f"the two CCE implementations disagree by {max_diff}"
-        num("CceCrossRows", n_rows); num("CceCrossMaxDiff", "0" if max_diff == 0 else f"{max_diff:.0e}")
+        num("CceCrossRows", n_rows); num("CceCrossMaxDiff", r"$<10^{-12}$" if max_diff < 1e-12 else f"{max_diff:.0e}")   # last-digit noise differs by machine
     print("  CCE cross-check: run_cce.py and run_cce_e0e2.py agree on the counts of all E0/E2 games and on every interval")
 
 

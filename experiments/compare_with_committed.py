@@ -51,7 +51,7 @@ def close(a, b, path, diffs):
             for i, (x, y) in enumerate(zip(a, b)):
                 close(x, y, f"{path}[{i}]", diffs)
     elif isinstance(a, (int, float)) and isinstance(b, (int, float)) and not isinstance(a, bool):
-        if not (abs(a - b) <= 1e-12 + 1e-9 * max(abs(a), abs(b))):
+        if not (a != a and b != b) and not (abs(a - b) <= 1e-12 + 1e-9 * max(abs(a), abs(b))):     # NaN == NaN here
             diffs.append(f"{path}: {a!r} vs {b!r}")
     elif a != b:
         diffs.append(f"{path}: {str(a)[:60]!r} vs {str(b)[:60]!r}")

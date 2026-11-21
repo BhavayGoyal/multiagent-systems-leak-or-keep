@@ -117,7 +117,7 @@
  "BaseWNobodySeats": "2.800",
  "BaseWRandomBar": "3.067",
  "BaseWRandomSeats": "2.797",
- "CceCrossMaxDiff": "0",
+ "CceCrossMaxDiff": "$<10^{-12}$",
  "CceCrossRows": "212",
  "CceEETot": "212",
  "CceEtwoAboveMax": "0",
