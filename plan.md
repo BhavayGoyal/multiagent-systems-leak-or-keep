@@ -5,7 +5,7 @@ four of us. You should be able to pick up any single item and work on it without
 
 - **Where we are (after the merge):** branch `merge-bhavay` (pushed to `origin`, Bhavay's repository) contains all work so
   far: the original submission, the review items 1–8, Phases 0 and 1, and Bhavay's five parallel commits (X5 sensitivity,
-  an independent CCE implementation, an E0 coordination measure, setup fixes). 43 unit tests pass; the report is 12 pages.
+  an independent CCE implementation, an E0 coordination measure, setup fixes). 43 unit tests pass; the report is 8 pages in IEEE conference format (converted 22 Nov).
   `report_merge.md` has the full audit; `fix.md`, `report_p0.md` and `report_p1.md` record the earlier steps.
 - **What is open:** a few fixes found in the merge audit (Phase M), the rest of the robustness checks, the E0 mechanism,
   CCEs for X2, the stretch target `n = 8`, and the final write-up.
@@ -604,7 +604,7 @@ For each finished item above, in this order:
 | Table 2 | a CCE column after 2.5 |
 | Table 4 | 5 columns with "Refuted if"; verdicts match the text; H1 row gains the pivotality-at-K result (M.2) |
 | Appendix | Tables 5 (rounds to 90 %) and 6 (baselines) are there; candidates: X4 at other α (2.2), learning in more settings (4.3) |
-| Length | 12 pages now; trim against D1 (candidates in 0.1; X5 and the appendix are the largest blocks) |
+| Length | 8 pages, IEEE conference format (22 Nov); Tables 5 and 6 (rounds to 90 %, baselines) left out of the PDF, still generated; trim against D1 (candidates in 0.1; X5 and the appendix are the largest blocks) |
 
 ### 6.3 Presentation — **Must if there is one** (*decision needed*)
 

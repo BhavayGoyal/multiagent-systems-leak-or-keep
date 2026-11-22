@@ -3,7 +3,7 @@
 Final project, Multi-Agent Systems, IIT Gandhinagar.
 Jash Bharat Pasad (24110146), Bhavay Goyal (24110070), Chaitanya Bhoite (24110086), Vishnu Sinha (24110389).
 
-**Report:** [`report/main.pdf`](report/main.pdf) (9 pages; LaTeX source in [`report/main.tex`](report/main.tex)).
+**Report:** [`report/main.pdf`](report/main.pdf) (8 pages, IEEE conference format; LaTeX source in [`report/main.tex`](report/main.tex)).
 
 After an interview, a candidate can tell friends who interview later which questions were asked. That helps the
 friends, but they may be competing for the same offers. We model this as a Bayesian game on a sharing matrix,
@@ -214,20 +214,21 @@ Notes:
 No number in the report is typed by hand. `experiments/make_figures.py` reads the result files and writes
 
 - `report/generated/numbers.tex`: one LaTeX macro per number used in the text,
-- `report/generated/tab_checks.tex`, `tab_x2.tex`, `tab_x3.tex`: Tables 1 to 3,
-- `report/figures/*.pdf`: Figures 1 to 5,
+- `report/generated/tab_checks.tex`, `tab_x2.tex`, `tab_x3.tex`: Tables I to III (`tab_rounds90.tex` and
+  `tab_baselines.tex` are generated too but did not fit the 8-page limit),
+- `report/figures/*.pdf`: Figures 1 to 6,
 - `results/numbers.json`: the same numbers in readable form.
 
 | In the report | Produced by | Result file |
 |---|---|---|
-| Table 1 (verification checks) | `experiments/run_checks.py` | `results/checks/checks.json` |
-| Figure 1, Figure 2a and 2b, Figure 3, Section 5.1 | `experiments/run_x1.py` | `results/x1/x1_<network>_<env>.json`, `x1_complete_local.json` |
-| Table 2, Figure 2c, Section 5.2 | `experiments/run_x2.py` | `results/x2/x2.json` |
-| Table 3, Figure 4, Section 5.3 | `experiments/run_x3.py`, `experiments/analyze_x3.py` | `results/x3/x3_summary.json` |
-| Figure 5, Section 5.4 | `experiments/run_x4.py` | `results/x4/x4.json` |
-| Figure 6, Section 5.5 | `experiments/run_sensitivity.py` | `results/x5/x5_<param>_<value>.json`, `x5_summary.json` |
-| Section 5.1, CCE paragraph (E0, E2) | `experiments/run_cce.py` (cross-checked by `experiments/run_cce_e0e2.py`) | `results/x1/x1_cce_<network>_<env>.json`; the independent copies are in `results/x1/independent/` |
-| Table 4 (hypotheses) | `experiments/make_figures.py` | all of the above |
+| Table I (verification checks) | `experiments/run_checks.py` | `results/checks/checks.json` |
+| Figure 1, Figure 2a and 2b, Figure 3, Section V-A | `experiments/run_x1.py`, `experiments/run_h1.py`, `experiments/run_support.py` | `results/x1/x1_<network>_<env>.json`, `x1_complete_local.json`, `x1_support.json`, `results/h1/` |
+| Table II, Figure 2c, Section V-B | `experiments/run_x2.py`, `experiments/run_cce_x2.py` | `results/x2/` |
+| Table III, Figure 4, Section V-C | `experiments/run_x3.py`, `experiments/analyze_x3.py`, `experiments/run_learners_in_cce.py`, `experiments/run_explanations.py`, `experiments/run_baselines.py` | `results/x3/x3_summary.json`, `learners_in_cce.json`, `results/explanations/`, `results/baselines/` |
+| Figure 5, Section V-D | `experiments/run_x4.py`, `experiments/run_x4_robust.py` | `results/x4/` |
+| Figure 6, Section V-E | `experiments/run_sensitivity.py` | `results/x5/x5_<param>_<value>.json`, `x5_summary.json` |
+| Section V-A, CCE paragraph (E0, E2) | `experiments/run_cce.py` (cross-checked by `experiments/run_cce_e0e2.py`) | `results/x1/x1_cce_<network>_<env>.json`; the independent copies are in `results/x1/independent/` |
+| Table IV (hypotheses) | `experiments/make_figures.py` | all of the above |
 
 ## Repository layout
 
