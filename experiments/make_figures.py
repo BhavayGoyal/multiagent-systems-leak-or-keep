@@ -1086,7 +1086,7 @@ def numbers_e2bias(eb):
     num("EtwoBiasOverGap", pct(eb["max_abs_bias_over_gap"]))
     num("EtwoBiasSe", f"{np.mean([v['se_pp'] for v in st.values()]):.2f}")
     num("EtwoBiasControlMax", f"{max(abs(v['bias_pp']) for v in ct.values()):.2f}")
-    num("EtwoBiasDays", f"{eb['n_days'] // 1_000_000}\,million")
+    num("EtwoBiasDays", rf"{eb['n_days'] // 1_000_000}\,million")
     num("EtwoBiasGap", f"{eb['smallest_gap_pp']:.2f}")
 
 
@@ -1097,7 +1097,7 @@ def numbers_h1(piv):
     for th, tn in enumerate(("Weak", "Avg", "Strong")):
         num("Piv" + tn, f"{100 * piv['P_rank_K'][th]:.1f}")
         num("PivNext" + tn, f"{100 * piv['P_rank_K1'][th]:.1f}")
-    num("PivDays", f"{piv['n_days'] // 1_000_000}\,million")
+    num("PivDays", rf"{piv['n_days'] // 1_000_000}\,million")
     num("PivOrderOk", "yes" if piv["order_matches_alpha_star"] else "no")
     if "by_K" in piv:                                  # pivotality at K = 1, 2, 3 against X5's alpha* order (issue I2)
         for K, tk in (("1", "Kone"), ("3", "Kthree")):
