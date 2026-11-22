@@ -67,9 +67,9 @@ studied, but there help is effort, not information. Li and Conitzer~\cite{li} mo
 the leak given; we make it a choice among competitors. With unknown payoffs, candidates are bandit learners~\cite{ucb,exp3,thompson},
 whose no-regret play approaches coarse correlated equilibria~\cite{hart}; solving a simulated game is empirical game theory~\cite{wellman}.
 
-\textbf{This report.} The project review fixed the model, proved Lemma~1 and Propositions~1--3 and showed a pilot. Here we give the algorithms (Section~\ref{sec:method}),
-all four planned experiments plus a robustness check (Section~\ref{sec:results}), and a verdict on the five hypotheses fixed in advance (Table~\ref{tab:hyp}).
-\emph{Fixed seats} (\seats) hires the best $K$ scores; a \emph{cut-off} (\barr) hires everyone above a fixed score.
+\textbf{This report.} The project review fixed the model, proved Lemma~1 and Propositions~1--3 and showed a pilot; here we add the algorithms (Section~\ref{sec:method}),
+four experiments plus a robustness check (Section~\ref{sec:results}) and verdicts on the five hypotheses (Table~\ref{tab:hyp}).
+\emph{Fixed seats} (\seats) hires the best $K$ scores; a \emph{cut-off} (\barr) everyone above a fixed score.
 
 % =====================================================================================================
 \section{Preliminaries}
@@ -145,15 +145,15 @@ $\alpha_{\text{eff}}=(\alpha+\beta)/(1+\beta)>\alpha$. Disliking outsiders shoul
 % =====================================================================================================
 \section{Methodology}\label{sec:method}
 \begin{figure}[t]\centering
-\includegraphics[width=\columnwidth]{figures/fig1_who_tells.pdf}
+\includegraphics[width=0.94\columnwidth]{figures/fig1_who_tells.pdf}
 \caption{The equilibrium for two friend groups $\{1,3,5\}$, $\{2,4,6\}$ at $\alpha=0.2$ (E1). Under either rule it is the only pure equilibrium among 262{,}144 profiles.}\label{fig:who}
 \end{figure}
 \begin{table*}[t]\centering\small
 \caption{Verification checks run before any experiment (\texttt{experiments/run\_checks.py}). ``Deviations'' are all rows of every type of every candidate, against both ``nobody shares'' and ``everybody shares''.}\label{tab:checks}
-\resizebox{0.86\textwidth}{!}{\input{generated/tab_checks.tex}}
+\resizebox{0.74\textwidth}{!}{\input{generated/tab_checks.tex}}
 \end{table*}
 \begin{figure*}[t]\centering
-\includegraphics[width=0.86\textwidth]{figures/fig2_why_and_clans.pdf}
+\includegraphics[width=0.7\textwidth]{figures/fig2_why_and_clans.pdf}
 \caption{(a) Own hiring chance lost per friend told. (b) Break-even friendliness; types below the dashed line tell at $\alpha=0.2$. (c) Share of possible tells made in equilibrium as candidates
 dislike outsiders' offers more ($\alpha=0.2$). Two friend groups, E1.}\label{fig:why}
 \end{figure*}
@@ -162,37 +162,39 @@ Unless a parameter is swept, $n=6$, $K=2$, $m=3$, $Q=15$, $\Delta=\sigma=1$, $c=
 
 \textbf{Stage 1: payoff tables.} For each of the $3^6=729$ type profiles $\theta$ and each of the $2^f$ sharing matrices ($f$ free entries; 64 for two friend groups)
 we simulate 2{,}000 days and store $P(x_j=1\mid\theta,S)$, $P(x_ix_j=1\mid\theta,S)$ and $\E[V\mid\theta,S]$ for both rules. The same days are reused for every $S$ and both rules
-(common random numbers), so payoff \emph{differences} --- all that equilibria depend on --- are precise, and Lemma~\ref{lem:mono} holds exactly in the table. All utilities are linear in the stored probabilities (\textsc{fair} uses the pairwise ones, $(x_j-x_i)^+=x_j-x_ix_j$),
-so changing $\alpha$, $\beta$, $(a,b)$ or mixing utilities needs no new simulation. Means over 20 blocks of days are kept for the bootstrap.
+(common random numbers), so payoff \emph{differences} --- all that equilibria depend on --- are precise, and Lemma~\ref{lem:mono} holds exactly in the table. Skills are drawn within each
+candidate's tercile, so every type profile gets the same sample. All utilities are linear in the stored probabilities (\textsc{fair} uses the pairwise ones, $(x_j-x_i)^+=x_j-x_ix_j$),
+so changing $\alpha$, $\beta$, $(a,b)$ or mixing utilities needs no new simulation. A two-groups table (93 million outcomes) takes 15--40\,s; means over 20 blocks of days are kept for the bootstrap.
 Before any experiment the simulator reproduces the worked example and every structural result of Section~III (Table~\ref{tab:checks}), and 43 unit tests cover every module.
 
 \textbf{Stage 2: solving the known game.} A pure strategy assigns one of $2^{|L(i)|}$ rows to each of three types: $4^3\cdot4^3\cdot2^3\cdot2^3=262{,}144$ profiles for two friend groups.
 We precompute the \emph{interim value} $V_i[\sigma_{-i},\theta_i,a]=\E_{\theta_{-i}}[u_i(\theta,S(a,\sigma_{-i}(\theta_{-i})))]$ for every $\sigma_{-i}$; everything else is a lookup.
 \begin{itemize}
 \item \textbf{Pure equilibria, exhaustively:} keep every profile whose exploitability $\max_{i,\theta_i,a}V_i[\sigma_{-i},\theta_i,a]-V_i[\sigma_{-i},\theta_i,\sigma_i(\theta_i)]$ is 0; the list is complete.
-Best-response dynamics from 8 starts must end in it; replicator dynamics on the 12 (candidate, type) agents looks for stable mixed equilibria.
-\item \textbf{Mixed equilibria:} iterated strict dominance on every game; if every agent keeps one action, that profile is the only
-equilibrium of any kind. On the pairs network (two actions per agent) we then enumerate the surviving supports and solve the indifference conditions.
+Best-response dynamics from 8 starts must end in it; replicator dynamics on the 12 (candidate, type) agents (3 interior starts) looks for stable mixed equilibria.
+\item \textbf{Mixed equilibria:} iterated strict dominance on every game (an action beaten by every surviving pure profile is beaten by every mixed one); if every agent keeps one action, that profile is the only
+equilibrium of any kind. On the pairs network (two actions per agent) we then enumerate the supports that survive and solve the indifference conditions (exactly when at most two agents mix; by multi-start root finding, not exhaustive, when three do).
 \item \textbf{All CCEs at once:} two linear programs (HiGHS) per game maximise and minimise the expected share of tells over the CCE polytope. If they coincide, \emph{every} CCE --- every mixed or correlated equilibrium and every limit of no-regret play --- shares the same amount.
-\item \textbf{Bootstrap $\varepsilon$:} resample the 20 blocks of days, rebuild the utilities and recompute the exploitability of the reported equilibrium; we report how often it stays exact and the 95th percentile of $\varepsilon$.
+\item \textbf{Bootstrap $\varepsilon$:} resample the 20 blocks of days (200 times; 100 for the smaller networks), rebuild the utilities (with the pairwise table when needed) and recompute the exploitability of the reported equilibrium; we report how often it stays exact and the 95th percentile of $\varepsilon$.
 \item \textbf{Break-even friendliness:} $\alpha^\star=(\ell_i+c)/G_i$ from the table, and directly as the smallest $\alpha$ (grid step 0.025) at which the type tells in every equilibrium.
 \end{itemize}
 The complete network ($2^{15}$ matrices) is solved exhaustively at $n=4$; at $n=6$ we test ``nobody shares'' and ``everybody shares'' against every deviation of every type.
 
 \begin{figure*}[t]\centering
-\includegraphics[width=0.95\textwidth]{figures/fig3_sharing_vs_friendliness.pdf}
+\includegraphics[width=0.78\textwidth]{figures/fig3_sharing_vs_friendliness.pdf}
 \caption{Share of possible tells made in equilibrium as candidates care more about friends. Shaded bands: range over multiple equilibria (E0 only). ``Everyone is friends'' shows the profile
 that passes the deviation test (E1).}\label{fig:alpha}
 \end{figure*}
 \textbf{Stage 3: learning the unknown game.} Each (candidate, type) is a bandit learner over that candidate's rows (12 learners with 4 or 2 arms). Each round draws fresh skills, the realised types'
-learners choose, one day is simulated, and each learner sees only its own utility. Six learners: \textbf{$\varepsilon$-greedy} ($\varepsilon_t=t^{-1/3}$),
-\textbf{UCB1}~\cite{ucb}, \textbf{Thompson sampling}~\cite{thompson}, \textbf{EXP3}~\cite{exp3}, and two of ours that also see how many of the told questions came up for each friend:
+learners choose, one day is simulated, and each learner sees only its own utility (rescaled to $[0,1]$). Six learners: \textbf{$\varepsilon$-greedy} ($\varepsilon_t=t^{-1/3}$),
+\textbf{UCB1}~\cite{ucb}, \textbf{Thompson sampling}~\cite{thompson} (Gaussian posteriors), \textbf{EXP3}~\cite{exp3}, and two of ours that also see how many of the told questions came up for each friend:
 \begin{itemize}
 \item \textbf{Leak-aware UCB} (Algorithm~\ref{alg:mb}): \emph{a tell matters only through questions that come up}. If none of my told questions appeared for my friend, the day went exactly as if I had not told her,
-so the sample also counts for ``did not tell her''. In E1/E2 about half of all tells do not land ($0.8^3=0.51$); under E0 the learner is UCB1. In E1 the credit is exact; in E2 its bias is at most \EtwoBiasMax{} points (\EtwoBiasDays{} days), \EtwoBiasOverGap\% of the smallest payoff gap.
-\item \textbf{Model-based UCB}: fits by ridge regression $r+c_n|a|=\mu_0+\sum_{j\in a}\beta_jk_j+\text{noise}$ ($k_j$: told questions that came up for friend $j$),
-estimates the leak rate $\hat p$, and plays $\arg\max_a\mu_0+\sum_{j\in a}\beta_jm\hat p-c_n|a|$ plus a LinUCB bonus computed with an optimistic $\hat p$.
-It is a reduced form of the review's learner: planning is single-agent, and the additive model cannot represent a redundant second tell (E0).
+so the sample also counts for ``did not tell her'' (plus the saved cost $c$). In E1/E2 about half of all tells do not land ($0.8^3=0.51$); under E0 every tell lands and the learner is UCB1. In E1 the credit is exact; in E2 it can be
+biased, and in the worst case (\EtwoBiasDays{} days) the bias is at most \EtwoBiasMax{} points (s.e.\ \EtwoBiasSe), \EtwoBiasOverGap\% of the smallest payoff gap the learners must detect.
+\item \textbf{Model-based UCB}: fits by ridge regression $r+c_n|a|=\mu_0+\sum_{j\in a}\beta_jk_j+\text{noise}$ ($k_j$: told questions that came up for friend $j$; $\beta_j$: value of one leaked question reaching $j$),
+estimates the leak rate $\hat p$, and plays $\arg\max_a\mu_0+\sum_{j\in a}\beta_jm\hat p-c_n|a|$ plus a LinUCB bonus computed with an optimistic $\hat p$ (with the plug-in $\hat p$, one tell that happens not to land gives $\hat p=0$ and the arm is never tried again).
+It is a reduced form of the review's learner: $\beta_j$ is $\Delta$ passed through the rule and the others' play, planning is single-agent, and the additive model cannot represent a redundant second tell (E0).
 \end{itemize}
 
 \begin{algorithm}[t]
@@ -205,8 +207,8 @@ $D\leftarrow\{j\in a: k^{(i)}_j=0\}$ \tcp*{tells that did not land}
 $t_\theta\leftarrow t_\theta+1$\;
 \end{algorithm}
 
-\textbf{Measures.} \emph{Agreement}: share of the 12 learners whose currently-best arm is the equilibrium row. \emph{Regret}: Definition~3 with the table's expected payoffs.
-\emph{CCE gap}: the largest average gain any candidate could have made by one fixed rule for the whole run. \emph{Rounds to 90\%}: first round with agreement $\ge0.9$.
+\textbf{Measures.} \emph{Agreement}: share of the 12 learners whose currently-best arm is the equilibrium row (best-matching equilibrium if there are several). \emph{Regret}: Definition~3 with the table's expected payoffs.
+\emph{CCE gap}: the largest average gain any candidate could have made by one fixed rule for the whole run. \emph{Rounds to 90\%}: first round with agreement $\ge0.9$. \emph{Residual gain}: exploitability of the profile of most-played arms.
 
 \textbf{Experiments and statistics.} X1: rule $\times$ $\alpha\in\{0,0.025,\dots,0.5\}$ $\times$ four networks $\times$ E0--E2. X2: four utility families and five mixed populations.
 X3: six learners $\times$ two rules $\times$ E0--E2, $T=\XthreeT$, \XthreeSeeds{} seeds. X4: bank size $Q\in\{4,\dots,64\}$ in E2, equilibrium re-solved for each $Q$ and $\alpha$. X5: $\Delta$, $\sigma$ or $K$ changed one at a time.
@@ -219,7 +221,7 @@ Runs that share a seed share every environment draw, so comparisons are paired: 
 \begin{table*}[t]\centering\small
 \caption{Equilibrium sharing for different motives (two friend groups A$=\{1,3,5\}$, B$=\{2,4,6\}$; E1). Every game has exactly one pure equilibrium.
 $^\dagger$: exact equilibrium in fewer than 95\% of bootstrap replicates.}\label{tab:x2}
-\resizebox{0.86\textwidth}{!}{\input{generated/tab_x2.tex}}
+\resizebox{0.74\textwidth}{!}{\input{generated/tab_x2.tex}}
 \end{table*}
 \finding{Under fixed seats only weak candidates tell; under a cut-off everyone does} (Fig.~\ref{fig:who}): \PilotShareSeats\% against \PilotShareBar\% of the possible tells.
 Under both rules the equilibrium is unique, every best-response and replicator run ends in it, and it stays exact in \PilotBootFracSeats\% / \PilotBootFracBar\% of \PilotBootRSeats{} bootstrap replicates.
@@ -238,27 +240,33 @@ under fixed seats it climbs in steps --- weak, average, strong. A cut-off shares
 and here is the one exception (\HtwoViolWhere): fixed seats have \HtwoViolSeatsN{} equilibria sharing \HtwoViolSeatsLo--\HtwoViolSeatsHi\%, the cut-off \HtwoViolBarN{} sharing \HtwoViolBar\%.
 \end{itemize}
 \begin{figure*}[t]\centering
-\includegraphics[width=0.9\textwidth]{figures/fig4_learning.pdf}
+\includegraphics[width=0.78\textwidth]{figures/fig4_learning.pdf}
 \caption{Learning in E1, mean over \XthreeSeeds{} seeds with 95\% bootstrap bands. (a,b) Share of the 12 (candidate, type) learners whose best arm is the equilibrium row.
 (c) CCE gap of the history of play.}\label{fig:learn}
 \end{figure*}
 \begin{table*}[t]\centering\small
 \caption{Decisions matching the equilibrium after \XthreeT{} rounds (\%, mean $\pm$ half-width of the 95\% CI over \XthreeSeeds{} seeds; best in bold), median rounds to reach 90\%
-(``never ($x$\%)'': the median run did not, $x$\% of runs did), and cumulative regret after \XthreeT{} rounds (in units of one offer, mean over the 12 learners; lowest in bold).}\label{tab:x3}
-\resizebox{0.9\textwidth}{!}{\input{generated/tab_x3.tex}}
+(``never ($x$\%)'': the median run did not, $x$\% of runs did; E0 and E2 in Table~\ref{tab:rounds90}), and cumulative regret after \XthreeT{} rounds (Definition~3, in units of one offer, mean over the 12 learners and \XthreeSeeds{} seeds; lowest in bold). In E0 with a cut-off the equilibria differ only in who makes a redundant tell.}\label{tab:x3}
+\resizebox{0.8\textwidth}{!}{\input{generated/tab_x3.tex}}
 \end{table*}
 \finding{How solid are these equilibria?} The reported profile stays exact in at least 95\% of bootstrap replicates in \XoneBootOk{} of \XoneBootTot{} games; the exceptions sit on a step of the staircase,
 and even there the 95th-percentile $\varepsilon$ is at most \XoneWorstEpsPP{} points: the \emph{pattern} is certain and each \emph{threshold} is known to within one grid step.
-Best-response dynamics converged in \XoneBrdOk{} of \XoneBrdTot{} runs; replicator dynamics ended at an enumerated equilibrium in \XoneRepMatch{} of \XoneRepTot.
+Counting near-ties (profiles within $\varepsilon=0.001$, one message cost, of being an equilibrium), the games of Fig.~\ref{fig:who} still have exactly \EpsBneHeadSeats{} and \EpsBneHeadBar;
+of all \EpsBneGames{} games \EpsBneMulti{} have more than one: \EpsBneLowAlpha{} at $\alpha\le0.025$, \EpsBneEzero{} in E0 and \EpsBneStep{} on steps of the fixed-seats staircase.
+Best-response dynamics converged in \XoneBrdOk{} of \XoneBrdTot{} runs and replicator dynamics ended at an enumerated equilibrium in \XoneRepMatch{} of \XoneRepTot{} (the other \XoneRepRest{} had not settled after 3{,}000 steps).
 
 
 \finding{Mixed and correlated equilibria change nothing in E1 and E2, but widen E0.} Over \emph{all} CCEs, the maximum and minimum sharing coincide in \CceSingleEone{} of \CceTotEone{} (E1) and \CceSingleEtwo{} of \CceTotEtwo{} (E2) games:
-no mixed or correlated equilibrium shares more or less than the pure one. In E0 the interval is wider than the pure range in \CceWiderEzero{} of \CceTotEzero{} games
-(up to \CceEzeroAboveMax{} points above the largest pure sharing); only the pairs network, with one possible teller per friend, is untouched.
-For two friend groups at $\alpha=0.2$ under a cut-off, the \CceExN{} pure equilibria share \CceExPure\%, correlated play \CceExLo--\CceExHi\%; \EzmRedundantBar\% of the extra tells go to a friend whom someone else already tells.
-A second, independent implementation gives the same intervals in all \CceCrossRows{} rows.
-Iterated strict dominance solves \DomSolved{} of the \DomTot{} games, each with a unique equilibrium of any kind; all but \DomOpenOutsideEzero{} of the rest are in E0.
-On the pairs network, support enumeration finds one mixed equilibrium in each of the \SuppPairsMixedGames{} games left open, inside the CCE interval.
+no mixed or correlated equilibrium shares more or less than the pure one. In E0 the interval is a single point in only \CceSingleEzero{} of \CceTotEzero{} games and is wider than the pure range in \CceWiderEzero{}
+(up to \CceEzeroAboveMax{} points above the largest pure sharing and \CceEzeroBelowMax{} below the smallest); only the pairs network, with one possible teller per friend, is untouched (\CceEzeroPairsEqual{} of \CceEzeroPairsTot).
+For two friend groups at $\alpha=0.2$ under a cut-off, the \CceExN{} pure equilibria share \CceExPure\%, correlated play anywhere from \CceExLo\% to \CceExHi\%.
+A second, independent implementation of the programs gives the same intervals in all \CceCrossRows{} rows.
+\emph{Why E0?} There a second tell of the same friend is exactly redundant, and the extra sharing is entirely that: \EzmRedundantBar\% of the extra tells in the max-sharing CCE of this game go to a friend whom someone else already tells.
+It is not mere indifference at a tiny cost, though: raising the message cost \EzmCRatio-fold (from $c=\EzmCLo$ to \EzmCHi) narrows the interval only from \EzmWidthBarLo{} to \EzmWidthBarHi{} points (under fixed seats it closes from $c=\EzmSeatsClosedFrom$),
+refuting our prediction that the width would shrink roughly in proportion to $c$; plausibly (not tested) a correlated tell that is redundant on some type profiles is the first one on others, where it is worth far more than $c$.
+So in E0 the staircase describes pure equilibria, and play coordinated on \emph{who} tells can sit above it.
+Iterated strict dominance solves \DomSolved{} of the \DomTot{} games (pairs \DomPairsSolved/\DomPairsTot, star \DomStarSolved/\DomStarTot, two groups \DomTwoGroupsSolved/\DomTwoGroupsTot), each with a unique equilibrium of any kind; all but \DomOpenOutsideEzero{} of the rest are in E0.
+On the pairs network, support enumeration finds one mixed equilibrium in each of the \SuppPairsMixedGames{} games left open (E0, fixed seats), between the two pure ones and inside the CCE interval (not exhaustive: three agents mix).
 
 \subsection{What candidates care about (RQ2)}
 \finding{Disliking outsiders makes candidates more generous to friends --- but only under fixed seats} (Fig.~\ref{fig:why}c). As $\beta$ rises from 0 to 0.5 at $\alpha=0.2$, sharing under
@@ -268,46 +276,64 @@ fixed seats rises from \ClanShareMinSeats\% to \ClanShareMaxSeats\% (everyone te
 \finding{Fairness-minded candidates behave the other way round} (Table~\ref{tab:x2}). Under fixed seats they never tell. Under a cut-off it is the \emph{strong} who tell, and only for moderate
 inequality aversion: a strong candidate expects to be hired and dislikes being ahead of her friends; if envy ($a$) is large, the risk of being left behind dominates. This is the case Proposition~\ref{prop:bar} excludes.
 
-\finding{Motives barely spill over.} In the \MixedGames{} mixed-population games, only \MixedDiffCells{} of \MixedCells{} (candidate, type) choices differs from what that candidate does in a population of her own kind.
+\finding{Motives barely spill over.} In the \MixedGames{} mixed-population games, only \MixedDiffCells{} of \MixedCells{} (candidate, type) choices differs from what that candidate does in a population made entirely of her own kind
+(a nearly indifferent strong clannish candidate tells one friend more when the other group is merely friendly). With one friendly and one selfish group, exactly the friendly group shares: weak types under fixed seats, everyone under a cut-off.
 In all \XtwoCceGames{} games of this section the CCE programs give a single sharing level, equal to the pure equilibrium's.
 
 \subsection{Can candidates learn it? (RQ3)}\label{sec:learn}
 \begin{figure*}[t]\centering
-\includegraphics[width=0.9\textwidth]{figures/fig5_company_loss.pdf}
+\includegraphics[width=0.78\textwidth]{figures/fig5_company_loss.pdf}
 \caption{Company's hiring value under equilibrium sharing (E2, $m=3$). (a,b) As the question bank grows, $\alpha=0.2$; 95\% block-bootstrap intervals (\XfourBoot{} replicates) are narrower than the markers. (c) Loss against friendliness at $Q=15$ (solid) and $Q=40$ (dashed).}\label{fig:company}
 \end{figure*}
 \finding{Yes --- but the signal is tiny, so it takes tens of thousands of interviews.} At equilibrium the best row beats the second-best by only \PayGapMinEoneSeats--\PayGapMaxEoneSeats{} percentage points of utility under
 fixed seats and \PayGapMinEoneBar--\PayGapMaxEoneBar{} under a cut-off, while a single outcome is 0 or 1. UCB1 and Thompson sampling still end with \AgreeUcbEoneSeats\% and \AgreeTsEoneSeats\% (seats)
-and \AgreeUcbEoneBar\% and \AgreeTsEoneBar\% (cut-off) of decisions correct in E1 (Table~\ref{tab:x3}); EXP3 and $\varepsilon$-greedy are slower. E2 is the same within error bars.
+and \AgreeUcbEoneBar\% and \AgreeTsEoneBar\% (cut-off) of decisions correct in E1 (Table~\ref{tab:x3}); EXP3 and $\varepsilon$-greedy are slower
+(\AgreeExpEoneSeats/\AgreeExpEoneBar\% and \AgreeEpsEoneSeats/\AgreeEpsEoneBar\%). E2 is the same within error bars.
 
+\begin{table}[t]\centering\small
+\caption{Median rounds to 90\% agreement in all three leak models (``never ($x$\%)'' as in Table~\ref{tab:x3}).}\label{tab:rounds90}
+\resizebox{\columnwidth}{!}{\input{generated/tab_rounds90.tex}}
+\end{table}
+\begin{table}[t]\centering\small
+\caption{What a sharing pattern is worth (E1, two friend groups, $\alpha=0.2$): the baselines of the review and the profile each learner settled on (most-played rows; mean over \XthreeSeeds{} seeds). Welfare: sum of expected utilities (under fixed seats the same for every pattern up to $c$, so omitted). Company value: $\E[V]$.}\label{tab:baselines}
+\resizebox{\columnwidth}{!}{\input{generated/tab_baselines.tex}}
+\end{table}
 \finding{Finding the equilibrium and earning along the way are different things.} Regret ranks the learners almost the other way round: under fixed seats in E1 it is \RegretEpsEoneSeats{} for $\varepsilon$-greedy and
-\RegretTsEoneSeats{} for Thompson sampling against \RegretUcbEoneSeats{} for UCB1. With gaps this small UCB1's bonus never lets it settle: it ends with the right most-played row but puts \ExpWrongUcbSeats\% of its pulls (seats) on other rows ($\varepsilon$-greedy: \ExpWrongEpsSeats\%).
+\RegretTsEoneSeats{} for Thompson sampling against \RegretUcbEoneSeats{} for UCB1 and \RegretExpEoneSeats{} for EXP3 (cut-off: \RegretEpsEoneBar, \RegretTsEoneBar, \RegretUcbEoneBar, \RegretExpEoneBar).
+With gaps this small UCB1's bonus never lets it settle: it ends with the right most-played row but puts \ExpWrongUcbSeats\% (seats) and \ExpWrongUcbBar\% (cut-off) of its pulls on other rows ($\varepsilon$-greedy: \ExpWrongEpsSeats\% and \ExpWrongEpsBar\%).
+$\varepsilon$-greedy's low regret comes from pulling wrong rows less often, not from cheap mistakes (the payoff gap of its wrong cells is \ExpMistakeGapEpsSeats{} times the mean); the regret implied by the pull counts matches the stored regret within \ExpCostMatchPct\%.
 
-\finding{A cut-off is easier to learn} whenever the equilibrium is unique: the gap is larger and the same for all types; agreement under a cut-off is significantly higher in \BarSeatsSig{} of \BarSeatsTests{} paired E1/E2 tests (the rest are at 100\% under both).
+\finding{A cut-off is easier to learn} whenever the equilibrium is unique: the gap is larger and the same for all types; agreement under a cut-off is significantly higher in \BarSeatsSig{} of \BarSeatsTests{} paired E1/E2 tests (the exceptions, \BarSeatsNotSigLearners, are at 100\% under both).
 Under fixed seats the \emph{average} types are learned slowest (UCB1: \TypeUcbEoneSeatsWeak, \TypeUcbEoneSeatsAvg{} and \TypeUcbEoneSeatsStrong\% correct for weak, average, strong): their reward noise relative to their payoff gap is largest
-(squared noise over squared gap \ExpSnrWeak, \ExpSnrAvg, \ExpSnrStrong; rank correlation with the final error rate $\rho=\ExpRhoUcb$ for UCB1).
+(squared noise over squared gap \ExpSnrWeak, \ExpSnrAvg, \ExpSnrStrong; rank correlation with the final error rate over the 12 cells $\rho=\ExpRhoUcb$ for UCB1, $\ExpRhoTs$ for Thompson sampling); a weak candidate is almost never hired, so her reward is nearly noiseless (s.d.\ \ExpSdWeak{} against \ExpSdAvg{} and \ExpSdStrong).
 
 \begin{figure*}[t]\centering
-\includegraphics[width=0.8\textwidth]{figures/fig6_sensitivity.pdf}
+\includegraphics[width=0.66\textwidth]{figures/fig6_sensitivity.pdf}
 \caption{Two-groups game (E1) with one parameter moved at a time. (a) Break-even friendliness by type under fixed seats, and the single value of every type under a cut-off. (b) Equilibrium sharing in all seven settings; baseline bold.}\label{fig:sens}
 \end{figure*}
 \finding{Knowing how leaks work is worth a factor of two to five.} In E1, 90\% agreement takes Leak-aware UCB \TninetyMbEoneSeats{} rounds under fixed seats and \TninetyMbEoneBar{} under a cut-off, Model-based UCB \TninetyMuEoneSeats{} and \TninetyMuEoneBar,
-UCB1 \TninetyUcbEoneSeats{} and \TninetyUcbEoneBar; both leak-using learners end at 100\% in E1 and E2, and at 20{,}000 rounds lead UCB1 significantly in all E1/E2 settings.
-Leak-aware UCB lowers regret mainly under a cut-off ($\MbRegretEoneBar$), where the best arm ``tell everyone'' informs every other arm. Model-based UCB lowers regret in all four E1/E2 settings ($\MuRegretEoneSeats$ and $\MuRegretEoneBar$ in E1)
-and its leak-rate estimate is right ($\hat p=\MuLeakHatEone$, truth $0.2$).
+UCB1 \TninetyUcbEoneSeats{} and \TninetyUcbEoneBar; the two leak-using learners end at 100\% (rounded) in E1 and E2. At 20{,}000 rounds they lead UCB1 by $\MbEarlyEoneSeats$/$\MbEarlyEoneBar$ and $\MuEarlyEoneSeats$/$\MuEarlyEoneBar$ points in E1 (significant after Holm correction in \MbEarlySig{} of \MbEarlyTests{} and \MuEarlySig{} of \MuEarlyTests{} E1/E2 settings),
+and their settled profile is an exact equilibrium in \ExactEqMbEoneSeats/\ExactEqMbEoneBar\% (Leak-aware) and \ExactEqMuEoneSeats/\ExactEqMuEoneBar\% (Model-based) of E1 runs, against \ExactEqUcbEoneSeats/\ExactEqUcbEoneBar\% for UCB1.
+They help in different ways. Leak-aware UCB lowers regret mainly under a cut-off ($\MbRegretEoneBar$; seats: $\MbRegretEoneSeats$), where the best arm ``tell everyone'' informs every other arm, whereas silence teaches nothing about telling.
+Model-based UCB lowers regret in all four E1/E2 settings ($\MuRegretEoneSeats$ and $\MuRegretEoneBar$ in E1; significant in \MuRegretSig{} of \MuRegretTests) and is the only learner better than UCB1 in both regret and agreement under fixed seats;
+its gain is larger in the four-row cells in \ExpPoolWins{} of \ExpPoolOf{} settings, consistent with pooling across rows that tell the same friend, and its leak-rate estimate is right ($\hat p=\MuLeakHatEone$, truth $0.2$).
 
-\finding{Play moves toward the CCE set, but is not yet close to it} (Fig.~\ref{fig:learn}c). Between 10{,}000 and \XthreeT{} rounds the CCE gap falls for all six learners
-(significant in \GapFallSetSig{} of \GapFallSetTests{} learner-by-setting tests) but ends at \GapFinalMin--\GapFinalMax{} points --- about the size of the payoff gaps, so exploration is still being paid for.
-No learner's settled profile is below random sharing in welfare (\BaseLearnBelowWelfare{} exceptions in 24 comparisons).
+\finding{Play moves toward the CCE set, but is not yet close to it} (Fig.~\ref{fig:learn}c). Between 10{,}000 and \XthreeT{} rounds the CCE gap falls for all six learners (to \GapRatioMin--\GapRatioMax{} of its earlier value;
+significant in \GapFallSetSig{} of \GapFallSetTests{} learner-by-setting tests) but ends at \GapFinalMin--\GapFinalMax{} points --- about the size of the payoff gaps, so exploration is still being paid for.
+
+\finding{What the settled play is worth} (Table~\ref{tab:baselines}). No learner's settled profile is below random sharing in welfare (\BaseLearnBelowWelfare{} exceptions in 24 comparisons); under a cut-off the learners settle between \BaseWLearnMinBar{} and the equilibrium's \BaseWEqBar.
+For the company, the cut-off equilibrium is worth less than random sharing (\BaseVEqBar{} against \BaseVRandomBar) --- the cost of leaks of Section~\ref{sec:cost}, not a failure of learning.
 
 \finding{A caution about ``agreement'' in E0.} In E0 with a cut-off agreement looks poor (\AgreeEzeroBarMin--\AgreeEzeroBarMax\%): the \NumEqEzeroBar{} equilibria differ only in which of two friends tells the last
-candidate, and the learners end up both telling. The settled profile is an exact equilibrium in \ExactEzeroBarMax\% of these runs but within one
-message cost of one in \WithinCEzeroBarMin\%: \LcSettledHighN{} of the \LcSettledN{} learners settle on profiles sharing \LcSettledHighShareMin--\LcSettledHighShareMax\%, at or just above the top of the CCE interval (\CceExLo--\CceExHi\%) --- the redundant telling of Section~\ref{sec:who}.
+candidate, and the learners end up both telling. The residual gain from deviating is \ExplEzeroBarMin{} points for every learner, exactly $c$: the settled profile is an exact equilibrium in \ExactEzeroBarMax\% of these runs but within one
+message cost of one in \WithinCEzeroBarMin\% (elsewhere the two counts coincide, \WithinCOtherSame{} of \WithinCOtherTot{} pairs). This is the redundant telling of Section~\ref{sec:who}: \LcSettledHighN{} of the \LcSettledN{} learners
+(\LcSettledHighNames) settle on profiles sharing \LcSettledHighShareMin--\LcSettledHighShareMax\%, at or just above the top of the CCE interval (\CceExLo--\CceExHi\%), and \LcSettledLowNames{} in its middle (\LcSettledLowPosMin--\LcSettledLowPosMax{} on a 0--1 scale).
+The prediction we had fixed, that the \emph{run averages} sit toward the top, is refuted: they lie inside the interval in all \LcRunN{} runs but at \LcRunPosMin--\LcRunPosMax{} of its width, pulled down by exploration.
 
 \subsection{What it costs the company (RQ4)}\label{sec:cost}
 \begin{table*}[t]\centering\footnotesize
 \caption{The five hypotheses fixed in the project review, the refutation criterion fixed with them, and what the experiments say.}\label{tab:hyp}
-\begin{tabular}{@{}p{0.4cm}>{\raggedright\arraybackslash}p{3.7cm}>{\raggedright\arraybackslash}p{2.9cm}>{\raggedright\arraybackslash}p{7.3cm}>{\raggedright\arraybackslash}p{2.0cm}@{}}
+\setlength{\tabcolsep}{3pt}\begin{tabular}{@{}p{0.4cm}>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{3.1cm}>{\raggedright\arraybackslash}p{8.35cm}>{\raggedright\arraybackslash}p{1.8cm}@{}}
 \toprule
  & Hypothesis & Refuted if (review) & Evidence & Verdict\\\midrule
 H1 & Under fixed seats, $\alpha^\star$ is highest for the types most likely to be pivotal & $\alpha^\star$ flat, or lowest for pivotal types &
@@ -326,14 +352,17 @@ At $\alpha=0.2$: \LamRatioMin--\LamRatioMax$\times$ larger, disjoint CIs at ever
 \finding{At $\alpha=0.2$, leaks hurt a cut-off company about ten times more --- mostly because more people tell.} With a bank of 15 questions, equilibrium sharing costs \LamSeatsQFifteen\% of hiring value under fixed seats and \LamBarQFifteen\% under a cut-off;
 across all bank sizes the cut-off loses \LamRatioMin--\LamRatioMax{} times more, with disjoint bootstrap intervals at all \LamOrderTot{} sizes (Fig.~\ref{fig:company}a). Keeping the loss below 5\% needs $Q\ge\QFiveSeats$ under fixed seats and $Q\ge\QFiveBar$ under a cut-off
 (Proposition~\ref{prop:leak}: the leaked fraction falls like $m\,n_j/Q$). Two effects add up: \emph{who} tells (\XfourShareBar\% of possible tells under a cut-off, \XfourShareSeats\% under fixed seats), and the rule:
-every leaked mark can lift someone over a fixed line, whereas under fixed seats a leak only reorders candidates. If everyone told under both rules (dashed line), the cut-off would lose only \LamAllRatioMin--\LamAllRatioMax{} times more.
+every leaked mark can lift someone over a fixed line, whereas under fixed seats a leak only reorders candidates. If everyone told under both rules (dashed line), fixed seats would lose \LamAllSeatsQFifteen\% at $Q=15$ (cut-off: \LamAllBarQFifteen\%),
+the cut-off only \LamAllRatioMin--\LamAllRatioMax{} times more, and fixed seats would need $Q\ge\QFiveAllSeats$. Random sharing (each tell with probability $\frac12$) would cost \LamRandomSeatsQFifteen\% and \LamRandomBarQFifteen\% at $Q=15$.
 
 \finding{The order holds at every friendliness} (Fig.~\ref{fig:company}c): re-solving every bank size for $\alpha\in\{0,0.1,\dots,0.5\}$, the cut-off loses more in all \XfourRobBarMore{} games with $\alpha>0$;
-the ratio is \XfourRobRatioLowMin--\XfourRobRatioLowMax$\times$ at $\alpha=0.2$--$0.3$ and \XfourRobRatioHighMin--\XfourRobRatioHighMax$\times$ at $\alpha\ge0.4$, as more types tell under fixed seats.
+the ratio is \XfourRobRatioLowMin--\XfourRobRatioLowMax$\times$ at $\alpha=0.2$--$0.3$ and \XfourRobRatioHighMin--\XfourRobRatioHighMax$\times$ at $\alpha\ge0.4$, as more types tell under fixed seats; at $\alpha=0.1$ fixed seats lose nothing at \XfourRobAlphaOneSeatsZero{} of \XfourRobQs{} sizes while the cut-off already loses \XfourRobBarAOneQFifteen\% at $Q=15$.
 
 \finding{But the cut-off is still the better rule once the bank is large enough} (Fig.~\ref{fig:company}b). Without leaks a cut-off hires better (\VNoLeakBar{} against \VNoLeakSeats): it can hire three good candidates or none,
-where fixed seats must hire two. Leaks eat this advantage only for small banks: fixed seats give more value up to $Q=\CrossQBarWorseUpTo$, the cut-off from $Q=\CrossQBarBetterFrom$.
-With a cheaper charge per hire than $\tau_K$ ($\kappa=0$ or $\tau_K/2$), the cut-off is better at every bank size. For a company the message is not ``avoid cut-offs'' but ``a cut-off needs a larger bank''.
+where fixed seats must hire two. Leaks eat this advantage only for small banks: fixed seats give more value up to $Q=\CrossQBarWorseUpTo$, the cut-off from $Q=\CrossQBarBetterFrom$ (\VEqBarQFifteen{} against \VEqSeatsQFifteen{} at $Q=15$).
+This ranking depends on what a hire is worth. $V$ charges $\tau_K=\TauK$ per hire; with a charge $\kappa$ instead, $V_\kappa=V+(\tau_K-\kappa)\cdot|H|$, which needs no new simulation. Leaks make a cut-off hire more (\XfourRobHiredBarQFour{} people on average at $Q=4$, against 2),
+so cheaper hires favour it: with $\kappa=0$ or $\kappa=\tau_K/2$ the cut-off is better at every bank size, refuting our prediction that fixed seats would then be better everywhere. In general the cut-off is better exactly when $\kappa<\kappa^\star(Q)$, with $\kappa^\star$ from
+\KappaFlipMin$\,\tau_K$ at $Q=4$ to \KappaFlipMax$\,\tau_K$ at $Q=64$. For a company the message is not ``avoid cut-offs'' but ``a cut-off needs a larger bank, unless extra hires are cheap''.
 
 \subsection{How robust is the staircase? (X5)}
 The bootstrap measures only Monte Carlo error, so we re-solved the headline game exactly in \XfiveSettings{} settings ($\Delta\in\{0.5,1,2\}$, $\sigma\in\{0.5,1,2\}$, $K\in\{1,2,3\}$, one at a time; \XfiveGames{} games; Fig.~\ref{fig:sens}).
@@ -342,20 +371,21 @@ the cut-off shares at least as much as fixed seats (\XfiveHtwoCellsOk{} of \Xfiv
 does. Weak $<$ average $<$ strong holds in \XfiveOrderOk{} of them. The exception is $K=3$: the marginal seat sits at the
 median, a tell costs an \emph{average} candidate most (\XfiveKthreeEllWeak, \XfiveKthreeEllAvg, \XfiveKthreeEllStrong{} points per friend told) and the thresholds follow
 (\XfiveKthreeWeak, \XfiveKthreeAvg, \XfiveKthreeStrong). With nobody sharing, at $K=3$ an average candidate holds the last seat on \PivKthreeAvg\% of days, a strong one on \PivKthreeStrong\%, a weak one on \PivKthreeWeak\%:
-for every $K$ the type most often at the margin needs the most friendliness. With $K=1$ a strong candidate needs $\alpha^\star=\XfiveKoneStrong$ and never tells on our grid.
+for every $K$ the type most often at the margin needs the most friendliness. (At $K=1$: \PivKoneWeak, \PivKoneAvg, \PivKoneStrong\%.) With $K=1$ a strong candidate needs $\alpha^\star=\XfiveKoneStrong$ and never tells on our grid. Under a cut-off every type switches at the
+same point in \XfiveBarTogether{} of \XfiveSettings{} settings (at $\alpha=\XfiveBarSwitchLo$--$\XfiveBarSwitchHi$, the message cost over the friend's gain); in the remaining one (\XfiveBarSplitWhere) the switch point
+falls just below the first grid value and \XfiveBarSplitN{} near-indifferent equilibria share \XfiveBarSplitLo--\XfiveBarSplitHi\% there. \XfiveMulti{} of the \XfiveGames{} games have more than one pure equilibrium, each on a step of the staircase.
 
 \subsection{Verdict on the hypotheses, deviations and limits}
-Judged by the criteria fixed in the review (Table~\ref{tab:hyp}), H1, H3 and H5 are supported. H4 is not refuted, with unequal support: the faster-learner half holds clearly, but the CCE gap falls without becoming small.
-H2 is refuted at one point in E0, where the game has several equilibria; in E1 and E2 it holds in every comparison.
+By the review's criteria (Table~\ref{tab:hyp}) H1, H3 and H5 are supported; H4 holds for speed, but the CCE gap falls without becoming small; H2 fails once, in E0, and holds in every E1/E2 comparison.
 \textbf{Deviations from the review plan:} (i)~2{,}000 days per cell, not 8{,}000, with precision reported per equilibrium by the bootstrap; (ii)~the ``model-based'' learner is built in two simpler forms (Section~\ref{sec:method});
-(iii)~support enumeration on the pairs network only, with the CCE programs bounding the rest; (iv)~the complete network at $n=6$ was handled by deviation tests, and $n=8$ was not attempted.
+(iii)~support enumeration on the pairs network only, with the CCE programs bounding the rest (tightly in E1/E2, loosely in E0); (iv)~two friend groups use an $\alpha$ grid of step 0.05 for the CCE programs; (v)~the complete network at $n=6$ was handled by deviation tests, and $n=8$ was not attempted.
 \textbf{Limits.} Types are coarse and rounds independent: no reputation, and placed candidates do not leave the pool (a stochastic game~\cite{shapley}). Networks are fixed and small, there is no real leak data, so every claim is comparative,
-and sensitivity was tested one parameter at a time for one network.
+and sensitivity was tested one parameter at a time for one network; joint changes, other $n$, the position of the popular candidate and the message cost outside E0 were not varied.
 
 % =====================================================================================================
 \section{Contribution}
 {\centering\footnotesize
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.25cm}>{\raggedright\arraybackslash}p{4.85cm}>{\raggedright\arraybackslash}p{1.6cm}@{}}
+\setlength{\tabcolsep}{3pt}\begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.3cm}>{\raggedright\arraybackslash}p{5.35cm}>{\raggedright\arraybackslash}p{1.75cm}@{}}
 \toprule
 Member & Task assigned in the review; where it is delivered & Status\\\midrule
 Jash Bharat Pasad & Formulation, proofs; utility types (X2); company analysis (X4); writing. Sections II--III; \texttt{utility.py}, \texttt{run\_x2.py}, \texttt{run\_x4.py}; Table~\ref{tab:x2}, Fig.~\ref{fig:company} & Fulfilled\\

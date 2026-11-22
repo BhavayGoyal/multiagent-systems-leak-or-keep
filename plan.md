@@ -604,7 +604,7 @@ For each finished item above, in this order:
 | Table 2 | a CCE column after 2.5 |
 | Table 4 | 5 columns with "Refuted if"; verdicts match the text; H1 row gains the pivotality-at-K result (M.2) |
 | Appendix | Tables 5 (rounds to 90 %) and 6 (baselines) are there; candidates: X4 at other α (2.2), learning in more settings (4.3) |
-| Length | 8 pages, IEEE conference format (22 Nov); Tables 5 and 6 (rounds to 90 %, baselines) left out of the PDF, still generated; trim against D1 (candidates in 0.1; X5 and the appendix are the largest blocks) |
+| Length | 8 pages, IEEE conference format (22 Nov); all tables kept (rounds to 90 % and baselines are Tables IV and V); trim against D1 (candidates in 0.1; X5 and the appendix are the largest blocks) |
 
 ### 6.3 Presentation — **Must if there is one** (*decision needed*)
 
